@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MMBasicCollectionViewController.h
 //  MyMovie
 //
 //  Created by 王落凡 on 2017/10/16.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface MMBasicCollectionViewController : UICollectionViewController
 
 @end
-
