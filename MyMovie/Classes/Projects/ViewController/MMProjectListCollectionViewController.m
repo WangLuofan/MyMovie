@@ -6,6 +6,7 @@
 //  Copyright © 2017年 王落凡. All rights reserved.
 //
 
+#import "MMPhotoManager.h"
 #import "MMProjectListCollectionViewCell.h"
 #import "MMProjectEdittingViewController.h"
 #import "MMProjectListCollectionViewController.h"
@@ -33,6 +34,14 @@
     flowLayout.minimumInteritemSpacing = kMinimumSpacingInterItem;
     flowLayout.sectionInset = UIEdgeInsetsMake(kMinimumSpacingInterItem, kMinimumSpacingInterItem, 0, kMinimumSpacingInterItem);
     
+    return ;
+}
+
+-(void)editMediaProjectWithTitle:(NSString*)projectTitle {
+    MMProjectEdittingViewController* edittingController = (MMProjectEdittingViewController*)[storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
+    edittingController.title = projectTitle;
+    [self.navigationController pushViewController:edittingController animated:YES];
+
     return ;
 }
 
@@ -64,10 +73,22 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    MMProjectEdittingViewController* edittingController = [storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
-    if(edittingController != nil)
-        [self.navigationController pushViewController:edittingController animated:YES];
+    UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"新建项目" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"请输入项目名称";
+    }];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"创建" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if([MMPhotoManager sharedManager].authorizationStatus != MMAuthorizationStatusAuthorized) {
+            [[MMPhotoManager sharedManager] requestAuthorization:^(MMAuthorizationStatus status) {
+                [self editMediaProjectWithTitle:[alertController.textFields objectAtIndex:0].text];
+            }];
+        }else {
+            [self editMediaProjectWithTitle:[alertController.textFields objectAtIndex:0].text];
+        }
+    }]];
     
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
     return ;
 }
 

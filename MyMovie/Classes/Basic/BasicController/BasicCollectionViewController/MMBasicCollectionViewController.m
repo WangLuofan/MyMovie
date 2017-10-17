@@ -14,6 +14,15 @@
 
 @implementation MMBasicCollectionViewController
 
+- (instancetype)init
+{
+    self = [super initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];;
+    if (self) {
+        self.collectionView.backgroundColor = [UIColor whiteColor];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     return ;

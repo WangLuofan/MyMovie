@@ -32,12 +32,15 @@
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
+    [self makeRotate:UIInterfaceOrientationPortrait];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     return ;
 }
 
 -(void)makeRotate:(UIInterfaceOrientation)orientation {
-    if(orientation == UIInterfaceOrientationLandscapeLeft) {
+    if(orientation == UIInterfaceOrientationPortrait) {
+        self.navigationController.view.transform = CGAffineTransformIdentity;
+    }else if(orientation == UIInterfaceOrientationLandscapeLeft) {
         self.navigationController.view.transform = CGAffineTransformMakeRotation(M_PI_2);
     }else if(orientation == UIInterfaceOrientationLandscapeRight) {
         self.navigationController.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
@@ -48,7 +51,7 @@
 }
 
 -(void)deviceOrientationChanged:(NSNotification*)notification {
-    NSTimeInterval animateDuration = [[notification.userInfo valueForKey:@"UIDeviceOrientationRotateAnimatedUserInfoKey"] doubleValue];
+    NSTimeInterval animateDuration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
     UIDeviceOrientation deviceOri = ((UIDevice*)notification.object).orientation;
     
     if(UIDeviceOrientationIsLandscape(deviceOri) == NO)

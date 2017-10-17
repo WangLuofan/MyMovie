@@ -8,6 +8,9 @@
 
 #import "MMBasicViewController.h"
 
+@class PHAsset;
 @interface MMMediaPreviewViewController : MMBasicViewController
+
+@property(nonatomic, strong) PHAsset* mediaAsset;
 
 @end

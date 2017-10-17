@@ -10,4 +10,6 @@
 
 @interface MMProjectEdittingViewController : MMBasicViewController
 
+@property(nonatomic, copy) NSArray* allAlbums;
+
 @end
