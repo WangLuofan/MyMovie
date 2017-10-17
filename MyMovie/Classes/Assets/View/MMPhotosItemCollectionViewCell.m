@@ -11,6 +11,7 @@
 @interface MMPhotosItemCollectionViewCell()
 
 @property (weak, nonatomic) IBOutlet UIView *selectionView;
+@property (weak, nonatomic) IBOutlet UIButton *mediaAddBtn;
 
 @end
 
@@ -19,7 +20,13 @@
 -(void)setSelected:(BOOL)selected {
     [super setSelected:selected];
     
-    _selectionView.hidden = !selected;
+    if(selected == YES) {
+        _selectionView.hidden = NO;
+        _mediaAddBtn.hidden = NO;
+    }else {
+        _selectionView.hidden = YES;
+        _mediaAddBtn.hidden = YES;
+    }
     
     return ;
 }
@@ -38,6 +45,7 @@
 -(void)prepareForReuse {
     [super prepareForReuse];
     
+    self.mediaAddBtn.hidden = YES;
     self.durLabel.hidden = YES;
     return ;
 }

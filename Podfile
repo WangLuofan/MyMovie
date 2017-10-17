@@ -7,5 +7,6 @@ target 'MyMovie' do
 
   # Pods for MyMovie
 	pod 'MBProgressHUD'
+	pod 'Masonry'
 
 end

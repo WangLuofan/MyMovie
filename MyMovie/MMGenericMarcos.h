@@ -13,6 +13,8 @@
 #define SCREEN_WIDTH SCREEN_BOUNDS.size.width
 #define SCREEN_HEIGHT SCREEN_BOUNDS.size.height
 
+#define kDefaultAnimationDuration 0.25f
+
 #define nibNamed(nibName) [UINib nibWithNibName:nibName bundle:[NSBundle mainBundle]]
 #define storyBoardNamed(sbName) [UIStoryboard storyboardWithName:sbName bundle:[NSBundle mainBundle]]
 #define App_Delegate ((AppDelegate*)[UIApplication sharedApplication].delegate)

@@ -32,15 +32,21 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ey-ol-rCO">
+                        <rect key="frame" x="20.5" y="20.5" width="39" height="39"/>
+                        <state key="normal" image="tp_add_media_icon" backgroundImage="tp_square_button"/>
+                    </button>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="KK3-Ql-ouW" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="top" id="0Ng-Dy-PH2"/>
                 <constraint firstItem="gk2-bm-7HG" firstAttribute="trailing" secondItem="SEy-5g-ep8" secondAttribute="trailing" constant="-5" id="2cg-q1-DXA"/>
+                <constraint firstItem="4Ey-ol-rCO" firstAttribute="centerY" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="6sx-aw-1n4"/>
                 <constraint firstItem="bK4-Wy-NB5" firstAttribute="bottom" secondItem="gk2-bm-7HG" secondAttribute="bottom" id="918-TU-9x8"/>
                 <constraint firstItem="bK4-Wy-NB5" firstAttribute="trailing" secondItem="gk2-bm-7HG" secondAttribute="trailing" id="GIW-oP-5Eq"/>
                 <constraint firstItem="gk2-bm-7HG" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="top" constant="5" id="IsU-Ip-a78"/>
                 <constraint firstItem="KK3-Ql-ouW" firstAttribute="trailing" secondItem="SEy-5g-ep8" secondAttribute="trailing" id="Mhz-s5-AI9"/>
+                <constraint firstItem="4Ey-ol-rCO" firstAttribute="centerX" secondItem="SEy-5g-ep8" secondAttribute="centerX" id="MkD-Ex-2Dq"/>
                 <constraint firstItem="gk2-bm-7HG" firstAttribute="bottom" secondItem="SEy-5g-ep8" secondAttribute="bottom" constant="-5" id="a8b-hj-eAr"/>
                 <constraint firstItem="gk2-bm-7HG" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" constant="5" id="b5c-ze-y2z"/>
                 <constraint firstItem="KK3-Ql-ouW" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" id="hnC-a7-HkH"/>
@@ -51,9 +57,14 @@
             <connections>
                 <outlet property="durLabel" destination="bK4-Wy-NB5" id="cTB-e5-XPe"/>
                 <outlet property="imageView" destination="gk2-bm-7HG" id="oeV-v3-Kgt"/>
+                <outlet property="mediaAddBtn" destination="4Ey-ol-rCO" id="bxD-zh-Zyv"/>
                 <outlet property="selectionView" destination="KK3-Ql-ouW" id="eRi-5t-tOZ"/>
             </connections>
-            <point key="canvasLocation" x="-160" y="2"/>
+            <point key="canvasLocation" x="-220" y="0.0"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="tp_add_media_icon" width="33" height="26"/>
+        <image name="tp_square_button" width="39" height="39"/>
+    </resources>
 </document>
