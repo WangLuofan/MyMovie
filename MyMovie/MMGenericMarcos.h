@@ -15,5 +15,6 @@
 
 #define nibNamed(nibName) [UINib nibWithNibName:nibName bundle:[NSBundle mainBundle]]
 #define storyBoardNamed(sbName) [UIStoryboard storyboardWithName:sbName bundle:[NSBundle mainBundle]]
+#define App_Delegate ((AppDelegate*)[UIApplication sharedApplication].delegate)
 
 #endif /* GenericMarcos_h */

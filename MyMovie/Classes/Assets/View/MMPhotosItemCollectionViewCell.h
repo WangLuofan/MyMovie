@@ -13,4 +13,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *durLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
+-(UIImage*)toImage;
+
 @end

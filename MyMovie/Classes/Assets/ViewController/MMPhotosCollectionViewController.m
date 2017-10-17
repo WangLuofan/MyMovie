@@ -9,6 +9,7 @@
 #import "MMPhotoManager.h"
 #import "MMPhotosItemCollectionViewCell.h"
 #import "MMPhotosCollectionViewController.h"
+#import "MMMediaPreviewViewController.h"
 
 #define kDefaultItemsPerRow 4
 #define kItemInternalSpacing 5
@@ -34,6 +35,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.collectionView.showsVerticalScrollIndicator = NO;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
     [self.collectionView registerNib:nibNamed(@"MMPhotosItemCollectionViewCell") forCellWithReuseIdentifier:kPhotosCollectionViewCellIdentifier];
     
     UICollectionViewFlowLayout* flowLayout = (UICollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
@@ -42,7 +45,7 @@
     
     CGFloat itemSize = ((SCREEN_HEIGHT / 2) - (kDefaultItemsPerRow + 1) * kItemInternalSpacing) / kDefaultItemsPerRow;
     flowLayout.itemSize = CGSizeMake(itemSize, itemSize);
-
+    
     return ;
 }
 
@@ -83,6 +86,7 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MMPhotosItemCollectionViewCell* cell = (MMPhotosItemCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:kPhotosCollectionViewCellIdentifier forIndexPath:indexPath];
+    
     PHAsset* asset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
     
     if(asset.mediaType != PHAssetMediaTypeVideo)
@@ -103,6 +107,10 @@
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset* asset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
+    
+    MMMediaPreviewViewController* previewController = (MMMediaPreviewViewController*)[self.navigationController.parentViewController.childViewControllers objectAtIndex:1];
+    previewController.mediaAsset = asset;
+    
     return ;
 }
 

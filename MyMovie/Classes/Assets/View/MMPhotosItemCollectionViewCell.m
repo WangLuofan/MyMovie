@@ -24,6 +24,17 @@
     return ;
 }
 
+-(UIImage*)toImage {
+    UIGraphicsBeginImageContext(self.bounds.size);
+    
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage* cellImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return cellImg;
+}
+
 -(void)prepareForReuse {
     [super prepareForReuse];
     
