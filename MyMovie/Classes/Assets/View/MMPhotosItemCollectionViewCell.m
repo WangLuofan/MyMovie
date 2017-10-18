@@ -50,4 +50,10 @@
     return ;
 }
 
+- (IBAction)handleResAdded:(UIButton *)sender {
+    if([self.delegate respondsToSelector:@selector(mediaAssetsSelectedInItemCell:)])
+        [self.delegate mediaAssetsSelectedInItemCell:self];
+    return ;
+}
+
 @end

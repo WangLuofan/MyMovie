@@ -15,7 +15,7 @@
 #define kItemInternalSpacing 5
 #define kPhotosCollectionViewCellIdentifier @"PhotosCollectionViewCellIdentifier"
 
-@interface MMPhotosCollectionViewController ()
+@interface MMPhotosCollectionViewController () <MMPhotosItemCollectionViewCellDelegate>
 
 @property(nonatomic, copy) NSArray* assets;
 
@@ -102,6 +102,8 @@
             cell.imageView.image = image;
         });
     }];
+    
+    cell.delegate = self;
     return cell;
 }
 
@@ -111,6 +113,15 @@
     MMMediaPreviewViewController* previewController = (MMMediaPreviewViewController*)[self.navigationController.parentViewController.childViewControllers objectAtIndex:1];
     previewController.mediaAsset = asset;
     
+    return ;
+}
+
+#pragma mark - MMPhotosItemCollectionViewCellDelegate
+-(void)mediaAssetsSelectedInItemCell:(MMPhotosItemCollectionViewCell *)ItemCell {
+    NSIndexPath* indexPath = [self.collectionView indexPathForCell:ItemCell];
+    if(indexPath != nil) {
+        PHAsset* asset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
+    }
     return ;
 }
 

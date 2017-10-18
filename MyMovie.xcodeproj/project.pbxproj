@@ -14,6 +14,7 @@
 		B3AE18B51F95E83D009554D7 /* MMPhotosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18B31F95E83D009554D7 /* MMPhotosCollectionViewController.m */; };
 		B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18B81F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m */; };
 		B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */; };
+		B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */; };
 		B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */; };
 		B3FAA9221F94FD710023792C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FAA9211F94FD710023792C /* AppDelegate.m */; };
 		B3FAA9281F94FD710023792C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3FAA9261F94FD710023792C /* Main.storyboard */; };
@@ -45,6 +46,8 @@
 		B3AE18B71F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMPhotosItemCollectionViewCell.h; sourceTree = "<group>"; };
 		B3AE18B81F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMPhotosItemCollectionViewCell.m; sourceTree = "<group>"; };
 		B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMPhotosItemCollectionViewCell.xib; sourceTree = "<group>"; };
+		B3BBFA931F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaAssetsCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaAssetsCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		B3ECC89A1F95DB52007CE1CA /* MMHUDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMHUDUtils.h; sourceTree = "<group>"; };
 		B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMHUDUtils.m; sourceTree = "<group>"; };
 		B3FAA91D1F94FD710023792C /* MyMovie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMovie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +148,38 @@
 				B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		B3BBFA8F1F973C2800763E1E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B3FAA9721F950A050023792C /* MMMediaModifyCollectionViewController.h */,
+				B3FAA9731F950A050023792C /* MMMediaModifyCollectionViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		B3BBFA901F973C3100763E1E /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		B3BBFA911F973C3600763E1E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B3BBFA921F973E7200763E1E /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				B3BBFA931F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.h */,
+				B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */,
+			);
+			path = Layout;
 			sourceTree = "<group>";
 		};
 		B3FAA9141F94FD710023792C = {
@@ -350,8 +385,10 @@
 		B3FAA96B1F9509B60023792C /* Modify */ = {
 			isa = PBXGroup;
 			children = (
-				B3FAA9721F950A050023792C /* MMMediaModifyCollectionViewController.h */,
-				B3FAA9731F950A050023792C /* MMMediaModifyCollectionViewController.m */,
+				B3BBFA921F973E7200763E1E /* Layout */,
+				B3BBFA911F973C3600763E1E /* Model */,
+				B3BBFA901F973C3100763E1E /* View */,
+				B3BBFA8F1F973C2800763E1E /* ViewController */,
 			);
 			path = Modify;
 			sourceTree = "<group>";
@@ -502,6 +539,7 @@
 				B3FAA9501F94FFF20023792C /* MMBasicNavigationController.m in Sources */,
 				B3FAA94D1F94FFDB0023792C /* MMBasicViewController.m in Sources */,
 				B3FAA9561F95002E0023792C /* MMBasicCollectionViewController.m in Sources */,
+				B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */,
 				B3FAA9221F94FD710023792C /* AppDelegate.m in Sources */,
 				B3FAA94A1F94FFC00023792C /* MMBasicView.m in Sources */,
 				B3FAA9681F9507F70023792C /* MMProjectEdittingViewController.m in Sources */,

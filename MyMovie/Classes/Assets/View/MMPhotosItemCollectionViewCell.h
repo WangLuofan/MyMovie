@@ -8,8 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+@class MMPhotosItemCollectionViewCell;
+@protocol MMPhotosItemCollectionViewCellDelegate <NSObject>
+
+@optional
+-(void)mediaAssetsSelectedInItemCell:(MMPhotosItemCollectionViewCell*)ItemCell;
+
+@end
+
 @interface MMPhotosItemCollectionViewCell : UICollectionViewCell
 
+@property (nonatomic, assign) id<MMPhotosItemCollectionViewCellDelegate> delegate;
 @property (weak, nonatomic) IBOutlet UILabel *durLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 

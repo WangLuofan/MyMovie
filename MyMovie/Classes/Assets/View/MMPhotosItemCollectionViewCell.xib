@@ -35,6 +35,9 @@
                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ey-ol-rCO">
                         <rect key="frame" x="20.5" y="20.5" width="39" height="39"/>
                         <state key="normal" image="tp_add_media_icon" backgroundImage="tp_square_button"/>
+                        <connections>
+                            <action selector="handleResAdded:" destination="gTV-IL-0wX" eventType="touchUpInside" id="dFG-F8-SCg"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>
