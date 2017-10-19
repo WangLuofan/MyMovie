@@ -79,13 +79,15 @@
     }];
     [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alertController addAction:[UIAlertAction actionWithTitle:@"创建" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if([MMPhotoManager sharedManager].authorizationStatus != MMAuthorizationStatusAuthorized) {
-            [[MMPhotoManager sharedManager] requestAuthorization:^(MMAuthorizationStatus status) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if([MMPhotoManager sharedManager].authorizationStatus != MMAuthorizationStatusAuthorized) {
+                [[MMPhotoManager sharedManager] requestAuthorization:^(MMAuthorizationStatus status) {
+                    [self editMediaProjectWithTitle:[alertController.textFields objectAtIndex:0].text];
+                }];
+            }else {
                 [self editMediaProjectWithTitle:[alertController.textFields objectAtIndex:0].text];
-            }];
-        }else {
-            [self editMediaProjectWithTitle:[alertController.textFields objectAtIndex:0].text];
-        }
+            }
+        });
     }]];
     
     [self.navigationController presentViewController:alertController animated:YES completion:nil];
