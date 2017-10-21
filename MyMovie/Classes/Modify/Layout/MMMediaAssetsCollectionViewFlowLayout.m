@@ -49,6 +49,22 @@
     tapGesture.delegate = self;
     [self.collectionView addGestureRecognizer:tapGesture];
     
+    UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureAction:)];
+    [self.collectionView addGestureRecognizer:panGesture];
+    
+    return ;
+}
+
+-(void)handlePanGestureAction:(UIGestureRecognizer*)recognizer {
+    
+    if(recognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint touchPoint = [recognizer locationInView:self.collectionView];
+        NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:touchPoint];
+    }else if(recognizer.state == UIGestureRecognizerStateChanged) {
+        
+    }else if(recognizer.state == UIGestureRecognizerStateEnded) {
+        
+    }
     return ;
 }
 

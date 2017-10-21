@@ -10,4 +10,6 @@
 
 @interface MMMediaItemTransitionCollectionViewCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UIImageView *transitionImageView;
+
 @end

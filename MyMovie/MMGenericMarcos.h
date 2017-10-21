@@ -16,6 +16,7 @@
 #define kDefaultAnimationDuration 0.25f
 
 #define nibNamed(nibName) [UINib nibWithNibName:nibName bundle:[NSBundle mainBundle]]
+#define imageNamed(imgName) [UIImage imageNamed:imgName]
 #define storyBoardNamed(sbName) [UIStoryboard storyboardWithName:sbName bundle:[NSBundle mainBundle]]
 #define App_Delegate ((AppDelegate*)[UIApplication sharedApplication].delegate)
 

@@ -19,6 +19,8 @@
 		B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18B81F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m */; };
 		B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */; };
 		B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */; };
+		B3C4AC4D1F9BA06C00A0F86C /* MMTransitionModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C4AC4C1F9BA06C00A0F86C /* MMTransitionModifyView.m */; };
+		B3C4AC4F1F9BA99F00A0F86C /* MMTransitionModifyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3C4AC4E1F9BA99F00A0F86C /* MMTransitionModifyView.xib */; };
 		B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */; };
 		B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */; };
 		B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */; };
@@ -62,6 +64,9 @@
 		B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMPhotosItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		B3BBFA931F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaAssetsCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaAssetsCollectionViewFlowLayout.m; sourceTree = "<group>"; };
+		B3C4AC4B1F9BA06C00A0F86C /* MMTransitionModifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTransitionModifyView.h; sourceTree = "<group>"; };
+		B3C4AC4C1F9BA06C00A0F86C /* MMTransitionModifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTransitionModifyView.m; sourceTree = "<group>"; };
+		B3C4AC4E1F9BA99F00A0F86C /* MMTransitionModifyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MMTransitionModifyView.xib; sourceTree = "<group>"; };
 		B3ECC89A1F95DB52007CE1CA /* MMHUDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMHUDUtils.h; sourceTree = "<group>"; };
 		B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMHUDUtils.m; sourceTree = "<group>"; };
 		B3F8A3461F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaItemTransitionCollectionViewCell.h; sourceTree = "<group>"; };
@@ -191,6 +196,9 @@
 				B3F8A3461F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.h */,
 				B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */,
 				B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */,
+				B3C4AC4B1F9BA06C00A0F86C /* MMTransitionModifyView.h */,
+				B3C4AC4C1F9BA06C00A0F86C /* MMTransitionModifyView.m */,
+				B3C4AC4E1F9BA99F00A0F86C /* MMTransitionModifyView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -504,6 +512,7 @@
 				B3AE18B11F95E705009554D7 /* MMImagePickerTableViewCell.xib in Resources */,
 				B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */,
 				B3FAA9281F94FD710023792C /* Main.storyboard in Resources */,
+				B3C4AC4F1F9BA99F00A0F86C /* MMTransitionModifyView.xib in Resources */,
 				B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -589,6 +598,7 @@
 				B3AE18B51F95E83D009554D7 /* MMPhotosCollectionViewController.m in Sources */,
 				B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */,
 				B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */,
+				B3C4AC4D1F9BA06C00A0F86C /* MMTransitionModifyView.m in Sources */,
 				B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,6 +8,7 @@
 
 #import "MMPhotoManager.h"
 #import "MMMediaItemModel.h"
+#import "MMTransitionModifyView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMediaModifyItemCollectionViewCell.h"
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
@@ -17,11 +18,12 @@
 #define kMediaModifyItemCollectionViewCellIdentifier @"MediaModifyItemCollectionViewCellIdentifier"
 #define kMediaItemTransitionCollectionViewCellIdentifier @"MediaItemTransitionCollectionViewCellIdentifier"
 
-@interface MMMediaModifyCollectionViewController () <MMMediaAssetsCollectionViewFlowLayoutDelegate>
+@interface MMMediaModifyCollectionViewController () <MMMediaAssetsCollectionViewFlowLayoutDelegate, MMTransitionModifyViewDelegate>
 
 @property(nonatomic, strong) NSMutableArray* audioDataSource;
 @property(nonatomic, strong) NSMutableArray* assetsDataSource;
 @property(nonatomic, strong) NSMutableArray* selectedItemIndexPath;
+@property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
 
 @end
 
@@ -258,7 +260,11 @@ static NSString * const reuseIdentifier = @"Cell";
         if(bDeselect == NO)
             [_selectedItemIndexPath addObject:indexPath];
     } else if(model.mediaType == MMAssetMediaTypeTransition) {
-        
+        if(_transitionModifyView == nil) {
+            _transitionModifyView = (MMTransitionModifyView*)[[[NSBundle mainBundle] loadNibNamed:@"MMTransitionModifyView" owner:nil options:nil] objectAtIndex:0];
+            _transitionModifyView.delegate = self;
+        }
+        [_transitionModifyView showInView:self.parentViewController.navigationController.view withModel:model];
     }else if(model.mediaType == MMAssetMediaTypeAudio) {
         
     }
@@ -347,6 +353,26 @@ static NSString * const reuseIdentifier = @"Cell";
         }
         
     }
+    return ;
+}
+
+#pragma mark - MMTransitionModifyViewDelegate
+-(void)transitionViewDidHide:(MMTransitionModifyView *)transitionView {
+    [self.collectionView deselectItemAtIndexPath:[[self.collectionView indexPathsForSelectedItems] objectAtIndex:0] animated:YES];
+    return ;
+}
+
+-(void)transitionView:(MMTransitionModifyView *)transtionView willSaveDataWithModel:(MMMediaItemModel *)model {
+    NSIndexPath* indexPath = [[self.collectionView indexPathsForSelectedItems] objectAtIndex:0];
+    
+    MMMediaItemModel* curModel = nil;
+    if(indexPath.section == 0)
+        curModel = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];
+    else
+        curModel = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
+    
+    curModel.duration = model.duration;
+    ((MMMediaTransitionModel*)curModel).transitionType = ((MMMediaTransitionModel*)model).transitionType;
     return ;
 }
 

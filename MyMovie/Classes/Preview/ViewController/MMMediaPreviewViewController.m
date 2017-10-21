@@ -40,6 +40,7 @@
     if(_mediaAsset.mediaType == PHAssetMediaTypeImage) {
         if(_previewImageView == nil) {
             _previewImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+            _previewImageView.contentMode = UIViewContentModeScaleAspectFill;
             [self.view addSubview:_previewImageView];
         }
         
