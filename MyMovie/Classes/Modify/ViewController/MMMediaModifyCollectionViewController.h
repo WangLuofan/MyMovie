@@ -8,6 +8,9 @@
 
 #import "MMBasicCollectionViewController.h"
 
+@class MMMediaItemModel;
 @interface MMMediaModifyCollectionViewController : MMBasicCollectionViewController
+
+-(void)insertItemWithMediaItemModel:(MMMediaItemModel*)model;
 
 @end

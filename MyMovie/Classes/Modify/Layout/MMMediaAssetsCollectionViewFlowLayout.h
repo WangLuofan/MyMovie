@@ -8,13 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+@class MMMediaAssetsCollectionViewFlowLayout;
 @protocol MMMediaAssetsCollectionViewFlowLayoutDelegate <UICollectionViewDelegate>
+
+@required
+-(NSUInteger)collectionView:(UICollectionView*)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout*)layout assetsTypeForItemAtIndexPath:(NSIndexPath*)indexPath;
+
+@optional
+-(CGSize)collectionView:(UICollectionView*)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout*)layou sizeForItemAtIndexPath:(NSIndexPath*)indexPath;
+-(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didDeleteItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
 @interface MMMediaAssetsCollectionViewFlowLayout : UICollectionViewLayout
 
-@property(nonatomic) CGFloat itemHeight;
-@property(nonatomic) CGFloat minimum;
+@property(nonatomic) CGSize itemSize;
+@property(nonatomic) CGFloat minimumSpacing;
 
 @end

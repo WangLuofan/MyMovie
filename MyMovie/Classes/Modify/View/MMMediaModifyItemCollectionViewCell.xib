@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="MMMediaModifyItemCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mhT-NL-gUJ" userLabel="SelectionImageView">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BjF-Kx-WE7">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+                        <color key="backgroundColor" red="0.28235294119999998" green="0.76470588240000004" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
+                    </imageView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="BjF-Kx-WE7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3O1-fe-EJ0"/>
+                <constraint firstAttribute="trailing" secondItem="mhT-NL-gUJ" secondAttribute="trailing" id="WBU-5A-yMc"/>
+                <constraint firstItem="mhT-NL-gUJ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="axZ-ja-7xI"/>
+                <constraint firstItem="BjF-Kx-WE7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bB4-DY-5Ez"/>
+                <constraint firstAttribute="bottom" secondItem="mhT-NL-gUJ" secondAttribute="bottom" id="bKO-oq-THO"/>
+                <constraint firstItem="BjF-Kx-WE7" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" id="cmg-4u-zpl"/>
+                <constraint firstItem="BjF-Kx-WE7" firstAttribute="trailing" secondItem="gTV-IL-0wX" secondAttribute="trailing" id="izg-0j-Y87"/>
+                <constraint firstItem="mhT-NL-gUJ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="tfr-RQ-hhL"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <size key="customSize" width="481" height="424"/>
+            <connections>
+                <outlet property="bottomLayoutConstraint" destination="cmg-4u-zpl" id="ksd-zf-13X"/>
+                <outlet property="contentImageView" destination="BjF-Kx-WE7" id="AdB-ir-jkx"/>
+                <outlet property="leadingLayoutConstraint" destination="3O1-fe-EJ0" id="dix-W7-TAe"/>
+                <outlet property="selectionImageView" destination="mhT-NL-gUJ" id="jGX-6e-Ymp"/>
+                <outlet property="topLayoutConstraint" destination="bB4-DY-5Ez" id="UQG-mU-bb6"/>
+                <outlet property="trailingLayoutConstraint" destination="izg-0j-Y87" id="wyQ-9c-amu"/>
+            </connections>
+            <point key="canvasLocation" x="41" y="-53.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

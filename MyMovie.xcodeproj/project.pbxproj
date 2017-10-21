@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		980E9FE22C3447272D4F57F5 /* libPods-MyMovie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7881627BF15CFD5765BC68B7 /* libPods-MyMovie.a */; };
+		B3255A0C1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3255A0A1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m */; };
+		B3255A0D1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3255A0B1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib */; };
+		B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3255A0F1F989CDE00DA3884 /* MMMediaItemModel.m */; };
+		B3255A131F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3255A121F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m */; };
 		B3AE18A91F95E370009554D7 /* MMPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FD2F561F95AB95009A0571 /* MMPhotoManager.m */; };
 		B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */; };
 		B3AE18B11F95E705009554D7 /* MMImagePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18AF1F95E705009554D7 /* MMImagePickerTableViewCell.xib */; };
@@ -16,6 +20,9 @@
 		B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18B91F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib */; };
 		B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */; };
 		B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */; };
+		B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */; };
+		B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */; };
+		B3F8A34D1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F8A34C1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m */; };
 		B3FAA9221F94FD710023792C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FAA9211F94FD710023792C /* AppDelegate.m */; };
 		B3FAA9281F94FD710023792C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3FAA9261F94FD710023792C /* Main.storyboard */; };
 		B3FAA92A1F94FD710023792C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3FAA9291F94FD710023792C /* Assets.xcassets */; };
@@ -37,6 +44,13 @@
 
 /* Begin PBXFileReference section */
 		7881627BF15CFD5765BC68B7 /* libPods-MyMovie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyMovie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B3255A091F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaModifyItemCollectionViewCell.h; sourceTree = "<group>"; };
+		B3255A0A1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaModifyItemCollectionViewCell.m; sourceTree = "<group>"; };
+		B3255A0B1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MMMediaModifyItemCollectionViewCell.xib; sourceTree = "<group>"; };
+		B3255A0E1F989CDE00DA3884 /* MMMediaItemModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaItemModel.h; sourceTree = "<group>"; };
+		B3255A0F1F989CDE00DA3884 /* MMMediaItemModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaItemModel.m; sourceTree = "<group>"; };
+		B3255A111F98AF4C00DA3884 /* MMAudioAssetsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAudioAssetsTableViewController.h; sourceTree = "<group>"; };
+		B3255A121F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAudioAssetsTableViewController.m; sourceTree = "<group>"; };
 		B32F835146AF919B0DF1A218 /* Pods-MyMovie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMovie.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyMovie/Pods-MyMovie.release.xcconfig"; sourceTree = "<group>"; };
 		B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMImagePickerTableViewCell.m; sourceTree = "<group>"; };
 		B3AE18AE1F95E705009554D7 /* MMImagePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMImagePickerTableViewCell.h; sourceTree = "<group>"; };
@@ -50,6 +64,11 @@
 		B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaAssetsCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		B3ECC89A1F95DB52007CE1CA /* MMHUDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMHUDUtils.h; sourceTree = "<group>"; };
 		B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMHUDUtils.m; sourceTree = "<group>"; };
+		B3F8A3461F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaItemTransitionCollectionViewCell.h; sourceTree = "<group>"; };
+		B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaItemTransitionCollectionViewCell.m; sourceTree = "<group>"; };
+		B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MMMediaItemTransitionCollectionViewCell.xib; sourceTree = "<group>"; };
+		B3F8A34B1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMVideoAssetsTableViewController.h; sourceTree = "<group>"; };
+		B3F8A34C1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMVideoAssetsTableViewController.m; sourceTree = "<group>"; };
 		B3FAA91D1F94FD710023792C /* MyMovie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMovie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3FAA9201F94FD710023792C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B3FAA9211F94FD710023792C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -133,6 +152,10 @@
 				B3FAA9761F950A1C0023792C /* MMMediaAssetsTableViewController.m */,
 				B3AE18B21F95E83C009554D7 /* MMPhotosCollectionViewController.h */,
 				B3AE18B31F95E83D009554D7 /* MMPhotosCollectionViewController.m */,
+				B3255A111F98AF4C00DA3884 /* MMAudioAssetsTableViewController.h */,
+				B3255A121F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m */,
+				B3F8A34B1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.h */,
+				B3F8A34C1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -162,6 +185,12 @@
 		B3BBFA901F973C3100763E1E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B3255A091F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.h */,
+				B3255A0A1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m */,
+				B3255A0B1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib */,
+				B3F8A3461F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.h */,
+				B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */,
+				B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -169,6 +198,8 @@
 		B3BBFA911F973C3600763E1E /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				B3255A0E1F989CDE00DA3884 /* MMMediaItemModel.h */,
+				B3255A0F1F989CDE00DA3884 /* MMMediaItemModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -466,12 +497,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3255A0D1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib in Resources */,
 				B3FAA9611F9502A60023792C /* MMProjectListCollectionViewCell.xib in Resources */,
 				B3FAA92D1F94FD710023792C /* LaunchScreen.storyboard in Resources */,
 				B3FAA92A1F94FD710023792C /* Assets.xcassets in Resources */,
 				B3AE18B11F95E705009554D7 /* MMImagePickerTableViewCell.xib in Resources */,
 				B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */,
 				B3FAA9281F94FD710023792C /* Main.storyboard in Resources */,
+				B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,10 +566,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3F8A34D1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m in Sources */,
 				B3AE18A91F95E370009554D7 /* MMPhotoManager.m in Sources */,
+				B3255A131F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m in Sources */,
 				B3FAA9531F9500080023792C /* MMBasicTableViewController.m in Sources */,
 				B3FAA9301F94FD710023792C /* main.m in Sources */,
 				B3FAA9591F95017A0023792C /* MMProjectListCollectionViewController.m in Sources */,
+				B3255A0C1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m in Sources */,
 				B3FAA9711F9509EE0023792C /* MMMediaPreviewViewController.m in Sources */,
 				B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */,
 				B3FAA9501F94FFF20023792C /* MMBasicNavigationController.m in Sources */,
@@ -549,7 +585,9 @@
 				B3FAA9601F9502A60023792C /* MMProjectListCollectionViewCell.m in Sources */,
 				B3FAA9771F950A1C0023792C /* MMMediaAssetsTableViewController.m in Sources */,
 				B3FAA9741F950A050023792C /* MMMediaModifyCollectionViewController.m in Sources */,
+				B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */,
 				B3AE18B51F95E83D009554D7 /* MMPhotosCollectionViewController.m in Sources */,
+				B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */,
 				B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */,
 				B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */,
 			);
@@ -690,7 +728,7 @@
 				DEVELOPMENT_TEAM = 29D7F8VWD7;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/MyMovie_Prefix.pch";
 				INFOPLIST_FILE = MyMovie/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = wangluofan.MyMovie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -707,7 +745,7 @@
 				DEVELOPMENT_TEAM = 29D7F8VWD7;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/$(PROJECT_NAME)/MyMovie_Prefix.pch";
 				INFOPLIST_FILE = MyMovie/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = wangluofan.MyMovie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
