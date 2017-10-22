@@ -138,14 +138,12 @@ static NSString * const reuseIdentifier = @"Cell";
     else
         model = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
-    if(model.mediaType == MMAssetMediaTypeVideo || model.mediaType == MMAssetMediaTypeAudio) {
+    if(model.mediaType != MMAssetMediaTypeTransition) {
         NSTimeInterval seconds = (NSInteger)(model.duration + 1.0f);
         return seconds * 5.0f;
-    }else if(model.mediaType == MMAssetMediaTypeTransition) {
-        return 30.0f;
     }
     
-    return 80.0f;
+    return 30.0f;
 }
 
 -(MMAssetMediaType)assetMediaTypeForItemAtIndexPath:(NSIndexPath*)indexPath {
@@ -354,6 +352,24 @@ static NSString * const reuseIdentifier = @"Cell";
         
     }
     return ;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didAdjustItemAtIndexPath:(NSIndexPath *)indexPath xOffset:(CGFloat)offset {
+    CGSize itemSize = [self collectionView:collectionView layout:layout sizeForItemAtIndexPath:indexPath];
+    
+    MMMediaItemModel* curModel = nil;
+    if(indexPath.section == 0)
+        curModel = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];
+    else
+        curModel = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
+    
+    curModel.duration = (itemSize.width + offset) / 5.0f;
+    
+    return ;
+}
+
+-(BOOL)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout canAdjustItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [_selectedItemIndexPath containsObject:indexPath];
 }
 
 #pragma mark - MMTransitionModifyViewDelegate

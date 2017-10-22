@@ -17,6 +17,8 @@
 @optional
 -(CGSize)collectionView:(UICollectionView*)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout*)layou sizeForItemAtIndexPath:(NSIndexPath*)indexPath;
 -(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didDeleteItemAtIndexPath:(NSIndexPath *)indexPath;
+-(void)collectionView:(UICollectionView*)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout*)layout didAdjustItemAtIndexPath:(NSIndexPath*)indexPath xOffset:(CGFloat)offset;
+-(BOOL)collectionView:(UICollectionView*)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout*)layout canAdjustItemAtIndexPath:(NSIndexPath*)indexPath;
 
 @end
 

@@ -57,6 +57,7 @@
     if(_dimView == nil) {
         _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
         _dimView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25f];
+        [_dimView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)]];
     }
     
     self.frame = CGRectMake(0, SCREEN_WIDTH, SCREEN_HEIGHT, 66.0f);
