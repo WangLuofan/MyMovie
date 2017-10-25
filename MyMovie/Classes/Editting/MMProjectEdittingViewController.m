@@ -6,9 +6,11 @@
 //  Copyright © 2017年 王落凡. All rights reserved.
 //
 
+#import "MMBasicNavigationController.h"
+#import "MMPhotosCollectionViewController.h"
 #import "MMProjectEdittingViewController.h"
 
-@interface MMProjectEdittingViewController ()
+@interface MMProjectEdittingViewController () <UIGestureRecognizerDelegate>
 
 @end
 
@@ -19,6 +21,11 @@
     
     [self makeRotate:UIInterfaceOrientationLandscapeLeft];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressAction:)];
+    longPressGesture.delegate = self;
+    [self.view addGestureRecognizer:longPressGesture];
+    
     return ;
 }
 
@@ -34,6 +41,10 @@
     
     [self makeRotate:UIInterfaceOrientationPortrait];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+    return ;
+}
+
+-(void)handleLongPressAction:(UIGestureRecognizer*)recognizer {
     return ;
 }
 
@@ -74,6 +85,20 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    UITabBarController* tabbarController = [self.childViewControllers objectAtIndex:0];
+    MMBasicNavigationController* selectedController = (MMBasicNavigationController*)tabbarController.selectedViewController;
+    UIViewController* viewController = selectedController.topViewController;
+    
+    if([viewController isKindOfClass:[MMPhotosCollectionViewController class]] == NO)
+        return NO;
+    
+    CGPoint location = [gestureRecognizer locationInView:viewController.view];
+    
+    return YES;
 }
 
 @end

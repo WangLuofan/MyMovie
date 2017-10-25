@@ -258,7 +258,7 @@
         <!--音频-->
         <scene sceneID="wyc-or-0Es">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zZd-Fc-GGB" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zZd-Fc-GGB" customClass="MMBasicNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="音频" image="THTabBarAudio" selectedImage="THTabBarAudio_selected" id="s8q-Q5-7Lt"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LHY-F4-dW4">

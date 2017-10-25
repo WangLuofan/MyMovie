@@ -10,6 +10,8 @@
 
 @interface MMMediaModifyItemCollectionViewCell : UICollectionViewCell
 
+@property (weak, nonatomic) IBOutlet UILabel *contentTitleLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *contentImageView;
+-(UIImage*)toImage;
 
 @end

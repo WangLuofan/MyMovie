@@ -207,6 +207,7 @@ static NSString * const reuseIdentifier = @"Cell";
                 [timeArr addObject:[NSValue valueWithCMTime:cursorTime]];
             }
             
+            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = YES;
             if(((MMMediaVideoModel*)model).thumbnail != nil)
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaVideoModel*)model).thumbnail;
             else {
@@ -222,12 +223,16 @@ static NSString * const reuseIdentifier = @"Cell";
                 }];
             }
         } else if(model.mediaType == MMAssetMediaTypeImage) {
+            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = YES;
             if(((MMMediaImageModel*)model).thumbnail != nil)
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaImageModel*)model).thumbnail;
             else {
                 ((MMMediaImageModel*)model).thumbnail = [self generateThumbnailWithImage:[UIImage imageWithData:((MMMediaImageModel*)model).srcImage] size:CGSizeMake(itemWidth, 80.0f)];
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaImageModel*)model).thumbnail;
             }
+        }else if(model.mediaType == MMAssetMediaTypeAudio) {
+            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = NO;
+            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.text = [NSString stringWithFormat:@"%@-%@", ((MMMediaAudioModel*)model).title, ((MMMediaAudioModel*)model).artist];
         }
     }else if(model.mediaType == MMAssetMediaTypeTransition) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaItemTransitionCollectionViewCellIdentifier forIndexPath:indexPath];
@@ -244,7 +249,7 @@ static NSString * const reuseIdentifier = @"Cell";
     else
         model = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
-    if(model.mediaType == MMAssetMediaTypeVideo || model.mediaType == MMAssetMediaTypeImage) {
+    if(model.mediaType != MMAssetMediaTypeTransition) {
         BOOL bDeselect = NO;
         for (NSIndexPath* selectedIndexPath in _selectedItemIndexPath) {
             if(selectedIndexPath.item == indexPath.item) {
@@ -257,14 +262,12 @@ static NSString * const reuseIdentifier = @"Cell";
         
         if(bDeselect == NO)
             [_selectedItemIndexPath addObject:indexPath];
-    } else if(model.mediaType == MMAssetMediaTypeTransition) {
+    } else {
         if(_transitionModifyView == nil) {
             _transitionModifyView = (MMTransitionModifyView*)[[[NSBundle mainBundle] loadNibNamed:@"MMTransitionModifyView" owner:nil options:nil] objectAtIndex:0];
             _transitionModifyView.delegate = self;
         }
         [_transitionModifyView showInView:self.parentViewController.navigationController.view withModel:model];
-    }else if(model.mediaType == MMAssetMediaTypeAudio) {
-        
     }
     
     return ;
@@ -354,22 +357,36 @@ static NSString * const reuseIdentifier = @"Cell";
     return ;
 }
 
--(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didAdjustItemAtIndexPath:(NSIndexPath *)indexPath xOffset:(CGFloat)offset {
-    CGSize itemSize = [self collectionView:collectionView layout:layout sizeForItemAtIndexPath:indexPath];
-    
+-(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didAdjustItemAtIndexPath:(NSIndexPath *)indexPath toWidth:(CGFloat)width {
     MMMediaItemModel* curModel = nil;
     if(indexPath.section == 0)
         curModel = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];
     else
         curModel = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
-    curModel.duration = (itemSize.width + offset) / 5.0f;
+    curModel.duration = width / 5.0f;
     
     return ;
 }
 
 -(BOOL)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout canAdjustItemAtIndexPath:(NSIndexPath *)indexPath {
     return [_selectedItemIndexPath containsObject:indexPath];
+}
+
+-(BOOL)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [_selectedItemIndexPath containsObject:indexPath] == NO;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didMoveItemAtIndexPath:(NSIndexPath *)srcIndexPath toIndexPath:(NSIndexPath *)dstIndexPath {
+    if(srcIndexPath.section == dstIndexPath.section) {
+        if(srcIndexPath.section == 0)
+            [_assetsDataSource exchangeObjectAtIndex:(NSUInteger)srcIndexPath.item withObjectAtIndex:(NSUInteger)dstIndexPath.item];
+        else
+            [_audioDataSource exchangeObjectAtIndex:(NSUInteger)srcIndexPath.item withObjectAtIndex:(NSUInteger)dstIndexPath.item];
+    }
+    
+    [collectionView reloadSections:[NSIndexSet indexSetWithIndex:(NSUInteger)srcIndexPath.section]];
+    return ;
 }
 
 #pragma mark - MMTransitionModifyViewDelegate

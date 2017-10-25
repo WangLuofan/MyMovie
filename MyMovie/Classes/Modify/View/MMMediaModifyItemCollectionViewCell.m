@@ -56,7 +56,19 @@
     [super prepareForReuse];
     
     self.contentImageView.image = nil;
+    self.contentTitleLabel.text = @"";
     return ;
+}
+
+-(UIImage*)toImage {
+    UIGraphicsBeginImageContext(self.bounds.size);
+    
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage* cellImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return cellImg;
 }
 
 @end

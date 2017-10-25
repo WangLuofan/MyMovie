@@ -26,10 +26,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
                         <color key="backgroundColor" red="0.28235294119999998" green="0.76470588240000004" blue="0.38431372549999998" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJb-Bt-pbP">
+                        <rect key="frame" x="10" y="10" width="48" height="24"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <constraints>
+                <constraint firstItem="qJb-Bt-pbP" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="top" constant="10" id="2tX-PK-dXW"/>
                 <constraint firstItem="BjF-Kx-WE7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="3O1-fe-EJ0"/>
+                <constraint firstItem="qJb-Bt-pbP" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" constant="10" id="LTq-mk-1Me"/>
                 <constraint firstAttribute="trailing" secondItem="mhT-NL-gUJ" secondAttribute="trailing" id="WBU-5A-yMc"/>
                 <constraint firstItem="mhT-NL-gUJ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="axZ-ja-7xI"/>
                 <constraint firstItem="BjF-Kx-WE7" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="bB4-DY-5Ez"/>
@@ -43,6 +51,7 @@
             <connections>
                 <outlet property="bottomLayoutConstraint" destination="cmg-4u-zpl" id="ksd-zf-13X"/>
                 <outlet property="contentImageView" destination="BjF-Kx-WE7" id="AdB-ir-jkx"/>
+                <outlet property="contentTitleLabel" destination="qJb-Bt-pbP" id="mMd-gO-Yuy"/>
                 <outlet property="leadingLayoutConstraint" destination="3O1-fe-EJ0" id="dix-W7-TAe"/>
                 <outlet property="selectionImageView" destination="mhT-NL-gUJ" id="jGX-6e-Ymp"/>
                 <outlet property="topLayoutConstraint" destination="bB4-DY-5Ez" id="UQG-mU-bb6"/>

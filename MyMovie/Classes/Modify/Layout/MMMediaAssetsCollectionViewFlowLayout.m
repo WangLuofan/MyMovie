@@ -7,9 +7,11 @@
 //
 
 #import "MMPhotoManager.h"
+#import "MMMediaModifyItemCollectionViewCell.h"
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
 
 #define NSIndexPathSame(indexPath1, indexPath2) (indexPath1.section == indexPath2.section && indexPath1.item == indexPath2.item)
+#define NSStringFromIndexPath(indexPath) [NSString stringWithFormat:@"{section = %ld, item = %ld}", indexPath.section, indexPath.item]
 
 @interface MMLayoutAttributeFrameHeight : NSObject
 
@@ -21,6 +23,11 @@
 @implementation MMLayoutAttributeFrameHeight
 @end
 
+typedef NS_OPTIONS(NSUInteger, MMDragMode) {
+    MMDragModeTrim,
+    MMDragModeDrag,
+};
+
 @interface MMMediaAssetsCollectionViewFlowLayout() <UIGestureRecognizerDelegate>
 
 @property(nonatomic, assign) id<MMMediaAssetsCollectionViewFlowLayoutDelegate> delegate;
@@ -28,8 +35,10 @@
 @property(nonatomic, strong) NSMutableArray* calculatedLayoutFrames;            //cell frame 缓存
 @property(nonatomic, strong) NSMutableArray* calculatedMaxSectionHeight;
 
-@property(nonatomic, strong) NSIndexPath* panIndexPath;
-@property(nonatomic, assign) CGFloat xOffset;
+@property(nonatomic, strong) NSIndexPath* gestrureIndexPath;
+
+@property(nonatomic, assign) MMDragMode dragMode;
+@property(nonatomic, strong) UIImageView* draggableImageView;
 
 @end
 
@@ -50,85 +59,24 @@
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGestureAction:)];
     tapGesture.numberOfTapsRequired = 2;
     tapGesture.delegate = self;
-    [self.collectionView addGestureRecognizer:tapGesture];
     
     UIPanGestureRecognizer* panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGestureAction:)];
     panGesture.delegate = self;
+    
+    UILongPressGestureRecognizer* longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGestureAction:)];
+    longPressGesture.delegate = self;
+    longPressGesture.minimumPressDuration = 0.5f;
+    
+    [self.collectionView addGestureRecognizer:tapGesture];
     [self.collectionView addGestureRecognizer:panGesture];
-    
-    return ;
-}
-
--(void)handlePanGestureAction:(UIGestureRecognizer*)recognizer {
-    
-    if(recognizer.state == UIGestureRecognizerStateBegan) {
-        CGPoint point = [recognizer locationInView:self.collectionView];
-        _panIndexPath = [self.collectionView indexPathForItemAtPoint:point];
-        
-        _xOffset = 0.0f;
-    }else if(recognizer.state == UIGestureRecognizerStateChanged) {
-        CGPoint offset = [((UIPanGestureRecognizer*)recognizer) translationInView:self.collectionView];
-        
-        UICollectionViewLayoutAttributes* attrs = [_calculatedLayoutAttributes objectForKey:_panIndexPath];
-        attrs.frame = CGRectMake(attrs.frame.origin.x, attrs.frame.origin.y, attrs.frame.size.width + offset.x - _xOffset, attrs.frame.size.height);
-        
-        NSMutableArray* frameArr = [_calculatedLayoutFrames objectAtIndex:(NSUInteger)_panIndexPath.section];
-        [frameArr replaceObjectAtIndex:(NSUInteger)_panIndexPath.item withObject:[NSValue valueWithCGRect:attrs.frame]];
-        
-        for (NSIndexPath* indexPath in _calculatedLayoutAttributes.allKeys) {
-            if(indexPath.section == _panIndexPath.section && indexPath.item > _panIndexPath.item) {
-                UICollectionViewLayoutAttributes* otAttrs = [_calculatedLayoutAttributes objectForKey:indexPath];
-                otAttrs.frame = CGRectMake(otAttrs.frame.origin.x + offset.x - _xOffset, otAttrs.frame.origin.y, otAttrs.frame.size.width, otAttrs.frame.size.height);
-                [frameArr replaceObjectAtIndex:(NSUInteger)indexPath.item withObject:[NSValue valueWithCGRect:otAttrs.frame]];
-            }
-        }
-        
-        _xOffset = offset.x;
-        [self invalidateLayout];
-    }else if(recognizer.state == UIGestureRecognizerStateEnded) {
-        if([self.delegate respondsToSelector:@selector(collectionView:layout:didAdjustItemAtIndexPath:xOffset:)])
-            [self.delegate collectionView:self.collectionView layout:self didAdjustItemAtIndexPath:_panIndexPath xOffset:[((UIPanGestureRecognizer*)recognizer) translationInView:self.collectionView].x];
-    }
-    
-    return ;
-}
-
--(void)handleTapGestureAction:(UIGestureRecognizer*)recognizer {
-    
-    CGPoint touchPoint = [recognizer locationInView:self.collectionView];
-    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:touchPoint];
-    
-    if(indexPath == nil) return ;
-    
-    MMAssetMediaType mediaType = [self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:indexPath];
-    
-    if(mediaType == MMAssetMediaTypeTransition)
-        return ;
-    
-    NSMutableArray* framesArr = (NSMutableArray*)[_calculatedLayoutFrames objectAtIndex:(NSUInteger)indexPath.section];
-    if(framesArr.count == 1 && indexPath.section == 0) {
-        [_calculatedLayoutAttributes removeAllObjects];
-        [_calculatedLayoutFrames removeAllObjects];
-    }
-    else {
-        NSArray* allKeys = _calculatedLayoutAttributes.allKeys;
-        for (NSIndexPath* curIndexPath in allKeys) {
-            if(curIndexPath.section == indexPath.section) {
-                [_calculatedLayoutAttributes removeObjectForKey:curIndexPath];
-            }
-        }
-        [framesArr removeAllObjects];
-    }
-    
-    if([self.delegate respondsToSelector:@selector(collectionView:layout:didDeleteItemAtIndexPath:)])
-        [self.delegate collectionView:self.collectionView layout:self didDeleteItemAtIndexPath:indexPath];
+    [self.collectionView addGestureRecognizer:longPressGesture];
     
     return ;
 }
 
 -(BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
     CGRect visibleRect = CGRectMake(self.collectionView.contentOffset.x, 0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
-
+    
     return (CGRectIntersectsRect(newBounds, visibleRect)) == true;
 }
 
@@ -232,7 +180,7 @@
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]])
         return YES;
-    else {
+    else if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]){
         CGPoint location = [gestureRecognizer locationInView:self.collectionView];
         NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:location];
         
@@ -240,21 +188,201 @@
         if(indexPath == nil)
             return NO;
         
-        //不能调整
-        if([self.delegate respondsToSelector:@selector(collectionView:layout:canAdjustItemAtIndexPath:)])
-            if([self.delegate collectionView:self.collectionView layout:self canAdjustItemAtIndexPath:indexPath] == NO)
-                return NO;
-        
         //特效宽度无法调整
         MMAssetMediaType mediaType = [self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:indexPath];
         if(mediaType == MMAssetMediaTypeTransition)
             return NO;
         
-        UICollectionViewLayoutAttributes* attr = [self layoutAttributesForItemAtIndexPath:indexPath];
-        if(CGRectContainsPoint(CGRectMake(attr.frame.origin.x + attr.frame.size.width - 50, attr.frame.origin.y, 50, attr.frame.size.height), location) == true)
-            return YES;
+        if(_dragMode == MMDragModeTrim) {
+            //不能调整
+            if([self.delegate respondsToSelector:@selector(collectionView:layout:canAdjustItemAtIndexPath:)])
+                if([self.delegate collectionView:self.collectionView layout:self canAdjustItemAtIndexPath:indexPath] == NO)
+                    return NO;
+            
+            UICollectionViewLayoutAttributes* attr = [self layoutAttributesForItemAtIndexPath:indexPath];
+            if(CGRectContainsPoint(CGRectMake(attr.frame.origin.x + attr.frame.size.width - 50, attr.frame.origin.y, 50, attr.frame.size.height), location) == true)
+                return YES;
+        }else {
+            if([self.delegate respondsToSelector:@selector(collectionView:layout:canMoveItemAtIndexPath:)])
+                if([self.delegate collectionView:self.collectionView layout:self canMoveItemAtIndexPath:indexPath] == NO)
+                    return NO;
+        }
+    }else {
+        CGPoint location = [gestureRecognizer locationInView:self.collectionView];
+        NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:location];
+        
+        if(indexPath == nil)
+            return NO;
+        
+        if([self.delegate respondsToSelector:@selector(collectionView:layout:canMoveItemAtIndexPath:)])
+            if([self.delegate collectionView:self.collectionView layout:self canMoveItemAtIndexPath:indexPath] == NO)
+                return NO;
+        
+        MMAssetMediaType mediaType = [self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:indexPath];
+        if(mediaType == MMAssetMediaTypeTransition)
+            return NO;
     }
-    return NO;
+    
+    return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)recognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherRecognizer {
+    if([recognizer isKindOfClass:[UIPanGestureRecognizer class]] && [otherRecognizer isKindOfClass:[UIPanGestureRecognizer class]])
+        return NO;
+    return YES;
+}
+
+#pragma mark - 手势处理
+-(void)handlePanGestureAction:(UIGestureRecognizer*)recognizer {
+    CGPoint location = [recognizer locationInView:self.collectionView];
+    CGPoint offset = [((UIPanGestureRecognizer*)recognizer) translationInView:self.collectionView];
+    
+    NSIndexPath* newIndexPath = [self.collectionView indexPathForItemAtPoint:location];
+    
+    if(recognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint point = [recognizer locationInView:self.collectionView];
+        _gestrureIndexPath = [self.collectionView indexPathForItemAtPoint:point];
+    }else if(recognizer.state == UIGestureRecognizerStateChanged) {
+        if(_dragMode == MMDragModeDrag) {
+            
+            UICollectionViewCell* curCell = [self.collectionView cellForItemAtIndexPath:_gestrureIndexPath];
+            if(curCell != nil)
+                curCell.hidden = YES;
+            
+            _draggableImageView.center = CGPointMake(_draggableImageView.center.x + offset.x, _draggableImageView.center.y + offset.y);
+            
+            if(newIndexPath != nil &&[self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:newIndexPath] != MMAssetMediaTypeTransition && newIndexPath != _gestrureIndexPath && newIndexPath.section == _gestrureIndexPath.section) {
+                
+                NSMutableArray* frameArray = [_calculatedLayoutFrames objectAtIndex:(NSUInteger)newIndexPath.section];
+                [frameArray removeAllObjects];
+                
+                NSArray* allKeys = _calculatedLayoutAttributes.allKeys;
+                for(NSIndexPath* indexPath in allKeys) {
+                    if(indexPath.section == _gestrureIndexPath.section)
+                        [_calculatedLayoutAttributes removeObjectForKey:indexPath];
+                }
+            }
+            
+        }else if(_dragMode == MMDragModeTrim) {
+            
+            UICollectionViewLayoutAttributes* attrs = [_calculatedLayoutAttributes objectForKey:_gestrureIndexPath];
+            
+            if(attrs.frame.size.width + offset.x < 5.0f)
+                return ;
+            
+            attrs.frame = CGRectMake(attrs.frame.origin.x, attrs.frame.origin.y, attrs.frame.size.width + offset.x, attrs.frame.size.height);
+            
+            NSMutableArray* frameArr = [_calculatedLayoutFrames objectAtIndex:(NSUInteger)_gestrureIndexPath.section];
+            [frameArr replaceObjectAtIndex:(NSUInteger)_gestrureIndexPath.item withObject:[NSValue valueWithCGRect:attrs.frame]];
+            
+            for (NSIndexPath* indexPath in _calculatedLayoutAttributes.allKeys) {
+                if(indexPath.section == _gestrureIndexPath.section && indexPath.item > _gestrureIndexPath.item) {
+                    UICollectionViewLayoutAttributes* otAttrs = [_calculatedLayoutAttributes objectForKey:indexPath];
+                    otAttrs.frame = CGRectMake(otAttrs.frame.origin.x + offset.x, otAttrs.frame.origin.y, otAttrs.frame.size.width, otAttrs.frame.size.height);
+                    [frameArr replaceObjectAtIndex:(NSUInteger)indexPath.item withObject:[NSValue valueWithCGRect:otAttrs.frame]];
+                }
+            }
+            
+            [self invalidateLayout];
+        }
+        [((UIPanGestureRecognizer*)recognizer) setTranslation:CGPointZero inView:self.collectionView];
+    }else if(recognizer.state == UIGestureRecognizerStateEnded) {
+        if(_dragMode == MMDragModeTrim) {
+            NSMutableArray* frameArr = [_calculatedLayoutFrames objectAtIndex:(NSUInteger)_gestrureIndexPath.section];
+            
+            if([self.delegate respondsToSelector:@selector(collectionView:layout:didAdjustItemAtIndexPath:toWidth:)])
+                [self.delegate collectionView:self.collectionView layout:self didAdjustItemAtIndexPath:_gestrureIndexPath toWidth:[[frameArr objectAtIndex:(NSUInteger)_gestrureIndexPath.item] CGRectValue].size.width];
+        }else {
+            UICollectionViewCell* curCell = [self.collectionView cellForItemAtIndexPath:_gestrureIndexPath];
+            if(curCell != nil)
+                curCell.hidden = NO;
+            
+            [_draggableImageView removeFromSuperview];
+            _draggableImageView = nil;
+            
+            _dragMode = MMDragModeTrim;
+            
+            if([self.delegate respondsToSelector:@selector(collectionView:layout:didMoveItemAtIndexPath:toIndexPath:)]) {
+                [self.delegate collectionView:self.collectionView layout:self didMoveItemAtIndexPath:_gestrureIndexPath toIndexPath:newIndexPath];
+            }
+        }
+        
+        [self invalidateLayout];
+    }
+    
+    return ;
+}
+
+-(void)handleTapGestureAction:(UIGestureRecognizer*)recognizer {
+    
+    CGPoint touchPoint = [recognizer locationInView:self.collectionView];
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:touchPoint];
+    
+    if(indexPath == nil) return ;
+    
+    MMAssetMediaType mediaType = [self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:indexPath];
+    
+    if(mediaType == MMAssetMediaTypeTransition)
+        return ;
+    
+    NSMutableArray* framesArr = (NSMutableArray*)[_calculatedLayoutFrames objectAtIndex:(NSUInteger)indexPath.section];
+    if(framesArr.count == 1 && indexPath.section == 0) {
+        [_calculatedLayoutAttributes removeAllObjects];
+        [_calculatedLayoutFrames removeAllObjects];
+    }
+    else {
+        NSArray* allKeys = _calculatedLayoutAttributes.allKeys;
+        for (NSIndexPath* curIndexPath in allKeys) {
+            if(curIndexPath.section == indexPath.section) {
+                [_calculatedLayoutAttributes removeObjectForKey:curIndexPath];
+            }
+        }
+        [framesArr removeAllObjects];
+    }
+    
+    if([self.delegate respondsToSelector:@selector(collectionView:layout:didDeleteItemAtIndexPath:)])
+        [self.delegate collectionView:self.collectionView layout:self didDeleteItemAtIndexPath:indexPath];
+    
+    return ;
+}
+
+-(void)handleLongPressGestureAction:(UIGestureRecognizer*)recognizer {
+    CGPoint touchPoint = [recognizer locationInView:self.collectionView];
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:touchPoint];
+    
+    if(indexPath == nil) return ;
+    
+    MMAssetMediaType mediaType = [self.delegate collectionView:self.collectionView layout:self assetsTypeForItemAtIndexPath:indexPath];
+    
+    if(mediaType == MMAssetMediaTypeTransition)
+        return ;
+    
+    if(recognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint point = [recognizer locationInView:self.collectionView];
+        _gestrureIndexPath = [self.collectionView indexPathForItemAtPoint:point];
+        
+        MMMediaModifyItemCollectionViewCell* cell = (MMMediaModifyItemCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:_gestrureIndexPath];
+        
+        if(cell == nil) return ;
+        self.draggableImageView = [[UIImageView alloc] initWithImage:[cell toImage]];
+        
+        [self.collectionView addSubview:self.draggableImageView];
+        self.draggableImageView.frame = cell.frame;
+        
+        _dragMode = MMDragModeDrag;
+    } else if(recognizer.state == UIGestureRecognizerStateEnded) {
+        if(_draggableImageView != nil) {
+            [_draggableImageView removeFromSuperview];
+            _draggableImageView = nil;
+        }
+        
+        UICollectionViewCell* curCell = [self.collectionView cellForItemAtIndexPath:_gestrureIndexPath];
+        if(curCell != nil)
+            curCell.hidden = NO;
+        
+        _dragMode = MMDragModeTrim;
+    }
+    return ;
 }
 
 @end

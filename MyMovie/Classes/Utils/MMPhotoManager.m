@@ -37,7 +37,9 @@ static MMPhotoManager* _instance;
 -(void)requestAuthorization:(void (^)(MMAuthorizationStatus))handler {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         if(handler)
-            handler((MMAuthorizationStatus)status);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler((MMAuthorizationStatus)status);
+            });
     }];
     return ;
 }
