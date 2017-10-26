@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="MMAssetPlayerControl">
+            <rect key="frame" x="0.0" y="0.0" width="603" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="63p-c2-gSF">
+                    <rect key="frame" x="74" y="8" width="455" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="15" id="PZm-8s-ZFH"/>
+                    </constraints>
+                    <connections>
+                        <action selector="beforeProgressChanged:" destination="iN0-l3-epB" eventType="touchDown" id="oA5-2Q-rnX"/>
+                        <action selector="progressChanged:" destination="iN0-l3-epB" eventType="touchUpInside" id="YjZ-ce-Atz"/>
+                        <action selector="progressValueChanged:" destination="iN0-l3-epB" eventType="valueChanged" id="I06-gn-eP4"/>
+                    </connections>
+                </slider>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HFE-c6-m8h">
+                    <rect key="frame" x="15" y="5" width="46" height="20.5"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YIH-Zq-yzB">
+                    <rect key="frame" x="542" y="5" width="46" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gaP-9a-MDR">
+                    <rect key="frame" x="392.5" y="26" width="20" height="22"/>
+                    <state key="normal" image="tp_ff_icon"/>
+                    <connections>
+                        <action selector="forwardAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="ebf-xT-yYM"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUR-nQ-NaS">
+                    <rect key="frame" x="189.5" y="26" width="20" height="22"/>
+                    <state key="normal" image="tp_rewind_icon"/>
+                    <connections>
+                        <action selector="backwardAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="AMJ-ma-nRz"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cmL-mD-epJ">
+                    <rect key="frame" x="321.5" y="24.5" width="21" height="22"/>
+                    <state key="normal" image="tp_stop_icon"/>
+                    <connections>
+                        <action selector="stopAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="gAk-22-BDr"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TZs-2I-xIF">
+                    <rect key="frame" x="259.5" y="25" width="22" height="23"/>
+                    <state key="normal" image="tp_play_icon"/>
+                    <connections>
+                        <action selector="playAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="T5f-l3-57d"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="TZs-2I-xIF" secondAttribute="bottom" constant="2" id="17e-49-7fy"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="gaP-9a-MDR" secondAttribute="bottom" constant="2" id="5nc-DX-HLE"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="YIH-Zq-yzB" secondAttribute="trailing" constant="15" id="7ct-8U-a89"/>
+                <constraint firstItem="YIH-Zq-yzB" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="AMZ-Js-CaG"/>
+                <constraint firstItem="HFE-c6-m8h" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="15" id="BSH-d0-tRF"/>
+                <constraint firstItem="63p-c2-gSF" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="F5r-z1-c5O"/>
+                <constraint firstItem="63p-c2-gSF" firstAttribute="centerY" secondItem="HFE-c6-m8h" secondAttribute="centerY" id="GoY-zn-5IE"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="HUR-nQ-NaS" secondAttribute="bottom" constant="2" id="HXm-hl-OzV"/>
+                <constraint firstItem="TZs-2I-xIF" firstAttribute="leading" secondItem="HUR-nQ-NaS" secondAttribute="trailing" constant="50" id="Kay-Kg-04r"/>
+                <constraint firstItem="63p-c2-gSF" firstAttribute="leading" secondItem="HFE-c6-m8h" secondAttribute="trailing" constant="15" id="ZcH-wv-jdZ"/>
+                <constraint firstItem="TZs-2I-xIF" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="centerX" constant="-20" id="i2T-j7-io4"/>
+                <constraint firstItem="cmL-mD-epJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="centerX" constant="20" id="pHS-qE-EEX"/>
+                <constraint firstItem="gaP-9a-MDR" firstAttribute="leading" secondItem="cmL-mD-epJ" secondAttribute="trailing" constant="50" id="qSY-4M-xtq"/>
+                <constraint firstItem="YIH-Zq-yzB" firstAttribute="leading" secondItem="63p-c2-gSF" secondAttribute="trailing" constant="15" id="qeu-lp-PGY"/>
+                <constraint firstItem="cmL-mD-epJ" firstAttribute="centerY" secondItem="TZs-2I-xIF" secondAttribute="centerY" constant="-1" id="teW-wp-ypJ"/>
+                <constraint firstItem="HFE-c6-m8h" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="ucp-Q4-w3n"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="curTimeLabel" destination="HFE-c6-m8h" id="qzA-mK-5hb"/>
+                <outlet property="playBtn" destination="TZs-2I-xIF" id="qme-VW-Wx8"/>
+                <outlet property="progressSlider" destination="63p-c2-gSF" id="q5E-ze-g0H"/>
+                <outlet property="totTimeLabel" destination="YIH-Zq-yzB" id="wph-QR-8Je"/>
+            </connections>
+            <point key="canvasLocation" x="387" y="-434"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="tp_ff_icon" width="20" height="15"/>
+        <image name="tp_play_icon" width="22" height="23"/>
+        <image name="tp_rewind_icon" width="20" height="15"/>
+        <image name="tp_stop_icon" width="21" height="19"/>
+    </resources>
+</document>

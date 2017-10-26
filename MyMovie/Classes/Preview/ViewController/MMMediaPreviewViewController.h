@@ -10,9 +10,11 @@
 
 @class PHAsset;
 @class AVPlayerItem;
+@class MPMediaItem;
 @interface MMMediaPreviewViewController : MMBasicViewController
 
 @property(nonatomic, strong) PHAsset* mediaAsset;
+@property(nonatomic, strong) MPMediaItem* mediaItem;
 
 -(void)playVideoWithPlayerItem:(AVPlayerItem*)playerItem;
 

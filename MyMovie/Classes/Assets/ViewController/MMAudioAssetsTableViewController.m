@@ -9,6 +9,7 @@
 #import "MMPhotoManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "MMAudioAssetsTableViewController.h"
+#import "MMMediaPreviewViewController.h"
 #import "MMMediaModifyCollectionViewController.h"
 
 #define kAudioAssetsTableViewCellIdentifier @"AudioAssetsTableViewCellIdentifier"
@@ -45,6 +46,30 @@
     return ;
 }
 
+-(void)previewItemAtIndexPath:(NSIndexPath *)indexPath {
+    MPMediaItem* mediaItem = [_musicItemsArray objectAtIndex:(NSUInteger)indexPath.row];
+    
+    MMMediaPreviewViewController* previewController = (MMMediaPreviewViewController*)[self.navigationController.parentViewController.parentViewController.childViewControllers objectAtIndex:1];
+    previewController.mediaItem = mediaItem;
+    
+    return ;
+}
+
+-(void)insertModifyItemAtIndexPath:(NSIndexPath*)indexPath {
+    if(_modifyViewController == nil)
+        _modifyViewController = [self.navigationController.parentViewController.parentViewController.childViewControllers objectAtIndex:2];
+    
+    MPMediaItem* mediaItem = [_musicItemsArray objectAtIndex:(NSUInteger)indexPath.row];
+    MMMediaAudioModel* audioModel = [[MMMediaAudioModel alloc] init];
+    
+    audioModel.mediaType = MMAssetMediaTypeAudio;
+    audioModel.title = mediaItem.title;
+    audioModel.artist = mediaItem.artist;
+    audioModel.mediaAsset = [AVAsset assetWithURL:mediaItem.assetURL];
+    
+    [_modifyViewController insertItemWithMediaItemModel:audioModel];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -66,29 +91,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:kAudioAssetsTableViewCellIdentifier];
     MPMediaItem* mediaItem = [_musicItemsArray objectAtIndex:(NSUInteger)indexPath.row];
     
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = mediaItem.title;
     cell.detailTextLabel.text = mediaItem.artist;
     
-    UIButton* addBtn = [UIButton buttonWithType:UIButtonTypeContactAdd];
-    cell.accessoryView = addBtn;
     return cell;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if(_modifyViewController == nil)
-        _modifyViewController = [self.navigationController.parentViewController.parentViewController.childViewControllers objectAtIndex:2];
-    
-    MPMediaItem* mediaItem = [_musicItemsArray objectAtIndex:(NSUInteger)indexPath.row];
-    MMMediaAudioModel* audioModel = [[MMMediaAudioModel alloc] init];
-    
-    audioModel.mediaType = MMAssetMediaTypeAudio;
-    audioModel.title = mediaItem.title;
-    audioModel.artist = mediaItem.artist;
-    audioModel.mediaAsset = [AVAsset assetWithURL:mediaItem.assetURL];
-    
-    [_modifyViewController insertItemWithMediaItemModel:audioModel];
-    return ;
 }
 
 @end

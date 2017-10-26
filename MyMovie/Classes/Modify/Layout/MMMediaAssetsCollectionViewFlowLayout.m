@@ -9,6 +9,7 @@
 #import "MMPhotoManager.h"
 #import "MMMediaModifyItemCollectionViewCell.h"
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
+#import "UIView+MMRender.h"
 
 #define NSIndexPathSame(indexPath1, indexPath2) (indexPath1.section == indexPath2.section && indexPath1.item == indexPath2.item)
 #define NSStringFromIndexPath(indexPath) [NSString stringWithFormat:@"{section = %ld, item = %ld}", indexPath.section, indexPath.item]
@@ -297,16 +298,19 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
             if(curCell != nil)
                 curCell.hidden = NO;
             
-            [_draggableImageView removeFromSuperview];
-            _draggableImageView = nil;
+            if(_draggableImageView != nil) {
+                [_draggableImageView removeFromSuperview];
+                _draggableImageView = nil;
+            }
             
             _dragMode = MMDragModeTrim;
             
-            if([self.delegate respondsToSelector:@selector(collectionView:layout:didMoveItemAtIndexPath:toIndexPath:)]) {
+            if([self.delegate respondsToSelector:@selector(collectionView:layout:didMoveItemAtIndexPath:toIndexPath:)] && _gestrureIndexPath != nil && newIndexPath != nil) {
                 [self.delegate collectionView:self.collectionView layout:self didMoveItemAtIndexPath:_gestrureIndexPath toIndexPath:newIndexPath];
             }
         }
         
+        self.collectionView.scrollEnabled = YES;
         [self invalidateLayout];
     }
     
@@ -380,7 +384,7 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
         if(curCell != nil)
             curCell.hidden = NO;
         
-        _dragMode = MMDragModeTrim;
+        self.collectionView.scrollEnabled = NO;
     }
     return ;
 }

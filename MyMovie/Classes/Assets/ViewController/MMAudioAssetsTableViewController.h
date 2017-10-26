@@ -10,4 +10,7 @@
 
 @interface MMAudioAssetsTableViewController : MMMediaAssetsTableViewController
 
+-(void)insertModifyItemAtIndexPath:(NSIndexPath*)indexPath;
+-(void)previewItemAtIndexPath:(NSIndexPath *)indexPath;
+
 @end

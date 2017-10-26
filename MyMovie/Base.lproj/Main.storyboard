@@ -180,13 +180,36 @@
                     <view key="view" contentMode="scaleToFill" id="6ck-fL-43E">
                         <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3MD-jr-m9S">
+                                <rect key="frame" x="0.0" y="0.0" width="188" height="302"/>
+                            </imageView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksE-tQ-UaG">
+                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="0.76470588240000004" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="3MD-jr-m9S" secondAttribute="bottom" id="Ets-uN-YOd"/>
+                            <constraint firstItem="3MD-jr-m9S" firstAttribute="top" secondItem="eTq-wS-QZe" secondAttribute="top" id="GDm-De-8l4"/>
+                            <constraint firstItem="eTq-wS-QZe" firstAttribute="bottom" secondItem="ksE-tQ-UaG" secondAttribute="bottom" id="doi-mz-Q9Q"/>
+                            <constraint firstItem="3MD-jr-m9S" firstAttribute="leading" secondItem="eTq-wS-QZe" secondAttribute="leading" id="elF-FK-8FM"/>
+                            <constraint firstAttribute="trailing" secondItem="ksE-tQ-UaG" secondAttribute="trailing" id="iSo-ar-XXd"/>
+                            <constraint firstItem="ksE-tQ-UaG" firstAttribute="top" secondItem="eTq-wS-QZe" secondAttribute="top" id="kOj-ci-aKt"/>
+                            <constraint firstItem="ksE-tQ-UaG" firstAttribute="leading" secondItem="6ck-fL-43E" secondAttribute="leading" id="mWe-sZ-gGH"/>
+                            <constraint firstAttribute="trailing" secondItem="3MD-jr-m9S" secondAttribute="trailing" id="o9W-ec-LlV"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="eTq-wS-QZe"/>
                     </view>
+                    <connections>
+                        <outlet property="assetsPlayerView" destination="ksE-tQ-UaG" id="lxV-rG-qwa"/>
+                        <outlet property="previewImageView" destination="3MD-jr-m9S" id="qcm-Bj-zIV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3eT-4U-NfK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1669" y="32"/>
+            <point key="canvasLocation" x="1668.8" y="31.484257871064472"/>
         </scene>
         <!--视频-->
         <scene sceneID="GtF-Py-3sS">

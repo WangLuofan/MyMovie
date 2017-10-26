@@ -8,6 +8,7 @@
 
 #import "MMPhotoManager.h"
 #import "MMMediaItemModel.h"
+#import "MMMediaTimeUtils.h"
 #import "MMPhotosItemCollectionViewCell.h"
 #import "MMPhotosCollectionViewController.h"
 #import "MMMediaPreviewViewController.h"
@@ -17,7 +18,7 @@
 #define kItemInternalSpacing 5
 #define kPhotosCollectionViewCellIdentifier @"PhotosCollectionViewCellIdentifier"
 
-@interface MMPhotosCollectionViewController () <MMPhotosItemCollectionViewCellDelegate>
+@interface MMPhotosCollectionViewController ()
 
 @property(nonatomic, copy) NSArray* assets;
 @property(nonatomic, weak) MMMediaModifyCollectionViewController* modifyViewController;
@@ -52,27 +53,6 @@
     return ;
 }
 
--(NSString*)convertTimeIntervalToTime:(NSTimeInterval)timeInterval {
-    NSInteger hour = (NSInteger)(timeInterval / 3600);
-    NSInteger minute = (NSInteger)(timeInterval / 60);
-    NSInteger second = (NSInteger)(timeInterval - hour * 3600 - minute * 60);
-    
-    NSString* timeStr = @"";
-    
-    if(hour != 0)
-        timeStr = [timeStr stringByAppendingString:[NSString stringWithFormat:@"%02ld", (long)hour]];
-    
-    if(hour != 0)
-        timeStr = [timeStr stringByAppendingString:[NSString stringWithFormat:@":%02ld", minute]];
-    else
-        timeStr = [timeStr stringByAppendingString:[NSString stringWithFormat:@"%02ld", minute]];
-    
-    if(second == 0) second += 1;
-    timeStr = [timeStr stringByAppendingString:[NSString stringWithFormat:@":%02ld", second]];
-    
-    return timeStr;
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -92,13 +72,6 @@
     
     PHAsset* asset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
     
-    if(asset.mediaType != PHAssetMediaTypeVideo)
-        cell.durLabel.hidden = YES;
-    else {
-        cell.durLabel.hidden = NO;
-        cell.durLabel.text = [self convertTimeIntervalToTime:asset.duration];
-    }
-    
     CGFloat itemSize = (SCREEN_WIDTH - (kDefaultItemsPerRow + 1) * kItemInternalSpacing) / kDefaultItemsPerRow;
     [[MMPhotoManager sharedManager] requestImageForAsset:asset TargetSize:CGSizeMake(itemSize, itemSize) WhenComplelte:^(UIImage * image, NSDictionary * info) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -106,11 +79,17 @@
         });
     }];
     
-    cell.delegate = self;
+    if(asset.mediaType != PHAssetMediaTypeVideo)
+        cell.durLabel.hidden = YES;
+    else {
+        cell.durLabel.hidden = NO;
+        cell.durLabel.text = [MMMediaTimeUtils convertTimeIntervalToTime:asset.duration];
+    }
+    
     return cell;
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+-(void)previewItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset* asset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
     
     MMMediaPreviewViewController* previewController = (MMMediaPreviewViewController*)[self.navigationController.parentViewController.parentViewController.childViewControllers objectAtIndex:1];
@@ -119,12 +98,10 @@
     return ;
 }
 
-#pragma mark - MMPhotosItemCollectionViewCellDelegate
--(void)mediaAssetsSelectedInItemCell:(MMPhotosItemCollectionViewCell *)ItemCell {
+-(void)insertModifyItemAtIndexPath:(NSIndexPath *)indexPath {
     if(_modifyViewController == nil)
         _modifyViewController = [self.navigationController.parentViewController.parentViewController.childViewControllers objectAtIndex:2];
     
-    NSIndexPath* indexPath = [self.collectionView indexPathForCell:ItemCell];
     if(indexPath != nil) {
         PHAsset* mediaAsset = (PHAsset*)[_assets objectAtIndex:indexPath.item];
         
