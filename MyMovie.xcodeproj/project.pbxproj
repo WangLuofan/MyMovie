@@ -18,6 +18,7 @@
 		B344E3741FA1BDD2006EF1DF /* MMAssetPlayerControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = B344E3731FA1BDD2006EF1DF /* MMAssetPlayerControl.xib */; };
 		B344E3771FA1C94D006EF1DF /* UIImage+MMImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E3761FA1C94D006EF1DF /* UIImage+MMImage.m */; };
 		B344E37A1FA1CED7006EF1DF /* MMMediaTimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E3791FA1CED7006EF1DF /* MMMediaTimeUtils.m */; };
+		B344E37D1FA1E09C006EF1DF /* MMTimerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */; };
 		B3AE18A91F95E370009554D7 /* MMPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FD2F561F95AB95009A0571 /* MMPhotoManager.m */; };
 		B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */; };
 		B3AE18B11F95E705009554D7 /* MMImagePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18AF1F95E705009554D7 /* MMImagePickerTableViewCell.xib */; };
@@ -71,6 +72,8 @@
 		B344E3761FA1C94D006EF1DF /* UIImage+MMImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+MMImage.m"; sourceTree = "<group>"; };
 		B344E3781FA1CED7006EF1DF /* MMMediaTimeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaTimeUtils.h; sourceTree = "<group>"; };
 		B344E3791FA1CED7006EF1DF /* MMMediaTimeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaTimeUtils.m; sourceTree = "<group>"; };
+		B344E37B1FA1E09C006EF1DF /* MMTimerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTimerManager.h; sourceTree = "<group>"; };
+		B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTimerManager.m; sourceTree = "<group>"; };
 		B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMImagePickerTableViewCell.m; sourceTree = "<group>"; };
 		B3AE18AE1F95E705009554D7 /* MMImagePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMImagePickerTableViewCell.h; sourceTree = "<group>"; };
 		B3AE18AF1F95E705009554D7 /* MMImagePickerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMImagePickerTableViewCell.xib; sourceTree = "<group>"; };
@@ -483,6 +486,8 @@
 				B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */,
 				B344E3781FA1CED7006EF1DF /* MMMediaTimeUtils.h */,
 				B344E3791FA1CED7006EF1DF /* MMMediaTimeUtils.m */,
+				B344E37B1FA1E09C006EF1DF /* MMTimerManager.h */,
+				B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -644,6 +649,7 @@
 				B3FAA9741F950A050023792C /* MMMediaModifyCollectionViewController.m in Sources */,
 				B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */,
 				B3AE18B51F95E83D009554D7 /* MMPhotosCollectionViewController.m in Sources */,
+				B344E37D1FA1E09C006EF1DF /* MMTimerManager.m in Sources */,
 				B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */,
 				B344E37A1FA1CED7006EF1DF /* MMMediaTimeUtils.m in Sources */,
 				B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */,

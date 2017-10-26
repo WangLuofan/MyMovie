@@ -9,6 +9,7 @@
 #import "UIImage+MMImage.h"
 #import "MMMediaTimeUtils.h"
 #import "MMAssetPlayerControl.h"
+#import "MMTimerManager.h"
 #import <AVFoundation/AVFoundation.h>
 
 @interface MMAssetPlayerControl()
@@ -39,10 +40,8 @@
 }
 
 -(void)playToEnd:(NSNotification*)notification {
-    if(_progressTimer != nil) {
-        [_progressTimer invalidate];
-        _progressTimer = nil;
-    }
+    if(_progressTimer != nil)
+        [[MMTimerManager sharedManager] removeTimer:_progressTimer];
     
     _curTimeLabel.text = @"00:00";
     [_playBtn setImage:imageNamed(@"tp_play_icon") forState:UIControlStateNormal];
@@ -63,7 +62,7 @@
 
 -(NSTimer *)progressTimer {
     if(_progressTimer == nil) {
-        _progressTimer = [NSTimer timerWithTimeInterval:0.5f target:self selector:@selector(progressTimerEventHandler:) userInfo:nil repeats:YES];
+        _progressTimer = [[MMTimerManager sharedManager] addTimerWithTimeInterval:0.5f repeats:YES target:self selector:@selector(progressTimerEventHandler:)];
     }
     return _progressTimer;
 }
@@ -172,6 +171,10 @@
         }
     }];
     return ;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
