@@ -12,7 +12,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "MMMediaPreviewViewController.h"
 
-@interface MMMediaPreviewViewController ()
+@interface MMMediaPreviewViewController () <UIGestureRecognizerDelegate>
 
 //Image
 @property(nonatomic, weak) IBOutlet UIImageView* previewImageView;
@@ -39,7 +39,9 @@
     }];
     
     [_assetsPlayerView.layer insertSublayer:self.thePlayerLayer atIndex:0];
-    [_assetsPlayerView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPlayerControl:)]];
+    UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPlayerControl:)];
+    tapGesture.delegate = self;
+    [_assetsPlayerView addGestureRecognizer:tapGesture];
     return ;
 }
 
@@ -149,6 +151,14 @@
     }
     
     return ;
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint location = [gestureRecognizer locationInView:_playerControl];
+    if(CGRectContainsPoint(_playerControl.bounds, location))
+        return NO;
+    return YES;
 }
 
 @end

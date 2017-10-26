@@ -22,7 +22,7 @@
 @property(nonatomic, assign) BOOL isPlaying;
 @property(nonatomic, assign) BOOL isAnimationInProgress;
 
-@property(nonatomic, strong) NSTimer* progressTimer;
+@property(nonatomic, weak) NSTimer* progressTimer;
 
 @end
 
