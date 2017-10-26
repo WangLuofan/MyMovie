@@ -12,7 +12,7 @@
 
 +(instancetype)sharedManager;
 
--(NSTimer*)addTimerWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector;
+-(__weak NSTimer*)addTimerWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector;
 -(void)removeTimer:(NSTimer*)timer;
 -(void)removeAllTimers;
 

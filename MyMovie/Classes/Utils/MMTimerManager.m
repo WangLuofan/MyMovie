@@ -35,9 +35,10 @@ static MMTimerManager* _obj;
     return _obj;
 }
 
--(NSTimer *)addTimerWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector {
+-(__weak NSTimer *)addTimerWithTimeInterval:(NSTimeInterval)timeInterval repeats:(BOOL)repeats target:(id)target selector:(SEL)selector {
     NSTimer* timer = [NSTimer timerWithTimeInterval:timeInterval target:target selector:selector userInfo:nil repeats:repeats];
     [_timerArray addObject:timer];
+    
     return timer;
 }
 
