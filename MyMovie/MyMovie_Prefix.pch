@@ -14,6 +14,7 @@
 
 #import "AppDelegate.h"
 #import "MMGenericMarcos.h"
+#import "NSString+MD5.h"
 
 #import <Masonry.h>
 

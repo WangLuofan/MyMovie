@@ -9,8 +9,10 @@
 #import "MMBasicCollectionViewController.h"
 
 @class MMMediaItemModel;
+@class AVPlayerItem;
 @interface MMMediaModifyCollectionViewController : MMBasicCollectionViewController
 
+-(void)prepareForPlay;
 -(void)insertItemWithMediaItemModel:(MMMediaItemModel*)model;
 
 @end

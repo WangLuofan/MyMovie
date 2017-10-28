@@ -120,6 +120,7 @@
                                     MMMediaVideoModel* itemModel = [[MMMediaVideoModel alloc] init];
                                     itemModel.mediaType = mediaAsset.mediaType;
                                     itemModel.mediaAsset = asset;
+                                    itemModel.identifer = [NSString md5:mediaAsset.localIdentifier];
                                     
                                     [_modifyViewController insertItemWithMediaItemModel:itemModel];
                                 });
@@ -133,6 +134,7 @@
                         MMMediaImageModel* itemModel = [[MMMediaImageModel alloc] init];
                         itemModel.mediaType = mediaAsset.mediaType;
                         itemModel.srcImage = [imageData copy];
+                        itemModel.identifer = [NSString md5:mediaAsset.localIdentifier];
                         
                         [_modifyViewController insertItemWithMediaItemModel:itemModel];
                     });

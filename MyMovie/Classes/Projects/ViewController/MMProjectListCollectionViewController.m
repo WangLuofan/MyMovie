@@ -7,6 +7,7 @@
 //
 
 #import "MMPhotoManager.h"
+#import "MMHUDUtils.h"
 #import "MMProjectListCollectionViewCell.h"
 #import "MMProjectEdittingViewController.h"
 #import "MMProjectListCollectionViewController.h"
@@ -38,10 +39,24 @@
 }
 
 -(void)editMediaProjectWithTitle:(NSString*)projectTitle {
+    
+    NSString* dirPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:projectTitle];
+    if([[NSFileManager defaultManager] fileExistsAtPath:dirPath] == YES) {
+        [MMHUDUtils showHUDInView:self.view title:@"项目已经存在,请更换项目名称"];
+        return ;
+    }
+    
+    NSError* error = nil;
+    [[NSFileManager defaultManager] createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
+    
+    if(error != nil) {
+        [MMHUDUtils showHUDInView:self.view inMode:MBProgressHUDModeText withTitle:error.localizedDescription];
+        return ;
+    }
+    
     MMProjectEdittingViewController* edittingController = (MMProjectEdittingViewController*)[storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
     edittingController.title = projectTitle;
     [self.navigationController pushViewController:edittingController animated:YES];
-
     return ;
 }
 
@@ -76,6 +91,7 @@
     UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"新建项目" message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
         textField.placeholder = @"请输入项目名称";
+        textField.keyboardType = UIKeyboardTypeAlphabet;
     }];
     [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [alertController addAction:[UIAlertAction actionWithTitle:@"创建" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

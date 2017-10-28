@@ -43,9 +43,11 @@
     if(_progressTimer != nil)
         [[MMTimerManager sharedManager] removeTimer:_progressTimer];
     
+    _isPlaying = NO;
     _curTimeLabel.text = @"00:00";
     [_playBtn setImage:imageNamed(@"tp_play_icon") forState:UIControlStateNormal];
     _progressSlider.value = 0.0f;
+    [self.thePlayer replaceCurrentItemWithPlayerItem:nil];
     return ;
 }
 
@@ -74,6 +76,12 @@
 }
 
 - (IBAction)playAction:(UIButton *)sender {
+    if(self.thePlayer.currentItem == nil) {
+        if([self.delegate respondsToSelector:@selector(shouldPlayMediaAtControl:)])
+            [self.delegate shouldPlayMediaAtControl:self];
+        return ;
+    }
+    
     if(_isPlaying == NO) {
         [_thePlayer play];
         _isPlaying = YES;

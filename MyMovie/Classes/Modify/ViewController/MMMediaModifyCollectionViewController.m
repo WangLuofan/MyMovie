@@ -9,10 +9,13 @@
 #import "MMPhotoManager.h"
 #import "MMMediaItemModel.h"
 #import "MMTransitionModifyView.h"
+#import "MMImageToVideoUtils.h"
+#import "MMAssetPlayerProgressView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMediaModifyItemCollectionViewCell.h"
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
 #import "MMMediaModifyCollectionViewController.h"
+#import "MMMediaPreviewViewController.h"
 #import "MMMediaItemTransitionCollectionViewCell.h"
 
 #define kMediaModifyItemCollectionViewCellIdentifier @"MediaModifyItemCollectionViewCellIdentifier"
@@ -24,6 +27,7 @@
 @property(nonatomic, strong) NSMutableArray* assetsDataSource;
 @property(nonatomic, strong) NSMutableArray* selectedItemIndexPath;
 @property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
+@property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
 
 @end
 
@@ -55,7 +59,7 @@ static NSString * const reuseIdentifier = @"Cell";
             model.duration = 5.0f;
         
         if(_assetsDataSource.count == 0) {
-            [_assetsDataSource addObject:model.copy];
+            [_assetsDataSource addObject:model];
             
             [self.collectionView performBatchUpdates:^{
                 [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:0]];
@@ -69,7 +73,7 @@ static NSString * const reuseIdentifier = @"Cell";
             transitionModel.transitionType = TransitionTypeNone;
             [_assetsDataSource addObject:transitionModel];
             
-            [_assetsDataSource addObject:model.copy];
+            [_assetsDataSource addObject:model];
             
             [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_assetsDataSource.count - 2 inSection:0], [NSIndexPath indexPathForItem:_assetsDataSource.count - 1 inSection:0]]];
         }
@@ -81,13 +85,13 @@ static NSString * const reuseIdentifier = @"Cell";
         model.duration = CMTimeGetSeconds(((MMMediaAudioModel*)model).mediaAsset.duration);
         
         if(_audioDataSource.count == 0) {
-            [_audioDataSource addObject:model.copy];
+            [_audioDataSource addObject:model];
             [self.collectionView performBatchUpdates:^{
                 [self.collectionView insertSections:[NSIndexSet indexSetWithIndex:1]];
                 [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_audioDataSource.count - 1 inSection:1]]];
             } completion:nil];
         }else {
-            [_audioDataSource addObject:model.copy];
+            [_audioDataSource addObject:model];
             [self.collectionView performBatchUpdates:^{
                 [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_audioDataSource.count - 1 inSection:1]]];
             } completion:nil];
@@ -128,6 +132,55 @@ static NSString * const reuseIdentifier = @"Cell";
     UIGraphicsEndImageContext();
     
     return theImg;
+}
+
+-(void)prepareForPlay {
+    NSInteger itemCount = 0;
+    for (MMMediaItemModel* model in _assetsDataSource)
+        if(model.mediaType == MMAssetMediaTypeImage)
+            ++itemCount;
+    
+    if(itemCount == 0) {
+        [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
+            if(_previewViewController == nil)
+                _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
+            _previewViewController.showProgress = NO;
+            [_previewViewController playVideoWithPlayerItem:playerItem];
+            return ;
+        }];
+        
+        return ;
+    }
+    
+    __block NSInteger convertedItems = 0;
+    for(MMMediaItemModel* model in _assetsDataSource) {
+        if(model.mediaType == MMAssetMediaTypeImage) {
+            dispatch_queue_t queue = dispatch_queue_create(model.identifer.UTF8String, DISPATCH_QUEUE_SERIAL);
+            
+            dispatch_async(queue, ^{
+                [MMImageToVideoUtils videoFromImageModel:(MMMediaImageModel*)model onQueue:queue docPath:(self.parentViewController.title) complete:^(NSString * filePath) {
+                    NSLog(@"%@", filePath);
+                    @synchronized(self) {
+                        ++convertedItems;
+                        if(_previewViewController == nil)
+                            _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
+                        _previewViewController.progressView.progress = convertedItems * 0.6 / itemCount;
+                    }
+                    
+                    if(convertedItems == itemCount) {
+                        [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
+                            _previewViewController.showProgress = NO;
+                            [_previewViewController playVideoWithPlayerItem:playerItem];
+                            return ;
+                        }];
+                    }
+                    return ;
+                }];
+            });
+        }
+    }
+    
+    return ;
 }
 
 -(CGFloat)widthForItemAtIndexPath:(NSIndexPath*)indexPath {
@@ -236,6 +289,7 @@ static NSString * const reuseIdentifier = @"Cell";
         }
     }else if(model.mediaType == MMAssetMediaTypeTransition) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaItemTransitionCollectionViewCellIdentifier forIndexPath:indexPath];
+        ((MMMediaItemTransitionCollectionViewCell*)cell).transtionType = ((MMMediaTransitionModel*)model).transitionType;
     }
     
     return cell;
@@ -391,7 +445,8 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark - MMTransitionModifyViewDelegate
 -(void)transitionViewDidHide:(MMTransitionModifyView *)transitionView {
-    [self.collectionView deselectItemAtIndexPath:[[self.collectionView indexPathsForSelectedItems] objectAtIndex:0] animated:YES];
+    if(self.collectionView.indexPathsForSelectedItems.count != 0)
+        [self.collectionView deselectItemAtIndexPath:[[self.collectionView indexPathsForSelectedItems] objectAtIndex:0] animated:YES];
     return ;
 }
 
@@ -406,6 +461,7 @@ static NSString * const reuseIdentifier = @"Cell";
     
     curModel.duration = model.duration;
     ((MMMediaTransitionModel*)curModel).transitionType = ((MMMediaTransitionModel*)model).transitionType;
+    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     return ;
 }
 

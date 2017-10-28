@@ -7,22 +7,26 @@
 //
 
 #import "MMPhotoManager.h"
+#import "MMAssetPlayerProgressView.h"
 #import "MMAssetPlayerControl.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import "MMMediaPreviewViewController.h"
+#import "MMMediaModifyCollectionViewController.h"
 
-@interface MMMediaPreviewViewController () <UIGestureRecognizerDelegate>
+@interface MMMediaPreviewViewController () <UIGestureRecognizerDelegate, MMAssetPlayerControlDelegate>
 
 //Image
 @property(nonatomic, weak) IBOutlet UIImageView* previewImageView;
-
 @property (weak, nonatomic) IBOutlet UIView *assetsPlayerView;
 
 //Video
 @property(nonatomic, strong) AVPlayer* thePlayer;
 @property(nonatomic, strong) AVPlayerLayer* thePlayerLayer;
 @property(nonatomic, strong) MMAssetPlayerControl* playerControl;
+
+//progress
+@property(nonatomic, strong) MMAssetPlayerProgressHostView* progressHostView;
 
 @end
 
@@ -32,6 +36,7 @@
     [super viewDidLoad];
     
     _playerControl = (MMAssetPlayerControl*)[[[NSBundle mainBundle] loadNibNamed:@"MMAssetPlayerControl" owner:nil options:nil] objectAtIndex:0];
+    _playerControl.delegate = self;
     [_assetsPlayerView addSubview:_playerControl];
     [_playerControl mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.and.bottom.and.trailing.mas_equalTo(_assetsPlayerView);
@@ -42,7 +47,25 @@
     UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showPlayerControl:)];
     tapGesture.delegate = self;
     [_assetsPlayerView addGestureRecognizer:tapGesture];
+    
+    _progressHostView = [[MMAssetPlayerProgressHostView alloc] init];
+    _progressHostView.hidden = YES;
+    [self.view addSubview:_progressHostView];
+    [_progressHostView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.and.bottom.and.trailing.and.top.mas_equalTo(self.view);
+    }];
     return ;
+}
+
+-(void)setShowProgress:(BOOL)showProgress {
+    _showProgress = showProgress;
+    _progressHostView.hidden = !showProgress;
+    
+    return ;
+}
+
+-(MMAssetPlayerProgressView *)progressView {
+    return _progressHostView.progressView;
 }
 
 -(void)showPlayerControl:(UIGestureRecognizer*)recognizer {
@@ -159,6 +182,14 @@
     if(CGRectContainsPoint(_playerControl.bounds, location))
         return NO;
     return YES;
+}
+
+#pragma mark - MMAssetPlayerControlDelegate
+-(void)shouldPlayMediaAtControl:(MMAssetPlayerControl *)control {
+    self.showProgress = YES;
+    MMMediaModifyCollectionViewController* modifyController = (MMMediaModifyCollectionViewController*)[self.parentViewController.childViewControllers objectAtIndex:2];
+    [modifyController prepareForPlay];
+    return ;
 }
 
 @end

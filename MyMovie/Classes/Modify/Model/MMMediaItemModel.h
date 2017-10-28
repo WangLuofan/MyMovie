@@ -16,10 +16,11 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
 };
 
 @class AVAsset;
-@interface MMMediaItemModel : NSObject <NSCopying>
+@interface MMMediaItemModel : NSObject
 
 @property(nonatomic, assign) NSUInteger mediaType;
 @property(nonatomic, assign) NSTimeInterval duration;
+@property(nonatomic, copy) NSString* identifer;
 
 @end
 

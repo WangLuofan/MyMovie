@@ -10,6 +10,6 @@
 
 @interface MMMediaItemTransitionCollectionViewCell : UICollectionViewCell
 
-@property (weak, nonatomic) IBOutlet UIImageView *transitionImageView;
+@property(nonatomic, assign) NSUInteger transtionType;
 
 @end

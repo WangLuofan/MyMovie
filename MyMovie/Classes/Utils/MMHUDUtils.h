@@ -12,9 +12,10 @@
 @interface MMHUDUtils : NSObject
 
 +(void)showHUDInView:(UIView*)view;
++(void)showHUDInView:(UIView *)view title:(NSString*)title;
 +(void)showHUDInView:(UIView *)view inMode:(MBProgressHUDMode)mode;
 +(void)showHUDInView:(UIView *)view inMode:(MBProgressHUDMode)mode withTitle:(NSString*)title;
 +(void)hideHUDForView:(UIView*)view;
-+(void)hideHUDForView:(UIView *)view complete:(void(^)(void))complete;
++(void)hideHUDForView:(UIView *)view delay:(NSTimeInterval)delay;
 
 @end

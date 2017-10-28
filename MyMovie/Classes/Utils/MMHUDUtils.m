@@ -18,11 +18,19 @@
     return [MMHUDUtils showHUDInView:view inMode:MBProgressHUDModeIndeterminate];
 }
 
++(void)showHUDInView:(UIView *)view title:(NSString *)title {
+    [MMHUDUtils showHUDInView:view inMode:MBProgressHUDModeText withTitle:title];
+    [MMHUDUtils hideHUDForView:view delay:1.0f];
+    return ;
+}
+
 +(void)showHUDInView:(UIView *)view inMode:(MBProgressHUDMode)mode {
     return [MMHUDUtils showHUDInView:view inMode:mode withTitle:nil];
 }
 
 +(void)showHUDInView:(UIView *)view inMode:(MBProgressHUDMode)mode withTitle:(NSString *)title {
+    [self hideHUDForView:view];
+    
     MBProgressHUD* HUD = [[MBProgressHUD alloc] initWithView:view];
     HUD.mode = mode;
     HUD.label.text = title;
@@ -34,16 +42,15 @@
 }
 
 +(void)hideHUDForView:(UIView *)view {
-    return [MMHUDUtils hideHUDForView:view complete:nil];
+    return [MMHUDUtils hideHUDForView:view delay:0.0f];
 }
 
-+(void)hideHUDForView:(UIView *)view complete:(void (^)(void))complete {
++(void)hideHUDForView:(UIView *)view delay:(NSTimeInterval)delay {
     MBProgressHUD* hud = [MBProgressHUD HUDForView:view];
-    if(hud != nil) {
-        if(complete != nil)
-            hud.completionBlock = complete;
-        [hud hideAnimated:YES];
-    }
+    
+    if(hud != nil)
+        [hud hideAnimated:YES afterDelay:delay];
+    
     return ;
 }
 

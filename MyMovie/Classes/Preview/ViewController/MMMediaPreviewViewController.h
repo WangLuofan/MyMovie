@@ -11,10 +11,15 @@
 @class PHAsset;
 @class AVPlayerItem;
 @class MPMediaItem;
+@class MMAssetPlayerProgressView;
+
 @interface MMMediaPreviewViewController : MMBasicViewController
 
 @property(nonatomic, strong) PHAsset* mediaAsset;
 @property(nonatomic, strong) MPMediaItem* mediaItem;
+@property(nonatomic, assign) BOOL showProgress;
+
+@property(nonatomic, weak) MMAssetPlayerProgressView* progressView;
 
 -(void)playVideoWithPlayerItem:(AVPlayerItem*)playerItem;
 

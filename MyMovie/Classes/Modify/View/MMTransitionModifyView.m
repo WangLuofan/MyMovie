@@ -11,7 +11,7 @@
 #import "MMMediaItemTransitionCollectionViewCell.h"
 
 #define kMediaItemTransitionCollectionViewCellIdentifier @"MediaItemTransitionCollectionViewCellIdentifier"
-@interface MMTransitionModifyView() <UICollectionViewDelegate, UICollectionViewDataSource>
+@interface MMTransitionModifyView() <UICollectionViewDelegate, UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
 @property(nonatomic, strong) UIView* dimView;
 @property(nonatomic, assign) NSInteger theSelectedIndex;
@@ -57,7 +57,9 @@
     if(_dimView == nil) {
         _dimView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, SCREEN_WIDTH)];
         _dimView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.25f];
-        [_dimView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)]];
+        UITapGestureRecognizer* tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
+        tapGesture.delegate = self;
+        [_dimView addGestureRecognizer:tapGesture];
     }
     
     self.frame = CGRectMake(0, SCREEN_WIDTH, SCREEN_HEIGHT, 66.0f);
@@ -113,19 +115,32 @@
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MMMediaItemTransitionCollectionViewCell* cell = (MMMediaItemTransitionCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:kMediaItemTransitionCollectionViewCellIdentifier forIndexPath:indexPath];
-    if(indexPath.item == 0)
-        cell.transitionImageView.image = imageNamed(@"trans_btn_bg_none");
-    else if(indexPath.item == 1)
-        cell.transitionImageView.image = imageNamed(@"trans_btn_bg_push");
-    else if(indexPath.item == 2)
-        cell.transitionImageView.image = imageNamed(@"trans_btn_bg_wipe");
-    else
-        cell.transitionImageView.image = imageNamed(@"trans_btn_bg_xfade");
+    
+    switch (indexPath.item) {
+        case 0:
+            cell.transtionType = TransitionTypeNone;
+            break;
+        case 1:
+            cell.transtionType = TransitionTypePush;
+            break;
+        case 2:
+            cell.transtionType = TransitionTypeOpacity;
+            break;
+        case 3:
+            cell.transtionType = TransitionTypeCrop;
+            break;
+    }
     return cell;
 }
 
--(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return ;
+#pragma mark - UIGestureRecognizerDelegate
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
+    CGPoint location = [gestureRecognizer locationInView:_dimView];
+    
+    if(CGRectContainsPoint(self.frame, location) == true)
+        return NO;
+    
+    return YES;
 }
 
 @end

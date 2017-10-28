@@ -8,10 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class MMAssetPlayerControl;
+@protocol MMAssetPlayerControlDelegate <NSObject>
+
+@optional
+-(void)shouldPlayMediaAtControl:(MMAssetPlayerControl*)control;
+
+@end
+
 @class AVPlayer;
 @interface MMAssetPlayerControl : UIView
 
 @property(nonatomic, weak) AVPlayer* thePlayer;
+@property(nonatomic, assign) id<MMAssetPlayerControlDelegate> delegate;
 @property(nonatomic, readonly) BOOL isControllerShown;
 
 -(void)showController;

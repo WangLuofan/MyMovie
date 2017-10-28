@@ -65,6 +65,7 @@
     audioModel.mediaType = MMAssetMediaTypeAudio;
     audioModel.title = mediaItem.title;
     audioModel.artist = mediaItem.artist;
+    audioModel.identifer = [NSString md5:[NSString stringWithFormat:@"%@-%@", mediaItem.title, mediaItem.artist]];
     audioModel.mediaAsset = [AVAsset assetWithURL:mediaItem.assetURL];
     
     [_modifyViewController insertItemWithMediaItemModel:audioModel];
