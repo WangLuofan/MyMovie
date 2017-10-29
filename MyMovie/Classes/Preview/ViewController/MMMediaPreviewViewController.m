@@ -187,8 +187,11 @@
 #pragma mark - MMAssetPlayerControlDelegate
 -(void)shouldPlayMediaAtControl:(MMAssetPlayerControl *)control {
     self.showProgress = YES;
-    MMMediaModifyCollectionViewController* modifyController = (MMMediaModifyCollectionViewController*)[self.parentViewController.childViewControllers objectAtIndex:2];
-    [modifyController prepareForPlay];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        MMMediaModifyCollectionViewController* modifyController = (MMMediaModifyCollectionViewController*)[self.parentViewController.childViewControllers objectAtIndex:2];
+        [modifyController prepareForPlay];
+    });
     return ;
 }
 

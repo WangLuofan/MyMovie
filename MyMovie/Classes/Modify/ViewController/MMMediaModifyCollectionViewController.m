@@ -153,27 +153,33 @@ static NSString * const reuseIdentifier = @"Cell";
     }
     
     __block NSInteger convertedItems = 0;
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(3);
+    
     for(MMMediaItemModel* model in _assetsDataSource) {
         if(model.mediaType == MMAssetMediaTypeImage) {
-            dispatch_queue_t queue = dispatch_queue_create(model.identifer.UTF8String, DISPATCH_QUEUE_SERIAL);
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            
+            dispatch_queue_t queue = dispatch_queue_create(model.identifer.UTF8String, NULL);
             
             dispatch_async(queue, ^{
                 [MMImageToVideoUtils videoFromImageModel:(MMMediaImageModel*)model onQueue:queue docPath:(self.parentViewController.title) complete:^(NSString * filePath) {
                     NSLog(@"%@", filePath);
-                    @synchronized(self) {
-                        ++convertedItems;
+                    ++convertedItems;
+                    dispatch_semaphore_signal(semaphore);
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
                         if(_previewViewController == nil)
                             _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
                         _previewViewController.progressView.progress = convertedItems * 0.6 / itemCount;
-                    }
-                    
-                    if(convertedItems == itemCount) {
-                        [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
-                            _previewViewController.showProgress = NO;
-                            [_previewViewController playVideoWithPlayerItem:playerItem];
-                            return ;
-                        }];
-                    }
+                        
+                        if(convertedItems == itemCount) {
+                            [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
+                                _previewViewController.showProgress = NO;
+                                [_previewViewController playVideoWithPlayerItem:playerItem];
+                                return ;
+                            }];
+                        }
+                    });
                     return ;
                 }];
             });
