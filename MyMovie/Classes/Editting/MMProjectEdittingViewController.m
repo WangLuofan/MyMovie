@@ -13,6 +13,7 @@
 #import "MMPhotosCollectionViewController.h"
 #import "MMAudioAssetsTableViewController.h"
 #import "MMPhotoManager.h"
+#import "MMPopMenu.h"
 #import "UIViewController+MMRender.h"
 
 typedef NS_ENUM(NSUInteger, ItemDragStatus) {
@@ -32,6 +33,9 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 @property(nonatomic, strong) UIImageView* draggleImageView;
 @property(nonatomic, assign) ItemDragStatus dragStatus;
 @property(nonatomic, copy) NSIndexPath* theSelectedIndexPath;
+
+@property(nonatomic, strong) MMPopMenu* popMenu;
+@property(nonatomic, assign) UIInterfaceOrientation orientation;
 
 @end
 
@@ -54,6 +58,14 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
     
+    _popMenu = [[MMPopMenu alloc] init];
+    return ;
+}
+
+-(void)showMenu:(UIBarButtonItem*)sender event:(UIEvent*)event {
+    UIView* touchView = [event.allTouches anyObject].view;
+    
+    [_popMenu showInView:touchView orientation:_orientation];
     return ;
 }
 
@@ -190,6 +202,7 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
         self.navigationController.view.transform = CGAffineTransformMakeRotation(-M_PI_2);
     }
     
+    _orientation = orientation;
     self.navigationController.view.frame = SCREEN_BOUNDS;
     return ;
 }

@@ -56,7 +56,6 @@
     [super prepareForReuse];
     
     self.contentImageView.image = nil;
-    self.contentTitleLabel.text = @"";
     return ;
 }
 

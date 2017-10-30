@@ -16,8 +16,10 @@
 #import "MMMediaModifyCollectionViewController.h"
 #import "MMMediaPreviewViewController.h"
 #import "MMMediaItemTransitionCollectionViewCell.h"
+#import "MMAudioMediaItemCollectionViewCell.h"
 #import "MMMediaModifyCollectionViewController+MMMedia.h"
 
+#define kMediaAudioItemCollectionViewCellIdentifier @"MediaAudioItemCollectionViewCellIdentifier"
 #define kMediaModifyItemCollectionViewCellIdentifier @"MediaModifyItemCollectionViewCellIdentifier"
 #define kMediaItemTransitionCollectionViewCellIdentifier @"MediaItemTransitionCollectionViewCellIdentifier"
 
@@ -39,6 +41,7 @@ static NSString * const reuseIdentifier = @"Cell";
     _selectedItemIndexPath = [NSMutableArray array];
     [self.collectionView registerNib:nibNamed(@"MMMediaModifyItemCollectionViewCell") forCellWithReuseIdentifier:kMediaModifyItemCollectionViewCellIdentifier];
     [self.collectionView registerNib:nibNamed(@"MMMediaItemTransitionCollectionViewCell") forCellWithReuseIdentifier:kMediaItemTransitionCollectionViewCellIdentifier];
+    [self.collectionView registerNib:nibNamed(@"MMAudioMediaItemCollectionViewCell") forCellWithReuseIdentifier:kMediaAudioItemCollectionViewCellIdentifier];
     
     MMMediaAssetsCollectionViewFlowLayout* flowLayout = (MMMediaAssetsCollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
     flowLayout.minimumSpacing = 5.0f;
@@ -257,7 +260,7 @@ static NSString * const reuseIdentifier = @"Cell";
     else
         model = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
-    if(model.mediaType != MMAssetMediaTypeTransition) {
+    if(model.mediaType == MMAssetMediaTypeVideo || model.mediaType == MMAssetMediaTypeImage) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaModifyItemCollectionViewCellIdentifier forIndexPath:indexPath];
         
         CGFloat itemWidth = [self widthForItemAtIndexPath:indexPath];
@@ -270,8 +273,7 @@ static NSString * const reuseIdentifier = @"Cell";
                 cursorTime = CMTimeAdd(cursorTime, CMTimeMake(1, 1));
                 [timeArr addObject:[NSValue valueWithCMTime:cursorTime]];
             }
-            
-            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = YES;
+
             if(((MMMediaVideoModel*)model).thumbnail != nil)
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaVideoModel*)model).thumbnail;
             else {
@@ -287,20 +289,18 @@ static NSString * const reuseIdentifier = @"Cell";
                 }];
             }
         } else if(model.mediaType == MMAssetMediaTypeImage) {
-            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = YES;
             if(((MMMediaImageModel*)model).thumbnail != nil)
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaImageModel*)model).thumbnail;
             else {
                 ((MMMediaImageModel*)model).thumbnail = [self generateThumbnailWithImage:[UIImage imageWithData:((MMMediaImageModel*)model).srcImage] size:CGSizeMake(itemWidth, 80.0f)];
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaImageModel*)model).thumbnail;
             }
-        }else if(model.mediaType == MMAssetMediaTypeAudio) {
-            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.hidden = NO;
-            ((MMMediaModifyItemCollectionViewCell*)cell).contentTitleLabel.text = [NSString stringWithFormat:@"%@-%@", ((MMMediaAudioModel*)model).title, ((MMMediaAudioModel*)model).artist];
         }
     }else if(model.mediaType == MMAssetMediaTypeTransition) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaItemTransitionCollectionViewCellIdentifier forIndexPath:indexPath];
         ((MMMediaItemTransitionCollectionViewCell*)cell).transtionType = ((MMMediaTransitionModel*)model).transitionType;
+    }else if(model.mediaType == MMAssetMediaTypeAudio) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaAudioItemCollectionViewCellIdentifier forIndexPath:indexPath];
     }
     
     return cell;
@@ -418,7 +418,6 @@ static NSString * const reuseIdentifier = @"Cell";
                 [collectionView deleteItemsAtIndexPaths:indexPaths];
             } completion:nil];
         }
-        
     }
     return ;
 }

@@ -32,6 +32,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"菜单" style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController.parentViewController action:@selector(showMenu:event:)];
+    
     [self.tableView registerNib:nibNamed(@"MMImagePickerTableViewCell") forCellReuseIdentifier:kImagePickerTableViewCellIdentifier];
     
     return ;

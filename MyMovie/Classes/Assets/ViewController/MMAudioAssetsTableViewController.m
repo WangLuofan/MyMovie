@@ -25,6 +25,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"菜单" style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController.parentViewController action:@selector(showMenu:event:)];
+    
     if([MPMediaLibrary authorizationStatus] != MPMediaLibraryAuthorizationStatusAuthorized) {
         [MPMediaLibrary requestAuthorization:^(MPMediaLibraryAuthorizationStatus status) {
             if(status == MPMediaLibraryAuthorizationStatusAuthorized) {

@@ -199,10 +199,6 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
             if([self.delegate respondsToSelector:@selector(collectionView:layout:canAdjustItemAtIndexPath:)])
                 if([self.delegate collectionView:self.collectionView layout:self canAdjustItemAtIndexPath:indexPath] == NO)
                     return NO;
-            
-            UICollectionViewLayoutAttributes* attr = [self layoutAttributesForItemAtIndexPath:indexPath];
-            if(CGRectContainsPoint(CGRectMake(attr.frame.origin.x + attr.frame.size.width - 50, attr.frame.origin.y, 50, attr.frame.size.height), location) == true)
-                return YES;
         }else {
             if([self.delegate respondsToSelector:@selector(collectionView:layout:canMoveItemAtIndexPath:)])
                 if([self.delegate collectionView:self.collectionView layout:self canMoveItemAtIndexPath:indexPath] == NO)
