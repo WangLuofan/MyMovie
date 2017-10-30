@@ -84,7 +84,6 @@
     }
     
     _inView = inView;
-    NSLog(@"%@", _inView);
     
     [self makeRotate:orientation];
     
