@@ -42,7 +42,13 @@
                             <outlet property="delegate" destination="ehv-iU-fni" id="juS-bA-vff"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="所有项目" id="Ooa-vO-wNf"/>
+                    <navigationItem key="navigationItem" title="所有项目" id="Ooa-vO-wNf">
+                        <barButtonItem key="rightBarButtonItem" title="清空项目" id="EUi-5D-fk8">
+                            <connections>
+                                <action selector="removeAllProjects:" destination="ehv-iU-fni" id="icA-Lv-rfG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cj3-AE-asu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

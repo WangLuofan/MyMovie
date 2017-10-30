@@ -60,6 +60,47 @@
     return ;
 }
 
+- (IBAction)removeAllProjects:(UIBarButtonItem *)sender {
+    UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"清空项目" message:@"确定要删除所有项目吗?" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performRemoveAllProject];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+    return ;
+}
+
+-(void)performRemoveAllProject {
+    NSString* projectDir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    NSDirectoryEnumerator<NSString*> * enumerator = [fileManager enumeratorAtPath:projectDir];
+    
+    NSString* dirName = [enumerator nextObject];
+    NSError* error = nil;
+    
+    while(dirName != nil) {
+        if([fileManager removeItemAtPath:[projectDir stringByAppendingPathComponent:dirName] error:&error] == NO) {
+            break;
+        }
+        
+        dirName = [enumerator nextObject];
+    }
+    
+    UIAlertController* alertController = nil;
+    if(error == nil) {
+        alertController = [UIAlertController alertControllerWithTitle:@"清空项目" message:@"已删除所有项目" preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleCancel handler:nil]];
+    }else {
+        alertController = [UIAlertController alertControllerWithTitle:@"清空项目" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"好的" style:UIAlertActionStyleCancel handler:nil]];
+    }
+    
+    [self.navigationController presentViewController:alertController animated:YES completion:nil];
+    return ;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
