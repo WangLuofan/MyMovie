@@ -11,6 +11,15 @@
 
 @implementation MMMediaItemModel
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _bModified = YES;
+    }
+    return self;
+}
+
 @end
 
 @implementation MMMediaVideoModel

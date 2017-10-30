@@ -29,7 +29,7 @@
 
 -(void)setSelected:(BOOL)selected {
     [super setSelected:selected];
-    
+
     if(selected) {
         _selectionImageView.hidden = NO;
         

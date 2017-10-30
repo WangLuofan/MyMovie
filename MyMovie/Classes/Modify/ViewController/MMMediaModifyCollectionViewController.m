@@ -9,7 +9,6 @@
 #import "MMPhotoManager.h"
 #import "MMMediaItemModel.h"
 #import "MMTransitionModifyView.h"
-#import "MMImageToVideoUtils.h"
 #import "MMAssetPlayerProgressView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "MMMediaModifyItemCollectionViewCell.h"
@@ -17,17 +16,14 @@
 #import "MMMediaModifyCollectionViewController.h"
 #import "MMMediaPreviewViewController.h"
 #import "MMMediaItemTransitionCollectionViewCell.h"
+#import "MMMediaModifyCollectionViewController+MMMedia.h"
 
 #define kMediaModifyItemCollectionViewCellIdentifier @"MediaModifyItemCollectionViewCellIdentifier"
 #define kMediaItemTransitionCollectionViewCellIdentifier @"MediaItemTransitionCollectionViewCellIdentifier"
 
 @interface MMMediaModifyCollectionViewController () <MMMediaAssetsCollectionViewFlowLayoutDelegate, MMTransitionModifyViewDelegate>
 
-@property(nonatomic, strong) NSMutableArray* audioDataSource;
-@property(nonatomic, strong) NSMutableArray* assetsDataSource;
 @property(nonatomic, strong) NSMutableArray* selectedItemIndexPath;
-@property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
-@property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
 
 @end
 
@@ -46,6 +42,15 @@ static NSString * const reuseIdentifier = @"Cell";
     
     MMMediaAssetsCollectionViewFlowLayout* flowLayout = (MMMediaAssetsCollectionViewFlowLayout*)self.collectionView.collectionViewLayout;
     flowLayout.minimumSpacing = 5.0f;
+    
+    return ;
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if(_previewViewController == nil)
+        _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
     
     return ;
 }
@@ -141,11 +146,11 @@ static NSString * const reuseIdentifier = @"Cell";
             ++itemCount;
     
     if(itemCount == 0) {
-        [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
-            if(_previewViewController == nil)
-                _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
+        [self compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource  complete:^(AVPlayerItem * playerItem) {
+            
             _previewViewController.showProgress = NO;
             [_previewViewController playVideoWithPlayerItem:playerItem];
+            
             return ;
         }];
         
@@ -162,20 +167,20 @@ static NSString * const reuseIdentifier = @"Cell";
             dispatch_queue_t queue = dispatch_queue_create(model.identifer.UTF8String, NULL);
             
             dispatch_async(queue, ^{
-                [MMImageToVideoUtils videoFromImageModel:(MMMediaImageModel*)model onQueue:queue docPath:(self.parentViewController.title) complete:^(NSString * filePath) {
-                    NSLog(@"%@", filePath);
+                [self videoFromImageModel:(MMMediaImageModel*)model onQueue:queue complete:^(NSString * filePath) {
+                    
                     ++convertedItems;
                     dispatch_semaphore_signal(semaphore);
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if(_previewViewController == nil)
-                            _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
                         _previewViewController.progressView.progress = convertedItems * 0.6 / itemCount;
                         
                         if(convertedItems == itemCount) {
-                            [MMImageToVideoUtils compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource progress:_previewViewController.progressView docPath:(self.parentViewController.title) complete:^(AVPlayerItem * playerItem) {
+                            [self compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource complete:^(AVPlayerItem * playerItem) {
+                                
                                 _previewViewController.showProgress = NO;
                                 [_previewViewController playVideoWithPlayerItem:playerItem];
+                                
                                 return ;
                             }];
                         }
@@ -303,6 +308,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 #pragma mark <UICollectionViewDelegate>
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    
     MMMediaVideoModel* model = nil;
     if(indexPath.section == 0)
         model = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];

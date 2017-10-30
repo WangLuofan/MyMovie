@@ -21,6 +21,7 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
 @property(nonatomic, assign) NSUInteger mediaType;
 @property(nonatomic, assign) NSTimeInterval duration;
 @property(nonatomic, copy) NSString* identifer;
+@property(nonatomic, assign) BOOL bModified;
 
 @end
 

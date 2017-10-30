@@ -12,7 +12,6 @@
 		B3255A0D1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3255A0B1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib */; };
 		B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3255A0F1F989CDE00DA3884 /* MMMediaItemModel.m */; };
 		B3255A131F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3255A121F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m */; };
-		B33E56C61FA2D11B00C840F2 /* MMImageToVideoUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B33E56C51FA2D11B00C840F2 /* MMImageToVideoUtils.m */; };
 		B344E3671FA17AFE006EF1DF /* UIView+MMRender.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E3661FA17AFE006EF1DF /* UIView+MMRender.m */; };
 		B344E36E1FA18074006EF1DF /* UIViewController+MMRender.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E36D1FA18074006EF1DF /* UIViewController+MMRender.m */; };
 		B344E3721FA1BDC9006EF1DF /* MMAssetPlayerControl.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E3711FA1BDC9006EF1DF /* MMAssetPlayerControl.m */; };
@@ -31,6 +30,7 @@
 		B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = B3BBFA941F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m */; };
 		B3C4AC4D1F9BA06C00A0F86C /* MMTransitionModifyView.m in Sources */ = {isa = PBXBuildFile; fileRef = B3C4AC4C1F9BA06C00A0F86C /* MMTransitionModifyView.m */; };
 		B3C4AC4F1F9BA99F00A0F86C /* MMTransitionModifyView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3C4AC4E1F9BA99F00A0F86C /* MMTransitionModifyView.xib */; };
+		B3E483D51FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E483D41FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m */; };
 		B3ECC89C1F95DB52007CE1CA /* MMHUDUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */; };
 		B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3F8A3471F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m */; };
 		B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3F8A3481F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib */; };
@@ -64,8 +64,6 @@
 		B3255A111F98AF4C00DA3884 /* MMAudioAssetsTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAudioAssetsTableViewController.h; sourceTree = "<group>"; };
 		B3255A121F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAudioAssetsTableViewController.m; sourceTree = "<group>"; };
 		B32F835146AF919B0DF1A218 /* Pods-MyMovie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMovie.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyMovie/Pods-MyMovie.release.xcconfig"; sourceTree = "<group>"; };
-		B33E56C41FA2D11B00C840F2 /* MMImageToVideoUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMImageToVideoUtils.h; sourceTree = "<group>"; };
-		B33E56C51FA2D11B00C840F2 /* MMImageToVideoUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMImageToVideoUtils.m; sourceTree = "<group>"; };
 		B344E3651FA17AFE006EF1DF /* UIView+MMRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+MMRender.h"; sourceTree = "<group>"; };
 		B344E3661FA17AFE006EF1DF /* UIView+MMRender.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+MMRender.m"; sourceTree = "<group>"; };
 		B344E36C1FA18074006EF1DF /* UIViewController+MMRender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+MMRender.h"; sourceTree = "<group>"; };
@@ -96,6 +94,8 @@
 		B3C4AC4B1F9BA06C00A0F86C /* MMTransitionModifyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTransitionModifyView.h; sourceTree = "<group>"; };
 		B3C4AC4C1F9BA06C00A0F86C /* MMTransitionModifyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTransitionModifyView.m; sourceTree = "<group>"; };
 		B3C4AC4E1F9BA99F00A0F86C /* MMTransitionModifyView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MMTransitionModifyView.xib; sourceTree = "<group>"; };
+		B3E483D31FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MMMediaModifyCollectionViewController+MMMedia.h"; sourceTree = "<group>"; };
+		B3E483D41FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "MMMediaModifyCollectionViewController+MMMedia.m"; sourceTree = "<group>"; };
 		B3ECC89A1F95DB52007CE1CA /* MMHUDUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMHUDUtils.h; sourceTree = "<group>"; };
 		B3ECC89B1F95DB52007CE1CA /* MMHUDUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMHUDUtils.m; sourceTree = "<group>"; };
 		B3F8A3461F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaItemTransitionCollectionViewCell.h; sourceTree = "<group>"; };
@@ -239,6 +239,8 @@
 			children = (
 				B3FAA9721F950A050023792C /* MMMediaModifyCollectionViewController.h */,
 				B3FAA9731F950A050023792C /* MMMediaModifyCollectionViewController.m */,
+				B3E483D31FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.h */,
+				B3E483D41FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -501,8 +503,6 @@
 				B344E3791FA1CED7006EF1DF /* MMMediaTimeUtils.m */,
 				B344E37B1FA1E09C006EF1DF /* MMTimerManager.h */,
 				B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */,
-				B33E56C41FA2D11B00C840F2 /* MMImageToVideoUtils.h */,
-				B33E56C51FA2D11B00C840F2 /* MMImageToVideoUtils.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -649,6 +649,7 @@
 				B3255A0C1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m in Sources */,
 				B35F01291FA446B100BB8C94 /* MMAssetPlayerProgressView.m in Sources */,
 				B3FAA9711F9509EE0023792C /* MMMediaPreviewViewController.m in Sources */,
+				B3E483D51FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m in Sources */,
 				B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */,
 				B3FAA9501F94FFF20023792C /* MMBasicNavigationController.m in Sources */,
 				B3FAA94D1F94FFDB0023792C /* MMBasicViewController.m in Sources */,
@@ -666,7 +667,6 @@
 				B3FAA9741F950A050023792C /* MMMediaModifyCollectionViewController.m in Sources */,
 				B3F8A3491F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.m in Sources */,
 				B3AE18B51F95E83D009554D7 /* MMPhotosCollectionViewController.m in Sources */,
-				B33E56C61FA2D11B00C840F2 /* MMImageToVideoUtils.m in Sources */,
 				B344E37D1FA1E09C006EF1DF /* MMTimerManager.m in Sources */,
 				B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */,
 				B344E37A1FA1CED7006EF1DF /* MMMediaTimeUtils.m in Sources */,

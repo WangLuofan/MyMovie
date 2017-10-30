@@ -1,32 +1,33 @@
 //
-//  MMImageToVideoUtils.m
+//  MMMediaModifyCollectionViewController+MMMedia.m
 //  MyMovie
 //
-//  Created by 王落凡 on 2017/10/27.
+//  Created by 王落凡 on 2017/10/29.
 //  Copyright © 2017年 王落凡. All rights reserved.
 //
-
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import "MMAssetPlayerProgressView.h"
-#import "MMImageToVideoUtils.h"
 #import "MMMediaItemModel.h"
 #import "MMPhotoManager.h"
+#import "MMMediaPreviewViewController.h"
+#import "MMMediaModifyCollectionViewController+MMMedia.h"
 
 #define k1280pSize CGSizeMake(1280.0f, 720.0f)
+@implementation MMMediaModifyCollectionViewController (MMMedia)
 
-@implementation MMImageToVideoUtils
-
-+(NSURL*)tempFileURLForModel:(MMMediaItemModel*)model docPath:(NSString*)docPath {
-    
-    NSString* docDir = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:docPath];
-    NSString* filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", model.identifer]];
+-(NSURL*)tempFileURLForModel:(MMMediaItemModel*)model {
+    NSString* filePath = [[self docPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", model.identifer]];
     
     return [NSURL fileURLWithPath:filePath];
 }
 
-+(void)videoFromImageModel:(MMMediaImageModel *)model onQueue:(dispatch_queue_t)queue docPath:(NSString*)docPath complete:(void (^)(NSString *))complete {
-    NSURL* fileURL = [self tempFileURLForModel:model docPath:docPath];
+-(NSString*)docPath {
+    return [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:self.parentViewController.title];
+}
+
+-(void)videoFromImageModel:(MMMediaImageModel *)model onQueue:(dispatch_queue_t)queue complete:(void (^)(NSString *))complete {
+    NSURL* fileURL = [self tempFileURLForModel:model];
     
     if([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path])
         [[NSFileManager defaultManager] removeItemAtPath:fileURL.path error:nil];
@@ -51,7 +52,7 @@
         [assetWriter startSessionAtSourceTime:kCMTimeZero];
         __block NSInteger frameCount = 0;
         
-        CVPixelBufferRef pixelBuf = [MMImageToVideoUtils imageToPixelBufferRef:[UIImage imageWithData:model.srcImage]];
+        CVPixelBufferRef pixelBuf = [self imageToPixelBufferRef:[UIImage imageWithData:model.srcImage]];
         [assetWriterInput requestMediaDataWhenReadyOnQueue:queue usingBlock:^{
             while(assetWriterInput.readyForMoreMediaData == YES) {
                 if([adaptor appendPixelBuffer:pixelBuf withPresentationTime:nextPTS]) {
@@ -85,7 +86,7 @@
     return ;
 }
 
-+(CVPixelBufferRef)imageToPixelBufferRef:(UIImage*)image {
+-(CVPixelBufferRef)imageToPixelBufferRef:(UIImage*)image {
     NSDictionary* attrDict = @{(id)kCVPixelBufferOpenGLCompatibilityKey : (id)kCFBooleanTrue, (id)kCVPixelBufferCGBitmapContextCompatibilityKey : (id)kCFBooleanTrue, (id)kCVPixelBufferWidthKey : @(k1280pSize.width), (id)kCVPixelBufferHeightKey : @(k1280pSize.height), (id)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA)};
     
     CVPixelBufferRef pixelBuf;
@@ -108,8 +109,7 @@
     return pixelBuf;
 }
 
-+(void)compositionWithVideoAssetsArray:(NSArray *)videoAssetsArray audioAssets:(NSArray *)audioAssetsArray progress:(MMAssetPlayerProgressView *)progress docPath:(NSString*)docPath complete:(void (^)(AVPlayerItem *))complete {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+-(void)compositionWithVideoAssetsArray:(NSArray *)videoAssetsArray audioAssets:(NSArray *)audioAssetsArray complete:(void (^)(AVPlayerItem *))complete {
     
     AVMutableComposition* composition = [AVMutableComposition composition];
     AVMutableCompositionTrack* videoTrack_1 = [composition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
@@ -117,73 +117,25 @@
     
     AVMutableCompositionTrack* audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
-    NSArray* keys = @[@"duration", @"tracks"];
+    NSArray* videoTracks = @[videoTrack_1, videoTrack_2];
     
-    NSArray* tracksArray = @[videoTrack_1, videoTrack_2];
-    __block NSInteger trackIndex = 0;
+    dispatch_group_t buildGroup = dispatch_group_create();
+    dispatch_group_async(buildGroup, dispatch_queue_create("com.mmovie.videoTrack.build.queue", NULL), ^{
+        [self buildVideoTracks:videoTracks];
+    });
+    dispatch_group_async(buildGroup, dispatch_queue_create("com.mmovie.audioTrack.build.queue", NULL), ^{
+        [self buildAudioTracks:audioTrack];
+    });
     
-    __block CMTime cursorTime = kCMTimeZero;
+    dispatch_group_notify(buildGroup, dispatch_get_main_queue(), ^{
+        int i = 0;
+        return ;
+    });
     
-    for(int i = 0; ; i += 2) {
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-        
-        if(i > videoAssetsArray.count) {
-            dispatch_semaphore_signal(semaphore);
-            break;
-        }
-        
-        MMMediaItemModel* itemModel = [videoAssetsArray objectAtIndex:i];
-        if(itemModel.mediaType == MMAssetMediaTypeImage) {
-            NSString* docDir = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:docPath];
-            NSString* filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", itemModel.identifer]];
-            
-            AVAsset* imgAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
-            [imgAsset loadValuesAsynchronouslyForKeys:keys completionHandler:^{
-                if([imgAsset statusOfValueForKey:@"duration" error:nil] == AVKeyValueStatusLoaded && [imgAsset statusOfValueForKey:@"tracks" error:nil] == AVKeyValueStatusLoaded) {
-                    AVMutableCompositionTrack* track = [tracksArray objectAtIndex:(trackIndex++ % 2)];
-                    
-                    if(i != 0) {
-                        MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[videoAssetsArray objectAtIndex:i - 1];
-                        if(transitionModel.transitionType != TransitionTypeNone)
-                            cursorTime = CMTimeSubtract(cursorTime, CMTimeMake(transitionModel.duration * 2, 2));
-                    }
-                    
-                    [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, imgAsset.duration) ofTrack:[[imgAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
-                    
-                    cursorTime = CMTimeAdd(cursorTime, imgAsset.duration);
-                    progress.progress += 0.05;
-                    dispatch_semaphore_signal(semaphore);
-                }
-            }];
-        }else if(itemModel.mediaType == MMAssetMediaTypeVideo) {
-            AVMutableCompositionTrack* track = [tracksArray objectAtIndex:(trackIndex++ % 2)];
-            AVAsset* videoAsset = ((MMMediaVideoModel*)itemModel).mediaAsset;
-            
-            CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaVideoModel*)itemModel).duration, 1);
-            if(i != 0) {
-                MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[videoAssetsArray objectAtIndex:i - 1];
-                if(transitionModel.transitionType != TransitionTypeNone)
-                    cursorTime = CMTimeSubtract(cursorTime, CMTimeMake(transitionModel.duration * 2, 2));
-            }
-            
-            while(CMTIME_COMPARE_INLINE(assetDuration, >=, videoAsset.duration)) {
-                [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
-                cursorTime = CMTimeAdd(cursorTime, videoAsset.duration);
-                CMTimeSubtract(assetDuration, videoAsset.duration);
-            }
-            
-            if(CMTIME_COMPARE_INLINE(assetDuration, !=, kCMTimeZero)) {
-                [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, assetDuration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
-                cursorTime = CMTimeAdd(cursorTime, assetDuration);
-            }
-            
-            progress.progress += 0.05f;
-            dispatch_semaphore_signal(semaphore);
-        }
-    }
+    return ;
     
     AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
-    [MMImageToVideoUtils transitionInstructionsInVideoComposition:videoComposition videoAssets:videoAssetsArray];
+    [self transitionInstructionsInVideoComposition:videoComposition videoAssets:videoAssetsArray];
     
     AVPlayerItem* playerItem = [AVPlayerItem playerItemWithAsset:composition];
     playerItem.videoComposition = videoComposition;
@@ -194,7 +146,7 @@
     return ;
 }
 
-+(void)transitionInstructionsInVideoComposition:(AVVideoComposition*)videoComposition videoAssets:(NSArray*)videoAssets {
+-(void)transitionInstructionsInVideoComposition:(AVVideoComposition*)videoComposition videoAssets:(NSArray*)videoAssets {
     
     NSUInteger idx = 1;
     
@@ -250,6 +202,94 @@
             
             vci.layerInstructions = @[fromLayerInstruction, toLayerInstruction];
             idx += 2;
+        }
+    }
+    
+    return ;
+}
+
+-(void)buildVideoTracks:(NSArray*)videoTracks {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(1);
+    
+    __block NSInteger trackIndex = 0;
+    __block CMTime cursorTime = kCMTimeZero;
+    
+    for(int i = 0; ; i += 2) {
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        if(i > self.assetsDataSource.count) {
+            dispatch_semaphore_signal(semaphore);
+            break;
+        }
+        
+        MMMediaItemModel* itemModel = [self.assetsDataSource objectAtIndex:i];
+        if(itemModel.mediaType == MMAssetMediaTypeImage) {
+            NSString* filePath = [[self docPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", itemModel.identifer]];
+            
+            AVAsset* imgAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
+            [imgAsset loadValuesAsynchronouslyForKeys:@[@"duration", @"tracks"] completionHandler:^{
+                if([imgAsset statusOfValueForKey:@"duration" error:nil] == AVKeyValueStatusLoaded && [imgAsset statusOfValueForKey:@"tracks" error:nil] == AVKeyValueStatusLoaded) {
+                    AVMutableCompositionTrack* track = [videoTracks objectAtIndex:(trackIndex++ % 2)];
+                    
+                    if(i != 0) {
+                        MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[self.assetsDataSource objectAtIndex:i - 1];
+                        if(transitionModel.transitionType != TransitionTypeNone)
+                            cursorTime = CMTimeSubtract(cursorTime, CMTimeMake(transitionModel.duration * 2, 2));
+                    }
+                    
+                    [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, imgAsset.duration) ofTrack:[[imgAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+                    
+                    cursorTime = CMTimeAdd(cursorTime, imgAsset.duration);
+                    self.previewViewController.progressView.progress += 0.05;
+                    dispatch_semaphore_signal(semaphore);
+                }
+            }];
+        }else if(itemModel.mediaType == MMAssetMediaTypeVideo) {
+            AVMutableCompositionTrack* track = [videoTracks objectAtIndex:(trackIndex++ % 2)];
+            AVAsset* videoAsset = ((MMMediaVideoModel*)itemModel).mediaAsset;
+            
+            CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaVideoModel*)itemModel).duration, 1);
+            if(i != 0) {
+                MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[self.assetsDataSource objectAtIndex:i - 1];
+                if(transitionModel.transitionType != TransitionTypeNone)
+                    cursorTime = CMTimeSubtract(cursorTime, CMTimeMake(transitionModel.duration * 2, 2));
+            }
+            
+            while(CMTIME_COMPARE_INLINE(assetDuration, >=, videoAsset.duration)) {
+                [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+                cursorTime = CMTimeAdd(cursorTime, videoAsset.duration);
+                CMTimeSubtract(assetDuration, videoAsset.duration);
+            }
+            
+            if(CMTIME_COMPARE_INLINE(assetDuration, !=, kCMTimeZero)) {
+                [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, assetDuration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+                cursorTime = CMTimeAdd(cursorTime, assetDuration);
+            }
+            
+            self.previewViewController.progressView.progress += 0.05f;
+            dispatch_semaphore_signal(semaphore);
+        }
+    }
+    return ;
+}
+
+-(void)buildAudioTracks:(AVMutableCompositionTrack*)audioTrack {
+    CMTime cursorTime = kCMTimeZero;
+    
+    AVMutableAudioMix* audioMix = [AVMutableAudioMix audioMix];
+    for (MMMediaAudioModel* audioModel in self.audioDataSource) {
+        CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaAudioModel*)audioModel).duration, 1);
+        
+        while(CMTIME_COMPARE_INLINE(assetDuration, >=, audioModel.mediaAsset.duration)) {
+            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioModel.mediaAsset.duration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+            
+            cursorTime = CMTimeAdd(cursorTime, audioModel.mediaAsset.duration);
+            CMTimeSubtract(assetDuration, audioModel.mediaAsset.duration);
+        }
+        
+        if(CMTIME_COMPARE_INLINE(assetDuration, !=, kCMTimeZero)) {
+            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, assetDuration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+            cursorTime = CMTimeAdd(cursorTime, assetDuration);
         }
     }
     

@@ -10,7 +10,16 @@
 
 @class MMMediaItemModel;
 @class AVPlayerItem;
+@class MMTransitionModifyView;
+@class MMMediaPreviewViewController;
+
 @interface MMMediaModifyCollectionViewController : MMBasicCollectionViewController
+
+@property(nonatomic, strong) NSMutableArray* audioDataSource;
+@property(nonatomic, strong) NSMutableArray* assetsDataSource;
+
+@property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
+@property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
 
 -(void)prepareForPlay;
 -(void)insertItemWithMediaItemModel:(MMMediaItemModel*)model;
