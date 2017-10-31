@@ -32,6 +32,15 @@
 
 @implementation MMMediaAudioModel
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _inputParams = [NSMutableArray array];
+    }
+    return self;
+}
+
 @end
 
 @implementation MMMediaTransitionModel

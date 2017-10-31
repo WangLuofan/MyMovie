@@ -44,6 +44,7 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
 @property(nonatomic, copy) NSString* title;
 @property(nonatomic, copy) NSString* artist;
 @property(nonatomic, copy) AVAsset* mediaAsset;
+@property(nonatomic, strong) NSMutableArray* inputParams;
 
 @end
 

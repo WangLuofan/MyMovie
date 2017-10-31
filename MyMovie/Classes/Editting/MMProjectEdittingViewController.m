@@ -12,6 +12,7 @@
 #import "MMMediaModifyCollectionViewController.h"
 #import "MMPhotosCollectionViewController.h"
 #import "MMAudioAssetsTableViewController.h"
+#import "MMAudioTrackMixModifyTableViewController.h"
 #import "MMPhotoManager.h"
 #import "MMPopMenu.h"
 #import "UIViewController+MMRender.h"
@@ -22,7 +23,7 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     ItemDragStatusForModify,
 };
 
-@interface MMProjectEdittingViewController () <UIGestureRecognizerDelegate>
+@interface MMProjectEdittingViewController () <UIGestureRecognizerDelegate, MMPopMenuDelegate>
 
 @property(nonatomic, weak) MMMediaModifyCollectionViewController* modifyViewController;
 @property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
@@ -58,20 +59,20 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
     
-    _popMenu = [[MMPopMenu alloc] init];
     return ;
 }
 
--(void)showMenu:(UIBarButtonItem*)sender event:(UIEvent*)event {
-    UIView* touchView = [event.allTouches anyObject].view;
-    
-    [_popMenu showInView:touchView orientation:_orientation];
+-(void)showMenu:(UIButton*)sender {
+    if(_popMenu == nil)
+        _popMenu = [[MMPopMenu alloc] initWithDelegate:self];
+    [_popMenu showInView:sender orientation:_orientation];
     return ;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self makeRotate:UIInterfaceOrientationLandscapeLeft];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     return ;
 }
@@ -254,6 +255,27 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]] && [otherGestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]])
         return NO;
     return YES;
+}
+
+#pragma mark - MMPopMenuDelegate
+-(NSInteger)numberOfTracks {
+    return _modifyViewController.audioDataSource.count;
+}
+
+-(NSArray*)itemsForMenu:(MMPopMenu *)popMenu {
+    return nil;
+}
+
+-(void)popMenu:(MMPopMenu *)popMenu itemSelectedAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
+    if(bTrack == YES) {
+        MMMediaItemModel* itemModel = [_modifyViewController.audioDataSource objectAtIndex:(NSUInteger)indexPath.row];
+        MMAudioTrackMixModifyTableViewController* mixController = [[MMAudioTrackMixModifyTableViewController alloc] init];
+        mixController.audioModel = (MMMediaAudioModel*)itemModel;
+        [self.navigationController presentViewController:[[MMBasicNavigationController alloc] initWithRootViewController:mixController] animated:YES completion:nil];
+    }else {
+        
+    }
+    return ;
 }
 
 @end

@@ -21,6 +21,12 @@
 		B344E37D1FA1E09C006EF1DF /* MMTimerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */; };
 		B35F01261FA42E8100BB8C94 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = B35F01251FA42E8100BB8C94 /* NSString+MD5.m */; };
 		B35F01291FA446B100BB8C94 /* MMAssetPlayerProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B35F01281FA446B100BB8C94 /* MMAssetPlayerProgressView.m */; };
+		B36D01871FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B36D01861FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.m */; };
+		B36D018B1FA82756007379F5 /* MMAudioMixModifyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B36D01891FA82756007379F5 /* MMAudioMixModifyTableViewCell.m */; };
+		B36D01901FA827F0007379F5 /* MMStepView.m in Sources */ = {isa = PBXBuildFile; fileRef = B36D018D1FA827EF007379F5 /* MMStepView.m */; };
+		B36D01911FA827F0007379F5 /* MMStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B36D018F1FA827F0007379F5 /* MMStepView.xib */; };
+		B36D01941FA8287A007379F5 /* NSString+MMDataFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = B36D01921FA8287A007379F5 /* NSString+MMDataFormatter.m */; };
+		B36D01971FA84B91007379F5 /* MMAudioMixModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B36D01961FA84B91007379F5 /* MMAudioMixModel.m */; };
 		B3AE18A91F95E370009554D7 /* MMPhotoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FD2F561F95AB95009A0571 /* MMPhotoManager.m */; };
 		B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */; };
 		B3AE18B11F95E705009554D7 /* MMImagePickerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B3AE18AF1F95E705009554D7 /* MMImagePickerTableViewCell.xib */; };
@@ -84,6 +90,17 @@
 		B35F01251FA42E8100BB8C94 /* NSString+MD5.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		B35F01271FA446B100BB8C94 /* MMAssetPlayerProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAssetPlayerProgressView.h; sourceTree = "<group>"; };
 		B35F01281FA446B100BB8C94 /* MMAssetPlayerProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAssetPlayerProgressView.m; sourceTree = "<group>"; };
+		B36D01851FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAudioTrackMixModifyTableViewController.h; sourceTree = "<group>"; };
+		B36D01861FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAudioTrackMixModifyTableViewController.m; sourceTree = "<group>"; };
+		B36D01881FA82756007379F5 /* MMAudioMixModifyTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAudioMixModifyTableViewCell.h; sourceTree = "<group>"; };
+		B36D01891FA82756007379F5 /* MMAudioMixModifyTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAudioMixModifyTableViewCell.m; sourceTree = "<group>"; };
+		B36D018D1FA827EF007379F5 /* MMStepView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMStepView.m; sourceTree = "<group>"; };
+		B36D018E1FA827EF007379F5 /* MMStepView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMStepView.h; sourceTree = "<group>"; };
+		B36D018F1FA827F0007379F5 /* MMStepView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMStepView.xib; sourceTree = "<group>"; };
+		B36D01921FA8287A007379F5 /* NSString+MMDataFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MMDataFormatter.m"; sourceTree = "<group>"; };
+		B36D01931FA8287A007379F5 /* NSString+MMDataFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MMDataFormatter.h"; sourceTree = "<group>"; };
+		B36D01951FA84B91007379F5 /* MMAudioMixModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAudioMixModel.h; sourceTree = "<group>"; };
+		B36D01961FA84B91007379F5 /* MMAudioMixModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAudioMixModel.m; sourceTree = "<group>"; };
 		B3AE18AD1F95E705009554D7 /* MMImagePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMImagePickerTableViewCell.m; sourceTree = "<group>"; };
 		B3AE18AE1F95E705009554D7 /* MMImagePickerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMImagePickerTableViewCell.h; sourceTree = "<group>"; };
 		B3AE18AF1F95E705009554D7 /* MMImagePickerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MMImagePickerTableViewCell.xib; sourceTree = "<group>"; };
@@ -202,6 +219,8 @@
 		B37D21241FA0950300D84FDA /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				B36D01931FA8287A007379F5 /* NSString+MMDataFormatter.h */,
+				B36D01921FA8287A007379F5 /* NSString+MMDataFormatter.m */,
 				B344E3651FA17AFE006EF1DF /* UIView+MMRender.h */,
 				B344E3661FA17AFE006EF1DF /* UIView+MMRender.m */,
 				B344E36C1FA18074006EF1DF /* UIViewController+MMRender.h */,
@@ -249,6 +268,8 @@
 				B3FAA9731F950A050023792C /* MMMediaModifyCollectionViewController.m */,
 				B3E483D31FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.h */,
 				B3E483D41FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m */,
+				B36D01851FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.h */,
+				B36D01861FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -256,6 +277,9 @@
 		B3BBFA901F973C3100763E1E /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B36D018E1FA827EF007379F5 /* MMStepView.h */,
+				B36D018D1FA827EF007379F5 /* MMStepView.m */,
+				B36D018F1FA827F0007379F5 /* MMStepView.xib */,
 				B3255A091F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.h */,
 				B3255A0A1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.m */,
 				B3255A0B1F988A9B00DA3884 /* MMMediaModifyItemCollectionViewCell.xib */,
@@ -268,6 +292,8 @@
 				B3C503261FA71AD7002269B7 /* MMAudioMediaItemCollectionViewCell.h */,
 				B3C503271FA71AD7002269B7 /* MMAudioMediaItemCollectionViewCell.m */,
 				B3C503281FA71AD7002269B7 /* MMAudioMediaItemCollectionViewCell.xib */,
+				B36D01881FA82756007379F5 /* MMAudioMixModifyTableViewCell.h */,
+				B36D01891FA82756007379F5 /* MMAudioMixModifyTableViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -277,6 +303,8 @@
 			children = (
 				B3255A0E1F989CDE00DA3884 /* MMMediaItemModel.h */,
 				B3255A0F1F989CDE00DA3884 /* MMMediaItemModel.m */,
+				B36D01951FA84B91007379F5 /* MMAudioMixModel.h */,
+				B36D01961FA84B91007379F5 /* MMAudioMixModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -591,6 +619,7 @@
 				B3AE18BB1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.xib in Resources */,
 				B3C5032A1FA71AD7002269B7 /* MMAudioMediaItemCollectionViewCell.xib in Resources */,
 				B3FAA9281F94FD710023792C /* Main.storyboard in Resources */,
+				B36D01911FA827F0007379F5 /* MMStepView.xib in Resources */,
 				B3C4AC4F1F9BA99F00A0F86C /* MMTransitionModifyView.xib in Resources */,
 				B3F8A34A1F99FC58000656A7 /* MMMediaItemTransitionCollectionViewCell.xib in Resources */,
 			);
@@ -654,9 +683,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B36D01871FA81E41007379F5 /* MMAudioTrackMixModifyTableViewController.m in Sources */,
+				B36D018B1FA82756007379F5 /* MMAudioMixModifyTableViewCell.m in Sources */,
 				B3F8A34D1F9A8EAE000656A7 /* MMVideoAssetsTableViewController.m in Sources */,
 				B3AE18A91F95E370009554D7 /* MMPhotoManager.m in Sources */,
 				B3255A131F98AF4C00DA3884 /* MMAudioAssetsTableViewController.m in Sources */,
+				B36D01901FA827F0007379F5 /* MMStepView.m in Sources */,
 				B3FAA9531F9500080023792C /* MMBasicTableViewController.m in Sources */,
 				B3FAA9301F94FD710023792C /* main.m in Sources */,
 				B3C503291FA71AD7002269B7 /* MMAudioMediaItemCollectionViewCell.m in Sources */,
@@ -666,9 +698,11 @@
 				B3FAA9711F9509EE0023792C /* MMMediaPreviewViewController.m in Sources */,
 				B3E483D51FA6044D003F7E8E /* MMMediaModifyCollectionViewController+MMMedia.m in Sources */,
 				B3AE18B01F95E705009554D7 /* MMImagePickerTableViewCell.m in Sources */,
+				B36D01941FA8287A007379F5 /* NSString+MMDataFormatter.m in Sources */,
 				B3FAA9501F94FFF20023792C /* MMBasicNavigationController.m in Sources */,
 				B3FAA94D1F94FFDB0023792C /* MMBasicViewController.m in Sources */,
 				B3FAA9561F95002E0023792C /* MMBasicCollectionViewController.m in Sources */,
+				B36D01971FA84B91007379F5 /* MMAudioMixModel.m in Sources */,
 				B3BBFA951F973EAF00763E1E /* MMMediaAssetsCollectionViewFlowLayout.m in Sources */,
 				B344E3771FA1C94D006EF1DF /* UIImage+MMImage.m in Sources */,
 				B3C503251FA710A6002269B7 /* MMPopMenu.m in Sources */,

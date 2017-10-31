@@ -128,20 +128,17 @@
     });
     
     dispatch_group_notify(buildGroup, dispatch_get_main_queue(), ^{
-        int i = 0;
+        AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
+        [self transitionInstructionsInVideoComposition:videoComposition videoAssets:videoAssetsArray];
+        
+        AVPlayerItem* playerItem = [AVPlayerItem playerItemWithAsset:composition];
+        playerItem.videoComposition = videoComposition;
+        
+        if(complete)
+            complete(playerItem);
+        
         return ;
     });
-    
-    return ;
-    
-    AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
-    [self transitionInstructionsInVideoComposition:videoComposition videoAssets:videoAssetsArray];
-    
-    AVPlayerItem* playerItem = [AVPlayerItem playerItemWithAsset:composition];
-    playerItem.videoComposition = videoComposition;
-    
-    if(complete)
-        complete(playerItem);
     
     return ;
 }
@@ -258,7 +255,7 @@
             while(CMTIME_COMPARE_INLINE(assetDuration, >=, videoAsset.duration)) {
                 [track insertTimeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
                 cursorTime = CMTimeAdd(cursorTime, videoAsset.duration);
-                CMTimeSubtract(assetDuration, videoAsset.duration);
+                assetDuration = CMTimeSubtract(assetDuration, videoAsset.duration);
             }
             
             if(CMTIME_COMPARE_INLINE(assetDuration, !=, kCMTimeZero)) {

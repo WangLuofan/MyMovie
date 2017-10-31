@@ -32,7 +32,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"菜单" style:UIBarButtonItemStylePlain target:self.navigationController.parentViewController.parentViewController action:@selector(showMenu:event:)];
+    UIButton* menuBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    [menuBtn setTitle:@"菜单" forState:UIControlStateNormal];
+    [menuBtn addTarget:self.navigationController.parentViewController.parentViewController action:@selector(showMenu:) forControlEvents:UIControlEventTouchUpInside];
+    [menuBtn sizeToFit];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
     
     [self.tableView registerNib:nibNamed(@"MMImagePickerTableViewCell") forCellReuseIdentifier:kImagePickerTableViewCellIdentifier];
     
