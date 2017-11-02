@@ -5,7 +5,7 @@
 //  Created by 王落凡 on 2017/10/16.
 //  Copyright © 2017年 王落凡. All rights reserved.
 //
-
+#import "MMAudioMixModel.h"
 #import "MMPhotoManager.h"
 #import "MMMediaItemModel.h"
 #import "MMTransitionModifyView.h"
@@ -229,6 +229,14 @@ static NSString * const reuseIdentifier = @"Cell";
     return MMAssetMediaTypeUnknown;
 }
 
+-(void)reloadAudioTrackAtIndex:(NSInteger)index {
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:1]];
+    if(cell != nil) {
+        [cell setNeedsDisplay];
+    }
+    return ;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -301,6 +309,7 @@ static NSString * const reuseIdentifier = @"Cell";
         ((MMMediaItemTransitionCollectionViewCell*)cell).transtionType = ((MMMediaTransitionModel*)model).transitionType;
     }else if(model.mediaType == MMAssetMediaTypeAudio) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:kMediaAudioItemCollectionViewCellIdentifier forIndexPath:indexPath];
+        ((MMAudioMediaItemCollectionViewCell*)cell).inputParams = ((MMMediaAudioModel*)model).inputParams;
     }
     
     return cell;

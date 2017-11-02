@@ -22,6 +22,7 @@
 @property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
 
 -(void)prepareForPlay;
+-(void)reloadAudioTrackAtIndex:(NSInteger)index;
 -(void)insertItemWithMediaItemModel:(MMMediaItemModel*)model;
 
 @end

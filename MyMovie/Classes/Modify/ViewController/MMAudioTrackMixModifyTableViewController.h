@@ -9,8 +9,10 @@
 #import "MMBasicTableViewController.h"
 
 @class MMMediaAudioModel;
+@class MMMediaModifyCollectionViewController;
 @interface MMAudioTrackMixModifyTableViewController : MMBasicTableViewController
 
+-(instancetype)initWithModifyViewController:(MMMediaModifyCollectionViewController*)viewController;
 @property(nonatomic, strong) MMMediaAudioModel* audioModel;
 
 @end

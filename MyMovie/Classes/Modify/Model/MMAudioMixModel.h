@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MMAudioMixModel : NSObject
+@interface MMAudioMixModel : NSObject <NSCopying>
 
 @property(nonatomic, assign) NSTimeInterval startTimeRange;
 @property(nonatomic, assign) NSTimeInterval endTimeRange;

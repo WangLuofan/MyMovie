@@ -10,6 +10,14 @@
 #import "NSString+MMDataFormatter.h"
 #import "MMAudioMixModifyTableViewCell.h"
 
+@interface MMAudioMixModifyTableViewCell()
+
+@property(nonatomic, strong) MMStepView* startTimeRangeStepView;
+@property(nonatomic, strong) MMStepView* endTimeRangeStepView;
+@property(nonatomic, strong) MMStepView* audioLevelStepView;
+
+@end
+
 @implementation MMAudioMixModifyTableViewCell
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -17,6 +25,7 @@
     
     if(self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
         [self initUI];
     }
     
@@ -27,13 +36,13 @@
     _startTimeRangeStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:2];
     [_startTimeRangeStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     _startTimeRangeStepView.stepCount = @"0.01";
-    _startTimeRangeStepView.minimum = @"0.0";
+    _startTimeRangeStepView.minimum = @"0";
     _startTimeRangeStepView.placeholder = @"起始时间";
     [self.contentView addSubview:_startTimeRangeStepView];
     
     _endTimeRangeStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:2];
     _endTimeRangeStepView.stepCount = @"0.01";
-    _endTimeRangeStepView.minimum = @"0.0";
+    _endTimeRangeStepView.minimum = @"0";
     _endTimeRangeStepView.placeholder = @"结束时间";
     [_endTimeRangeStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_endTimeRangeStepView];
@@ -44,7 +53,7 @@
     _audioLevelStepView.maximum = @"1.0";
     [_audioLevelStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_audioLevelStepView];
-    
+
     [_startTimeRangeStepView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.and.top.and.height.mas_equalTo(self.contentView);
         make.width.mas_equalTo(_endTimeRangeStepView);
@@ -68,8 +77,8 @@
 -(void)setAudioMixModel:(MMAudioMixModel *)audioMixModel {
     _audioMixModel = audioMixModel;
     
-    _startTimeRangeStepView.value = [NSString stringWithFloat:_audioMixModel.startTimeRange effectiveBits:2];
-    _endTimeRangeStepView.value = [NSString stringWithFloat:_audioMixModel.endTimeRange effectiveBits:2];
+    _startTimeRangeStepView.value = [NSString stringWithFormat:@"%ld", (NSInteger)audioMixModel.startTimeRange];
+    _endTimeRangeStepView.value = [NSString stringWithFormat:@"%ld", (NSInteger)audioMixModel.endTimeRange];
     _audioLevelStepView.value = [NSString stringWithFloat:_audioMixModel.audioLevel effectiveBits:1];
     
     return ;
@@ -106,6 +115,5 @@
     
     return ;
 }
-
 
 @end

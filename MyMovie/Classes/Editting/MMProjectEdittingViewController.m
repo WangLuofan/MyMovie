@@ -269,7 +269,7 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 -(void)popMenu:(MMPopMenu *)popMenu itemSelectedAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
     if(bTrack == YES) {
         MMMediaItemModel* itemModel = [_modifyViewController.audioDataSource objectAtIndex:(NSUInteger)indexPath.row];
-        MMAudioTrackMixModifyTableViewController* mixController = [[MMAudioTrackMixModifyTableViewController alloc] init];
+        MMAudioTrackMixModifyTableViewController* mixController = [[MMAudioTrackMixModifyTableViewController alloc] initWithModifyViewController:_modifyViewController];
         mixController.audioModel = (MMMediaAudioModel*)itemModel;
         [self.navigationController presentViewController:[[MMBasicNavigationController alloc] initWithRootViewController:mixController] animated:YES completion:nil];
     }else {

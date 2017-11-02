@@ -10,4 +10,14 @@
 
 @implementation MMAudioMixModel
 
+-(id)copyWithZone:(NSZone *)zone {
+    MMAudioMixModel* tmpModel = [[MMAudioMixModel alloc] init];
+    
+    tmpModel.startTimeRange = self.startTimeRange;
+    tmpModel.endTimeRange = self.endTimeRange;
+    tmpModel.audioLevel = self.audioLevel;
+    
+    return tmpModel;
+}
+
 @end

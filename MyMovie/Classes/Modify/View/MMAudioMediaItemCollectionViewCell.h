@@ -10,6 +10,6 @@
 
 @interface MMAudioMediaItemCollectionViewCell : UICollectionViewCell
 
-@property(nonatomic, copy) NSArray* inputParams;
+@property(nonatomic, weak) NSArray* inputParams;
 
 @end

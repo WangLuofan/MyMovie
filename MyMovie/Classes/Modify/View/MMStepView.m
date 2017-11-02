@@ -73,7 +73,16 @@
     if([valueDecimal compare:minDecimal] == NSOrderedAscending)
         tmpVal = _minimum;
     
-    _valueTextField.text = [NSString correctPrecisionWithString:[[NSDecimalNumber decimalNumberWithString:tmpVal] stringValue] precision:_precision];
+    if(_keyboardType == MMStepViewKeyboardTypeDecimal)
+        _valueTextField.text = [NSString correctPrecisionWithString:[[NSDecimalNumber decimalNumberWithString:tmpVal] stringValue] precision:_precision];
+    else {
+        NSRange pointRange = [tmpVal rangeOfString:@"."];
+        
+        if(pointRange.location == NSNotFound)
+            _valueTextField.text = tmpVal;
+        else
+            _valueTextField.text = [tmpVal substringToIndex:pointRange.location];
+    }
     
     if([tmpVal isEqualToString:_minimum])
         _decreaseBtn.enabled = NO;
@@ -227,38 +236,7 @@
             return NO;
     }
     
-    if(string.length != 0) {
-        NSDecimal text = [NSDecimalNumber decimalNumberWithString:[textField.text stringByAppendingString:string]].decimalValue;
-        NSDecimal max = [NSDecimalNumber decimalNumberWithString:self.maximum].decimalValue;
-        
-        if(NSDecimalCompare(&text, &max) == NSOrderedDescending) {
-            self.value = [textField.text stringByAppendingString:string];
-            [self increment];
-            return NO;
-        }
-    }
-    
-    
     return YES;
 }
-
-//- (IBAction)textDidChange:(UITextField *)sender {
-//    if(sender.text.length <= 0)
-//        return ;
-//    
-//    NSInteger pos = [sender.text rangeOfString:@"."].location;
-//    
-//    NSString* text = [sender.text substringToIndex:sender.text.length - 1];
-//    NSString* last = [sender.text substringFromIndex:sender.text.length - 1];
-//    
-//    if([text rangeOfString:@"."].location != NSNotFound && [last isEqualToString:@"."])
-//        sender.text = text;
-//    
-//    if(pos != NSNotFound && pos + _precision + 1 < sender.text.length) {
-//        sender.text = [sender.text substringToIndex:pos + _precision + 1];
-//    }
-//    
-//    return ;
-//}
 
 @end

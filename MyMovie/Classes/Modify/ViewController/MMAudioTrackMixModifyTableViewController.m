@@ -8,6 +8,7 @@
 #import "MMMediaItemModel.h"
 #import "MMAudioMixModel.h"
 #import "MMAudioMixModifyTableViewCell.h"
+#import "MMMediaModifyCollectionViewController.h"
 #import "MMAudioTrackMixModifyTableViewController.h"
 
 #define kAudioTrackMixModifyTableViewHeaderCellIdentifier @"AudioTrackMixModifyTableViewHeaderCellIdentifier"
@@ -15,16 +16,28 @@
 
 @interface MMAudioTrackMixModifyTableViewController () <UIScrollViewDelegate>
 
+@property(nonatomic, weak) MMMediaModifyCollectionViewController* modifyViewController;
+@property(nonatomic, strong) NSMutableArray* audioMixArray;
+
 @end
 
 @implementation MMAudioTrackMixModifyTableViewController
+
+- (instancetype)initWithModifyViewController:(MMMediaModifyCollectionViewController *)viewController
+{
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self) {
+        _modifyViewController = viewController;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.title = @"音轨编辑";
     
-    [self.tableView registerClass:[MMAudioMixModifyTableViewCell class] forCellReuseIdentifier:kAudioTrackMixModifyTableViewCellIdentifier];
+    _audioMixArray = [_audioModel.inputParams mutableCopy];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(gotoBack)];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addParamLine)];
@@ -33,19 +46,35 @@
 
 -(void)addParamLine {
     if(_audioModel != nil) {
-        [_audioModel.inputParams addObject:[[MMAudioMixModel alloc] init]];
-        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_audioModel.inputParams.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [_audioMixArray addObject:[[MMAudioMixModel alloc] init]];
+        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_audioMixArray.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    return ;
-}
-
--(void)modify {
     return ;
 }
 
 -(void)gotoBack {
     [self resignFirstResponder];
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    
+    //移除
+    [_audioMixArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        MMAudioMixModel* mixModel = (MMAudioMixModel*)obj;
+        
+        if(mixModel.startTimeRange == mixModel.endTimeRange)
+            [_audioMixArray removeObject:mixModel];
+    }];
+    
+//    [_audioMixArray sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+//
+//    }];
+    
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        for(int i = 0; i != _modifyViewController.audioDataSource.count; ++i) {
+            if([[_modifyViewController.audioDataSource objectAtIndex:i] isEqual:_audioModel]) {
+                [_modifyViewController reloadAudioTrackAtIndex:i];
+                break;
+            }
+        }
+    }];
     return ;
 }
 
@@ -68,15 +97,13 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if(_audioModel == nil)
-        return 1;
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if(section == 0)
         return 1;
-    return _audioModel.inputParams.count;
+    return _audioMixArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -124,8 +151,11 @@
     }else {
         cell = [tableView dequeueReusableCellWithIdentifier:kAudioTrackMixModifyTableViewCellIdentifier];
         
+        if(cell == nil)
+            cell = [[MMAudioMixModifyTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kAudioTrackMixModifyTableViewCellIdentifier];
+        
         ((MMAudioMixModifyTableViewCell*)cell).duration = _audioModel.duration;
-        ((MMAudioMixModifyTableViewCell*)cell).audioMixModel = [_audioModel.inputParams objectAtIndex:(NSUInteger)indexPath.row];
+        ((MMAudioMixModifyTableViewCell*)cell).audioMixModel = [_audioMixArray objectAtIndex:(NSUInteger)indexPath.row];
     }
     
     return cell;
@@ -152,16 +182,27 @@
         return nil;
     
     UITableViewRowAction* deleteRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [_audioModel.inputParams removeObjectAtIndex:(NSUInteger)indexPath.row];
+        [_audioMixArray removeObjectAtIndex:(NSUInteger)indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
     
-    UITableViewRowAction* insertRowAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"增加" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [_audioModel.inputParams addObject:[[MMAudioMixModel alloc] init]];
-        [tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_audioModel.inputParams.count - 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }];
-    
-    return @[deleteRowAction, insertRowAction];
+    return @[deleteRowAction];
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01f;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    if(section == 0)
+        return 0.01f;
+    return 80.0f;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if(section == 1)
+        return @"应用程序会根据实际需要,对您输入的数据进行重新排序、拆分、合并、删除";
+    return nil;
 }
 
 #pragma mark - UIScrollViewDelegate

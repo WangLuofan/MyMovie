@@ -12,11 +12,7 @@
 @class MMAudioMixModel;
 @interface MMAudioMixModifyTableViewCell : UITableViewCell
 
-@property(nonatomic, strong) MMStepView* startTimeRangeStepView;
-@property(nonatomic, strong) MMStepView* endTimeRangeStepView;
-@property(nonatomic, strong) MMStepView* audioLevelStepView;
-
-@property(nonatomic, weak) MMAudioMixModel* audioMixModel;
+@property(nonatomic, strong) MMAudioMixModel* audioMixModel;
 @property(nonatomic, assign) NSTimeInterval duration;
 
 @end
