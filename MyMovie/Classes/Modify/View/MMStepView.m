@@ -105,8 +105,10 @@
     
     if([value compare:max] == NSOrderedAscending)
         _increaseBtn.enabled = YES;
-    else
+    else {
         _increaseBtn.enabled = NO;
+        self.value = maximum;
+    }
     
     return ;
 }
@@ -119,8 +121,10 @@
     
     if([value compare:min] == NSOrderedDescending)
         _decreaseBtn.enabled = YES;
-    else
+    else {
         _decreaseBtn.enabled = NO;
+        self.value = minimum;
+    }
     
     return ;
 }

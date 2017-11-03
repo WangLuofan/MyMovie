@@ -35,22 +35,24 @@
     if(_inputParams.count != 0) {
         CGSize itemSize = CGSizeMake(5.0f, rect.size.height);
         
-        CGFloat audioLevel = 0.0f;
         CGContextMoveToPoint(theCtx, 0.0f, rect.size.height);
         for(int i = 0; i != _inputParams.count; ++i) {
             MMAudioMixModel* audioMixModel = [_inputParams objectAtIndex:i];
             
-            CGContextAddLineToPoint(theCtx, audioMixModel.startTimeRange * itemSize.width, (1 - audioLevel) * itemSize.height);
-            CGContextAddLineToPoint(theCtx, audioMixModel.endTimeRange * itemSize.width, (1 - audioMixModel.audioLevel) * itemSize.height);
-            audioLevel = audioMixModel.audioLevel;
+            CGContextAddLineToPoint(theCtx, audioMixModel.timeInterval * itemSize.width, (1 - audioMixModel.audioLevel) * itemSize.height);
         }
         
         CGPoint curPoint = CGContextGetPathCurrentPoint(theCtx);
         CGContextAddLineToPoint(theCtx, rect.size.width, curPoint.y);
+        CGContextDrawPath(theCtx, kCGPathFillStroke);
+        
+        CGContextMoveToPoint(theCtx, rect.size.width, curPoint.y);
         CGContextAddLineToPoint(theCtx, rect.size.width, rect.size.height);
+        CGContextAddLineToPoint(theCtx, 0, rect.size.height);
+        
+        CGContextClosePath(theCtx);
+        CGContextDrawPath(theCtx, kCGPathFill);
     }
-    
-    CGContextDrawPath(theCtx, kCGPathFillStroke);
     
     CGContextRestoreGState(theCtx);
     return ;

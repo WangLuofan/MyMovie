@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MMAudioMixModel : NSObject <NSCopying>
+@interface MMAudioMixModel : NSObject
 
-@property(nonatomic, assign) NSTimeInterval startTimeRange;
-@property(nonatomic, assign) NSTimeInterval endTimeRange;
+-(instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval audio:(CGFloat)audio;
+
+@property(nonatomic, assign) NSTimeInterval timeInterval;
 @property(nonatomic, assign) CGFloat audioLevel;
 
 @end

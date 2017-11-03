@@ -14,5 +14,6 @@
 
 @property(nonatomic, strong) MMAudioMixModel* audioMixModel;
 @property(nonatomic, assign) NSTimeInterval duration;
+@property(nonatomic, assign) NSTimeInterval previousTimeInterval;
 
 @end

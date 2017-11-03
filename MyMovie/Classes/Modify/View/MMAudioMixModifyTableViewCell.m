@@ -12,8 +12,7 @@
 
 @interface MMAudioMixModifyTableViewCell()
 
-@property(nonatomic, strong) MMStepView* startTimeRangeStepView;
-@property(nonatomic, strong) MMStepView* endTimeRangeStepView;
+@property(nonatomic, strong) MMStepView* timeIntervalStepView;
 @property(nonatomic, strong) MMStepView* audioLevelStepView;
 
 @end
@@ -33,43 +32,30 @@
 }
 
 -(void)initUI {
-    _startTimeRangeStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:2];
-    [_startTimeRangeStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
-    _startTimeRangeStepView.stepCount = @"0.01";
-    _startTimeRangeStepView.minimum = @"0";
-    _startTimeRangeStepView.placeholder = @"起始时间";
-    [self.contentView addSubview:_startTimeRangeStepView];
-    
-    _endTimeRangeStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:2];
-    _endTimeRangeStepView.stepCount = @"0.01";
-    _endTimeRangeStepView.minimum = @"0";
-    _endTimeRangeStepView.placeholder = @"结束时间";
-    [_endTimeRangeStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.contentView addSubview:_endTimeRangeStepView];
-    
+    _timeIntervalStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:2];
+    [_timeIntervalStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+    _timeIntervalStepView.stepCount = @"0.01";
+    _timeIntervalStepView.minimum = @"0";
+    _timeIntervalStepView.placeholder = @"时间点";
+    [self.contentView addSubview:_timeIntervalStepView];
+
     _audioLevelStepView = [[MMStepView alloc] initWithKeyboardType:MMStepViewKeyboardTypeDecimal precision:1];
-    _audioLevelStepView.placeholder = @"音量大小";
+    _audioLevelStepView.placeholder = @"音量值";
     _audioLevelStepView.stepCount = @"0.1";
     _audioLevelStepView.maximum = @"1.0";
     [_audioLevelStepView addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
     [self.contentView addSubview:_audioLevelStepView];
 
-    [_startTimeRangeStepView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_timeIntervalStepView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.and.top.and.height.mas_equalTo(self.contentView);
-        make.width.mas_equalTo(_endTimeRangeStepView);
-    }];
-    
-    [_endTimeRangeStepView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.mas_equalTo(_startTimeRangeStepView.mas_trailing);
-        make.top.and.height.mas_equalTo(_startTimeRangeStepView);
         make.width.mas_equalTo(_audioLevelStepView);
     }];
-    
+
     [_audioLevelStepView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.trailing.mas_equalTo(self.contentView);
-        make.height.and.top.mas_equalTo(_startTimeRangeStepView);
-        make.leading.mas_equalTo(_endTimeRangeStepView.mas_trailing);
-        make.width.mas_equalTo(_startTimeRangeStepView);
+        make.height.and.top.mas_equalTo(_timeIntervalStepView);
+        make.leading.mas_equalTo(_timeIntervalStepView.mas_trailing);
+        make.width.mas_equalTo(_timeIntervalStepView);
     }];
     return ;
 }
@@ -77,38 +63,27 @@
 -(void)setAudioMixModel:(MMAudioMixModel *)audioMixModel {
     _audioMixModel = audioMixModel;
     
-    _startTimeRangeStepView.value = [NSString stringWithFormat:@"%ld", (NSInteger)audioMixModel.startTimeRange];
-    _endTimeRangeStepView.value = [NSString stringWithFormat:@"%ld", (NSInteger)audioMixModel.endTimeRange];
+    _timeIntervalStepView.value = [NSString stringWithFloat:_audioMixModel.timeInterval effectiveBits:2];
     _audioLevelStepView.value = [NSString stringWithFloat:_audioMixModel.audioLevel effectiveBits:1];
     
+    return ;
+}
+
+-(void)setPreviousTimeInterval:(NSTimeInterval)previousTimeInterval {
+    _timeIntervalStepView.minimum = [NSString stringWithFloat:previousTimeInterval effectiveBits:2];
     return ;
 }
 
 -(void)setDuration:(NSTimeInterval)duration {
     _duration = duration;
     
-    _startTimeRangeStepView.maximum = [NSString stringWithFloat:_duration effectiveBits:2];
-    _endTimeRangeStepView.maximum = [NSString stringWithFloat:_duration effectiveBits:2];
-    
+    _timeIntervalStepView.maximum = [NSString stringWithFloat:_duration effectiveBits:2];
     return ;
 }
 
 -(void)valueChanged:(MMStepView*)stepView {
-    if([stepView isEqual:_startTimeRangeStepView]) {
-        NSDecimalNumber* startVal = [NSDecimalNumber decimalNumberWithString:stepView.value];
-        NSDecimalNumber* endVal = [NSDecimalNumber decimalNumberWithString:_endTimeRangeStepView.value];
-        
-        _endTimeRangeStepView.minimum = stepView.value;
-        
-        NSDecimal startDecimal = startVal.decimalValue;
-        NSDecimal endDecimal = endVal.decimalValue;
-        
-        if(NSDecimalCompare(&startDecimal, &endDecimal) == NSOrderedDescending)
-            _endTimeRangeStepView.value = stepView.value;
-        
-        _audioMixModel.startTimeRange = [stepView.value doubleValue];
-    }else if([stepView isEqual:_endTimeRangeStepView]) {
-        _audioMixModel.endTimeRange = [stepView.value doubleValue];
+    if([stepView isEqual:_timeIntervalStepView]) {
+        _audioMixModel.timeInterval = [stepView.value doubleValue];
     }else {
         _audioMixModel.audioLevel = [stepView.value doubleValue];
     }
