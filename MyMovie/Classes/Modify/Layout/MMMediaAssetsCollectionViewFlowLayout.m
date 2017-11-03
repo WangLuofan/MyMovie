@@ -7,6 +7,7 @@
 //
 
 #import "MMPhotoManager.h"
+#import "MMAssetPlayerControl.h"
 #import "MMMediaModifyItemCollectionViewCell.h"
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
 #import "UIView+MMRender.h"
@@ -41,6 +42,8 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
 @property(nonatomic, assign) MMDragMode dragMode;
 @property(nonatomic, strong) UIImageView* draggableImageView;
 
+@property(nonatomic, strong) UIView* progressIndicatorLine;
+
 @end
 
 @implementation MMMediaAssetsCollectionViewFlowLayout
@@ -72,6 +75,9 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
     [self.collectionView addGestureRecognizer:panGesture];
     [self.collectionView addGestureRecognizer:longPressGesture];
     
+    [self.collectionView addSubview:self.progressIndicatorLine];
+    
+    [MMNotificationCenter addObserver:self selector:@selector(videoPlayStatusChanged:) name:kMovieVideoPlayStateChangedNotification object:nil];
     return ;
 }
 
@@ -175,6 +181,16 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
     }
     
     return contentSize;
+}
+
+-(UIView*)progressIndicatorLine {
+    if(_progressIndicatorLine == nil) {
+        _progressIndicatorLine = [[UIView alloc] initWithFrame:CGRectMake(5.0f, 0.0f, 2.0f, self.collectionView.bounds.size.height)];
+        _progressIndicatorLine.backgroundColor = [UIColor whiteColor];
+        _progressIndicatorLine.hidden = YES;
+    }
+    
+    return _progressIndicatorLine;
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -386,6 +402,42 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
         
         self.collectionView.scrollEnabled = NO;
     }
+    return ;
+}
+
+#pragma mark -
+-(void)setCurrentTime:(NSTimeInterval)currentTime {
+    self.progressIndicatorLine.frame = CGRectMake(5.0f + currentTime * 5.0f, 0.0f, 2.0f, self.collectionView.bounds.size.height);
+    
+    [self.collectionView scrollRectToVisible:CGRectMake(self.progressIndicatorLine.frame.origin.x, self.progressIndicatorLine.frame.origin.y, 100.0f, self.progressIndicatorLine.frame.size.height) animated:YES];
+    return ;
+}
+
+-(void)videoPlayStatusChanged:(NSNotification*)notification {
+    MMVideoPlayStatus status = [[notification.userInfo valueForKey:@"status"] unsignedIntegerValue];
+    
+    switch (status) {
+        case MMVideoPlayStatusStoped:
+        {
+            self.progressIndicatorLine.hidden = YES;
+            self.progressIndicatorLine.frame = CGRectMake(5.0f, 0.0f, 2.0f, self.collectionView.bounds.size.height);
+        }
+            break;
+        case MMVideoPlayStatusPlaying:
+        {
+            self.progressIndicatorLine.hidden = NO;
+        }
+            break;
+        default:
+            break;
+    }
+    
+    return ;
+}
+
+- (void)dealloc
+{
+    [MMNotificationCenter removeObserver:self];
     return ;
 }
 

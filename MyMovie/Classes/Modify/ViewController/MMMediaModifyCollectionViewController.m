@@ -431,6 +431,11 @@ static NSString * const reuseIdentifier = @"Cell";
     return ;
 }
 
+-(void)updateProgress:(NSTimeInterval)curTime {
+    ((MMMediaAssetsCollectionViewFlowLayout*)self.collectionView.collectionViewLayout).currentTime = curTime;
+    return ;
+}
+
 -(void)collectionView:(UICollectionView *)collectionView layout:(MMMediaAssetsCollectionViewFlowLayout *)layout didAdjustItemAtIndexPath:(NSIndexPath *)indexPath toWidth:(CGFloat)width {
     MMMediaItemModel* curModel = nil;
     if(indexPath.section == 0)

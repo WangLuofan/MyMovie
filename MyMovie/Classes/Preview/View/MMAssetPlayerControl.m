@@ -72,6 +72,9 @@
 -(void)progressTimerEventHandler:(NSTimer*)timer {
     _progressSlider.value = CMTimeGetSeconds(_thePlayer.currentTime);
     _curTimeLabel.text = [MMMediaTimeUtils convertTimeIntervalToTime:_progressSlider.value];
+    
+    if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
+        [self.delegate videoPlayerProgressUpdated:_progressSlider.value];
     return ;
 }
 
@@ -92,6 +95,8 @@
             [[NSRunLoop currentRunLoop] addTimer:self.progressTimer forMode:NSDefaultRunLoopMode];
         else
             [self.progressTimer setFireDate:[[NSDate date] dateByAddingTimeInterval:1.0f]];
+        
+        [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusPlaying), @"duration" : [NSValue valueWithCMTime:_thePlayer.currentItem.duration]}];
     }else {
         [_thePlayer pause];
         _isPlaying = NO;
@@ -100,6 +105,8 @@
         
         if(_progressTimer != nil)
             [self.progressTimer setFireDate:[NSDate distantFuture]];
+        
+        [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusPaused)}];
     }
     return ;
 }
@@ -109,6 +116,8 @@
     [_thePlayer seekToTime:kCMTimeZero];
     
     [self playToEnd:nil];
+    
+    [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusStoped)}];
     return ;
 }
 
@@ -118,10 +127,14 @@
     [self playAction:_playBtn];
     [_thePlayer seekToTime:time];
     
+    if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
+        [self.delegate videoPlayerProgressUpdated:_progressSlider.value];
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self playAction:_playBtn];
     });
     
+    [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusSeeking), @"currentTime" : [NSValue valueWithCMTime:_thePlayer.currentTime]}];
     return ;
 }
 
@@ -142,6 +155,8 @@
 
 - (IBAction)progressValueChanged:(UISlider *)sender {
     _curTimeLabel.text = [MMMediaTimeUtils convertTimeIntervalToTime:sender.value];
+    if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
+        [self.delegate videoPlayerProgressUpdated:sender.value];
     return ;
 }
 

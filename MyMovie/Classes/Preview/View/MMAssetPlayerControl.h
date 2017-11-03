@@ -8,11 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, MMVideoPlayStatus) {
+    MMVideoPlayStatusPlaying,
+    MMVideoPlayStatusPaused,
+    MMVideoPlayStatusStoped,
+    MMVideoPlayStatusSeeking,
+    MMVideoPlayStatusFailed,
+};
+
 @class MMAssetPlayerControl;
 @protocol MMAssetPlayerControlDelegate <NSObject>
 
 @optional
 -(void)shouldPlayMediaAtControl:(MMAssetPlayerControl*)control;
+-(void)videoPlayerProgressUpdated:(NSTimeInterval)timeInterval;
 
 @end
 

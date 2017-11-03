@@ -28,5 +28,6 @@
 
 @property(nonatomic) CGSize itemSize;
 @property(nonatomic) CGFloat minimumSpacing;
+@property(nonatomic) NSTimeInterval currentTime;
 
 @end

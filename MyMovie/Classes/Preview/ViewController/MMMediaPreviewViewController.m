@@ -27,6 +27,7 @@
 
 //progress
 @property(nonatomic, strong) MMAssetPlayerProgressHostView* progressHostView;
+@property(nonatomic, weak) MMMediaModifyCollectionViewController* mediaModifyViewController;
 
 @end
 
@@ -60,7 +61,7 @@
 -(void)setShowProgress:(BOOL)showProgress {
     _showProgress = showProgress;
     _progressHostView.hidden = !showProgress;
-    
+    _progressView.progress = 0.0f;
     return ;
 }
 
@@ -170,6 +171,8 @@
         if(self.thePlayer.currentItem.status == AVPlayerItemStatusReadyToPlay) {
             [self.thePlayer.currentItem removeObserver:self forKeyPath:@"status"];
             self.playerControl.thePlayer = self.thePlayer;
+        }else {
+            [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusFailed), @"error" : self.thePlayer.error}];
         }
     }
     
@@ -189,9 +192,15 @@
     self.showProgress = YES;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        MMMediaModifyCollectionViewController* modifyController = (MMMediaModifyCollectionViewController*)[self.parentViewController.childViewControllers objectAtIndex:2];
-        [modifyController prepareForPlay];
+        if(_mediaModifyViewController == nil)
+            _mediaModifyViewController = (MMMediaModifyCollectionViewController*)[self.parentViewController.childViewControllers objectAtIndex:2];
+        [_mediaModifyViewController prepareForPlay];
     });
+    return ;
+}
+
+-(void)videoPlayerProgressUpdated:(NSTimeInterval)timeInterval {
+    [_mediaModifyViewController updateProgress:timeInterval];
     return ;
 }
 
