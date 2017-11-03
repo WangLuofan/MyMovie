@@ -10,6 +10,7 @@
 #import "MMAssetPlayerProgressView.h"
 #import "MMMediaItemModel.h"
 #import "MMPhotoManager.h"
+#import "MMAudioMixModel.h"
 #import "MMMediaPreviewViewController.h"
 #import "MMMediaModifyCollectionViewController+MMMedia.h"
 
@@ -118,24 +119,30 @@
     AVMutableCompositionTrack* audioTrack = [composition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
     
     NSArray* videoTracks = @[videoTrack_1, videoTrack_2];
+    __block AVAudioMix* audioMix = nil;
     
     dispatch_group_t buildGroup = dispatch_group_create();
     dispatch_group_async(buildGroup, dispatch_queue_create("com.mmovie.videoTrack.build.queue", NULL), ^{
         [self buildVideoTracks:videoTracks];
     });
     dispatch_group_async(buildGroup, dispatch_queue_create("com.mmovie.audioTrack.build.queue", NULL), ^{
-        [self buildAudioTracks:audioTrack];
+        audioMix = [self buildAudioTracks:audioTrack];
     });
     
     dispatch_group_notify(buildGroup, dispatch_get_main_queue(), ^{
+        
         AVMutableVideoComposition* videoComposition = [AVMutableVideoComposition videoCompositionWithPropertiesOfAsset:composition];
         [self transitionInstructionsInVideoComposition:videoComposition videoAssets:videoAssetsArray];
         
         AVPlayerItem* playerItem = [AVPlayerItem playerItemWithAsset:composition];
         playerItem.videoComposition = videoComposition;
+        playerItem.audioMix = audioMix;
         
-        if(complete)
+        if(complete) {
+            self.previewViewController.progressView.progress = 1.0f;
+            
             complete(playerItem);
+        }
         
         return ;
     });
@@ -245,7 +252,8 @@
             AVMutableCompositionTrack* track = [videoTracks objectAtIndex:(trackIndex++ % 2)];
             AVAsset* videoAsset = ((MMMediaVideoModel*)itemModel).mediaAsset;
             
-            CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaVideoModel*)itemModel).duration, 1);
+            CMTimeShow(videoAsset.duration);
+            CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaVideoModel*)itemModel).duration, ((MMMediaVideoModel*)itemModel).mediaAsset.duration.timescale);
             if(i != 0) {
                 MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[self.assetsDataSource objectAtIndex:i - 1];
                 if(transitionModel.transitionType != TransitionTypeNone)
@@ -270,27 +278,44 @@
     return ;
 }
 
--(void)buildAudioTracks:(AVMutableCompositionTrack*)audioTrack {
+-(AVAudioMix*)buildAudioTracks:(AVMutableCompositionTrack*)audioTrack {
     CMTime cursorTime = kCMTimeZero;
+    CMTime audioDurTime = kCMTimeZero, audioStartTime = kCMTimeZero;
     
     AVMutableAudioMix* audioMix = [AVMutableAudioMix audioMix];
+    AVMutableAudioMixInputParameters* inputParams = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:audioTrack];
     for (MMMediaAudioModel* audioModel in self.audioDataSource) {
-        CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaAudioModel*)audioModel).duration, 1);
+        CMTime assetDuration = CMTimeMakeWithSeconds(audioModel.duration, audioModel.mediaAsset.duration.timescale);
         
         while(CMTIME_COMPARE_INLINE(assetDuration, >=, audioModel.mediaAsset.duration)) {
-            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioModel.mediaAsset.duration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioModel.mediaAsset.duration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:cursorTime error:nil];
             
             cursorTime = CMTimeAdd(cursorTime, audioModel.mediaAsset.duration);
-            CMTimeSubtract(assetDuration, audioModel.mediaAsset.duration);
+            assetDuration = CMTimeSubtract(assetDuration, audioModel.mediaAsset.duration);
         }
         
         if(CMTIME_COMPARE_INLINE(assetDuration, !=, kCMTimeZero)) {
-            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, assetDuration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeVideo] firstObject] atTime:cursorTime error:nil];
+            [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, assetDuration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:cursorTime error:nil];
             cursorTime = CMTimeAdd(cursorTime, assetDuration);
         }
+        
+        CGFloat startVolume = 0.0f;
+        CMTime audioTime = kCMTimeZero;
+        for (MMAudioMixModel* audioMixModel in audioModel.inputParams) {
+            audioTime = CMTimeSubtract(CMTimeMakeWithSeconds(audioMixModel.timeInterval, audioModel.mediaAsset.duration.timescale), audioTime);
+            [inputParams setVolumeRampFromStartVolume:startVolume toEndVolume:audioMixModel.audioLevel timeRange:CMTimeRangeMake(audioDurTime, audioTime)];
+            
+            startVolume = audioMixModel.audioLevel;
+            audioDurTime = CMTimeAdd(audioDurTime, audioTime);
+            audioTime = CMTimeMakeWithSeconds(audioMixModel.timeInterval, audioModel.mediaAsset.duration.timescale);
+        }
+        
+        audioStartTime = CMTimeAdd(audioStartTime, assetDuration);
+        audioDurTime = audioStartTime;
     }
     
-    return ;
+    audioMix.inputParameters = @[inputParams];
+    return audioMix;
 }
 
 @end

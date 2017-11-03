@@ -15,7 +15,7 @@
 {
     self = [super init];
     if (self) {
-        _bModified = YES;
+        _modified = YES;
     }
     return self;
 }

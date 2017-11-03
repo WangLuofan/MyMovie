@@ -164,7 +164,7 @@ static NSString * const reuseIdentifier = @"Cell";
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(3);
     
     for(MMMediaItemModel* model in _assetsDataSource) {
-        if(model.mediaType == MMAssetMediaTypeImage) {
+        if(model.mediaType == MMAssetMediaTypeImage && model.modified == YES) {
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
             dispatch_queue_t queue = dispatch_queue_create(model.identifer.UTF8String, NULL);
@@ -439,7 +439,7 @@ static NSString * const reuseIdentifier = @"Cell";
         curModel = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
     curModel.duration = width / 5.0f;
-    
+    curModel.modified = YES;
     return ;
 }
 
