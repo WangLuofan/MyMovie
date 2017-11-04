@@ -18,11 +18,10 @@
 @property(nonatomic, weak) IBOutlet UISlider* progressSlider;
 @property (weak, nonatomic) IBOutlet UILabel *curTimeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *totTimeLabel;
-
-@property(nonatomic, assign) BOOL isPlaying;
 @property(nonatomic, assign) BOOL isAnimationInProgress;
 
 @property(nonatomic, weak) NSTimer* progressTimer;
+@property(nonatomic, assign) MMVideoPlayMode videoPlayMode;
 
 @end
 
@@ -31,6 +30,7 @@
 -(void)awakeFromNib {
     [super awakeFromNib];
     _isControllerShown = YES;
+    _videoPlayMode = MMVideoPlayModeNormal;
     
     [_progressSlider setThumbImage:[UIImage imageNamed:@"knob" scale:0.5f] forState:UIControlStateNormal];
     [_progressSlider setThumbImage:[UIImage imageNamed:@"knob_highlighted" scale:0.5f] forState:UIControlStateHighlighted];
@@ -47,6 +47,7 @@
     _curTimeLabel.text = @"00:00";
     [_playBtn setImage:imageNamed(@"tp_play_icon") forState:UIControlStateNormal];
     _progressSlider.value = 0.0f;
+    
     [self.thePlayer replaceCurrentItemWithPlayerItem:nil];
     return ;
 }
@@ -60,6 +61,27 @@
     [_playBtn setImage:imageNamed(@"tp_play_icon") forState:UIControlStateNormal];
     
     return;
+}
+
+- (IBAction)zoom:(UIButton *)sender {
+    
+    MMVideoPlayMode currentMode = MMVideoPlayModeNormal;
+    if(_videoPlayMode == MMVideoPlayModeNormal) {
+        [sender setImage:[UIImage imageNamed:@"Zoom_In"] forState:UIControlStateNormal];
+        currentMode = MMVideoPlayModePictureInPicture;
+    }else if(_videoPlayMode == MMVideoPlayModePictureInPicture) {
+        [sender setImage:[UIImage imageNamed:@"Zoom_Out"] forState:UIControlStateNormal];
+        currentMode = MMVideoPlayModeFullScreen;
+    }else {
+        [sender setImage:[UIImage imageNamed:@"Zoom_Out"] forState:UIControlStateNormal];
+        currentMode = MMVideoPlayModeNormal;
+    }
+    
+    if([self.delegate respondsToSelector:@selector(control:videoPlayModeChangedFrom:to:)])
+        [self.delegate control:self videoPlayModeChangedFrom:_videoPlayMode to:currentMode];
+    _videoPlayMode = currentMode;
+    
+    return ;
 }
 
 -(NSTimer *)progressTimer {
@@ -78,6 +100,28 @@
     return ;
 }
 
+-(void)play {
+    [_thePlayer play];
+    _isPlaying = YES;
+    
+    if(_progressTimer == nil)
+        [[NSRunLoop currentRunLoop] addTimer:self.progressTimer forMode:NSDefaultRunLoopMode];
+    else
+        [self.progressTimer setFireDate:[[NSDate date] dateByAddingTimeInterval:1.0f]];
+    
+    return ;
+}
+
+-(void)pause {
+    [_thePlayer pause];
+    
+    _isPlaying = NO;
+    if(_progressTimer != nil)
+        [self.progressTimer setFireDate:[NSDate distantFuture]];
+    
+    return ;
+}
+
 - (IBAction)playAction:(UIButton *)sender {
     if(self.thePlayer.currentItem == nil) {
         if([self.delegate respondsToSelector:@selector(shouldPlayMediaAtControl:)])
@@ -86,32 +130,20 @@
     }
     
     if(_isPlaying == NO) {
-        [_thePlayer play];
-        _isPlaying = YES;
+        [self play];
         
         [sender setImage:imageNamed(@"tp_pause_icon") forState:UIControlStateNormal];
-        
-        if(_progressTimer == nil)
-            [[NSRunLoop currentRunLoop] addTimer:self.progressTimer forMode:NSDefaultRunLoopMode];
-        else
-            [self.progressTimer setFireDate:[[NSDate date] dateByAddingTimeInterval:1.0f]];
-        
         [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusPlaying), @"duration" : [NSValue valueWithCMTime:_thePlayer.currentItem.duration]}];
     }else {
-        [_thePlayer pause];
-        _isPlaying = NO;
+        [self pause];
         
         [sender setImage:imageNamed(@"tp_play_icon") forState:UIControlStateNormal];
-        
-        if(_progressTimer != nil)
-            [self.progressTimer setFireDate:[NSDate distantFuture]];
-        
         [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusPaused)}];
     }
     return ;
 }
 
-- (IBAction)stopAction:(UIButton *)sender {
+-(void)stop {
     [_thePlayer pause];
     [_thePlayer seekToTime:kCMTimeZero];
     
@@ -121,20 +153,23 @@
     return ;
 }
 
+- (IBAction)stopAction:(UIButton *)sender {
+    [self stop];
+    return ;
+}
+
 -(void)seekToTime:(CMTime)time {
     if(CMTIME_IS_INVALID(time) == true)
         return ;
     
-    _isPlaying = YES;
-    
-    [self playAction:_playBtn];
+    [self pause];
     [_thePlayer seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
         if(finished) {
             if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
                 [self.delegate videoPlayerProgressUpdated:_progressSlider.value];
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self playAction:_playBtn];
+                [self play];
             });
             
             [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusSeeking), @"currentTime" : [NSValue valueWithCMTime:_thePlayer.currentTime]}];

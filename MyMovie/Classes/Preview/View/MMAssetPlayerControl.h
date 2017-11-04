@@ -16,12 +16,19 @@ typedef NS_ENUM(NSUInteger, MMVideoPlayStatus) {
     MMVideoPlayStatusFailed,
 };
 
+typedef NS_ENUM(NSUInteger, MMVideoPlayMode) {
+    MMVideoPlayModeNormal,
+    MMVideoPlayModePictureInPicture,
+    MMVideoPlayModeFullScreen,
+};
+
 @class MMAssetPlayerControl;
 @protocol MMAssetPlayerControlDelegate <NSObject>
 
 @optional
 -(void)shouldPlayMediaAtControl:(MMAssetPlayerControl*)control;
 -(void)videoPlayerProgressUpdated:(NSTimeInterval)timeInterval;
+-(void)control:(MMAssetPlayerControl*)control videoPlayModeChangedFrom:(MMVideoPlayMode)fromPlayMode to:(MMVideoPlayMode)toPlayMode;
 
 @end
 
@@ -31,6 +38,11 @@ typedef NS_ENUM(NSUInteger, MMVideoPlayStatus) {
 @property(nonatomic, weak) AVPlayer* thePlayer;
 @property(nonatomic, assign) id<MMAssetPlayerControlDelegate> delegate;
 @property(nonatomic, readonly) BOOL isControllerShown;
+@property(nonatomic, assign) BOOL isPlaying;
+
+-(void)play;
+-(void)pause;
+-(void)stop;
 
 -(void)showController;
 -(void)hideController;

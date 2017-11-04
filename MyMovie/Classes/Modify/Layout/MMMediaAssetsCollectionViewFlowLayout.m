@@ -217,7 +217,13 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
                     return NO;
             
             UICollectionViewLayoutAttributes* attrs = [_calculatedLayoutAttributes objectForKey:indexPath];
-            if(CGRectContainsPoint(CGRectMake(attrs.frame.origin.x + attrs.frame.size.width - 50, attrs.frame.origin.y, 50, attrs.frame.size.height), location) == false)
+            
+            CGFloat xOffset = attrs.frame.origin.x + attrs.frame.size.width - 50.0f;
+            if(xOffset < 0.0f) xOffset = attrs.frame.origin.x;
+            
+            CGFloat xWidth = attrs.frame.size.width - xOffset > 50.0f ? 50.0f : attrs.size.width;
+            
+            if(CGRectContainsPoint(CGRectMake(xOffset, attrs.frame.origin.y, xWidth, attrs.frame.size.height), location) == false)
                 return NO;
         }else {
             if([self.delegate respondsToSelector:@selector(collectionView:layout:canMoveItemAtIndexPath:)])
@@ -284,7 +290,7 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
             
             UICollectionViewLayoutAttributes* attrs = [_calculatedLayoutAttributes objectForKey:_gestrureIndexPath];
             
-            if(attrs.frame.size.width + offset.x < 5.0f)
+            if(attrs.frame.size.width + offset.x < 25.0f)
                 return ;
             
             attrs.frame = CGRectMake(attrs.frame.origin.x, attrs.frame.origin.y, attrs.frame.size.width + offset.x, attrs.frame.size.height);

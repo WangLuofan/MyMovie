@@ -68,10 +68,18 @@
                         <action selector="playAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="T5f-l3-57d"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KPS-LJ-ZEd">
+                    <rect key="frame" x="578" y="26" width="20" height="22"/>
+                    <state key="normal" image="Zoom_Out"/>
+                    <connections>
+                        <action selector="zoom:" destination="iN0-l3-epB" eventType="touchUpInside" id="Dgz-UP-3Kf"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="TZs-2I-xIF" secondAttribute="bottom" constant="2" id="17e-49-7fy"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="KPS-LJ-ZEd" secondAttribute="trailing" constant="5" id="2xh-fc-5Ns"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="gaP-9a-MDR" secondAttribute="bottom" constant="2" id="5nc-DX-HLE"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="YIH-Zq-yzB" secondAttribute="trailing" constant="15" id="7ct-8U-a89"/>
                 <constraint firstItem="YIH-Zq-yzB" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="AMZ-Js-CaG"/>
@@ -85,6 +93,7 @@
                 <constraint firstItem="cmL-mD-epJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="centerX" constant="20" id="pHS-qE-EEX"/>
                 <constraint firstItem="gaP-9a-MDR" firstAttribute="leading" secondItem="cmL-mD-epJ" secondAttribute="trailing" constant="50" id="qSY-4M-xtq"/>
                 <constraint firstItem="YIH-Zq-yzB" firstAttribute="leading" secondItem="63p-c2-gSF" secondAttribute="trailing" constant="15" id="qeu-lp-PGY"/>
+                <constraint firstItem="gaP-9a-MDR" firstAttribute="bottom" secondItem="KPS-LJ-ZEd" secondAttribute="bottom" id="s6J-JO-THJ"/>
                 <constraint firstItem="cmL-mD-epJ" firstAttribute="centerY" secondItem="TZs-2I-xIF" secondAttribute="centerY" constant="-1" id="teW-wp-ypJ"/>
                 <constraint firstItem="HFE-c6-m8h" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="ucp-Q4-w3n"/>
             </constraints>
@@ -100,6 +109,7 @@
         </view>
     </objects>
     <resources>
+        <image name="Zoom_Out" width="20" height="20"/>
         <image name="tp_ff_icon" width="20" height="15"/>
         <image name="tp_play_icon" width="22" height="23"/>
         <image name="tp_rewind_icon" width="20" height="15"/>

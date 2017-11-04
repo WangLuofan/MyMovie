@@ -25,6 +25,11 @@
 @property(nonatomic, strong) AVPlayerLayer* thePlayerLayer;
 @property(nonatomic, strong) MMAssetPlayerControl* playerControl;
 
+//dim
+@property(nonatomic, strong) UIView* dimBgView;
+
+@property(nonatomic, assign) BOOL isVideoPlaying;
+
 //progress
 @property(nonatomic, strong) MMAssetPlayerProgressHostView* progressHostView;
 @property(nonatomic, weak) MMMediaModifyCollectionViewController* mediaModifyViewController;
@@ -55,6 +60,7 @@
     [_progressHostView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.and.bottom.and.trailing.and.top.mas_equalTo(self.view);
     }];
+    
     return ;
 }
 
@@ -201,6 +207,85 @@
 
 -(void)videoPlayerProgressUpdated:(NSTimeInterval)timeInterval {
     [_mediaModifyViewController updateProgress:timeInterval];
+    return ;
+}
+
+-(void)control:(MMAssetPlayerControl *)control videoPlayModeChangedFrom:(MMVideoPlayMode)fromPlayMode to:(MMVideoPlayMode)toPlayMode {
+    if(_dimBgView == nil) {
+        _dimBgView = [[UIView alloc] initWithFrame:self.navigationController.view.bounds];
+        _dimBgView.backgroundColor = [UIColor clearColor];
+    }
+    
+    _isVideoPlaying = control.isPlaying;
+    
+    if(_isVideoPlaying == YES)
+        [control pause];
+    
+    if(toPlayMode == MMVideoPlayModePictureInPicture && fromPlayMode == MMVideoPlayModeNormal) {
+        [self.parentViewController.navigationController.view addSubview:_dimBgView];
+        
+        CGRect frameRect = [_assetsPlayerView convertRect:_assetsPlayerView.frame toView:_dimBgView];
+        
+        [_assetsPlayerView removeFromSuperview];
+        [_dimBgView addSubview:_assetsPlayerView];
+        [_assetsPlayerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.trailing.mas_equalTo(_dimBgView);
+            make.width.mas_equalTo(frameRect.size.width);
+            make.height.mas_equalTo(frameRect.size.height);
+        }];
+        [_dimBgView addSubview:_assetsPlayerView];
+        [_dimBgView layoutIfNeeded];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_assetsPlayerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.and.trailing.mas_equalTo(_dimBgView);
+                make.width.mas_equalTo(frameRect.size.width);
+                make.height.mas_equalTo(frameRect.size.height);
+            }];
+            
+            [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+                [_dimBgView layoutIfNeeded];
+                self.thePlayerLayer.frame = _assetsPlayerView.bounds;
+            } completion:^(BOOL finished) {
+                if(finished && _isVideoPlaying == YES)
+                    [control play];
+            }];
+        });
+    }else if(toPlayMode == MMVideoPlayModeFullScreen && fromPlayMode == MMVideoPlayModePictureInPicture) {
+        [_assetsPlayerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.edges.mas_equalTo(_dimBgView);
+        }];
+        
+        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+            [_dimBgView layoutIfNeeded];
+            self.thePlayerLayer.frame = _assetsPlayerView.bounds;
+        } completion:^(BOOL finished) {
+            if(finished && _isVideoPlaying == YES)
+                [control play];
+        }];
+    }else {        
+        [_assetsPlayerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.trailing.mas_equalTo(_dimBgView);
+            make.width.mas_equalTo(self.view.bounds.size.width);
+            make.height.mas_equalTo(self.view.bounds.size.height);
+        }];
+        
+        [UIView animateWithDuration:kDefaultAnimationDuration animations:^{
+            [_dimBgView layoutIfNeeded];
+            self.thePlayerLayer.frame = _assetsPlayerView.bounds;
+        } completion:^(BOOL finished) {
+            if(finished) {
+                [_dimBgView removeFromSuperview];
+                [self.view insertSubview:_assetsPlayerView belowSubview:_progressHostView];
+                [_assetsPlayerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.edges.mas_equalTo(self.view);
+                }];
+                
+                if(_isVideoPlaying == YES)
+                    [control play];
+            }
+        }];
+    }
     return ;
 }
 
