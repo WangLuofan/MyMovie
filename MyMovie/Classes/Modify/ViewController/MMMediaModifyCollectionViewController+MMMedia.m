@@ -99,7 +99,7 @@
             
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
             CGContextRef context = CGBitmapContextCreate(baseAddr, k1280pSize.width, k1280pSize.height, 8, CVPixelBufferGetBytesPerRow(pixelBuf), colorSpace, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host);
-            CGContextDrawImage(context, CGRectMake(0, 0, k1280pSize.width, k1280pSize.height), image.CGImage);
+            CGContextDrawImage(context, AVMakeRectWithAspectRatioInsideRect(image.size, CGRectMake(0, 0, k1280pSize.width, k1280pSize.height)), image.CGImage);
             CGColorSpaceRelease(colorSpace);
             CGContextRelease(context);
         }
@@ -140,7 +140,7 @@
         
         if(complete) {
             self.previewViewController.progressView.progress = 1.0f;
-            
+            CMTimeShow(playerItem.duration);
             complete(playerItem);
         }
         

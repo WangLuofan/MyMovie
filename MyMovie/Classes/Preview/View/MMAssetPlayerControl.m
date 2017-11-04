@@ -122,19 +122,25 @@
 }
 
 -(void)seekToTime:(CMTime)time {
+    if(CMTIME_IS_INVALID(time) == true)
+        return ;
+    
     _isPlaying = YES;
     
     [self playAction:_playBtn];
-    [_thePlayer seekToTime:time];
+    [_thePlayer seekToTime:time toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+        if(finished) {
+            if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
+                [self.delegate videoPlayerProgressUpdated:_progressSlider.value];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self playAction:_playBtn];
+            });
+            
+            [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusSeeking), @"currentTime" : [NSValue valueWithCMTime:_thePlayer.currentTime]}];
+        }
+    }];
     
-    if([self.delegate respondsToSelector:@selector(videoPlayerProgressUpdated:)])
-        [self.delegate videoPlayerProgressUpdated:_progressSlider.value];
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self playAction:_playBtn];
-    });
-    
-    [MMNotificationCenter postNotificationName:kMovieVideoPlayStateChangedNotification object:nil userInfo:@{@"status" : @(MMVideoPlayStatusSeeking), @"currentTime" : [NSValue valueWithCMTime:_thePlayer.currentTime]}];
     return ;
 }
 

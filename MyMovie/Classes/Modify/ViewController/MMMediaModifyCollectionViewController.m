@@ -206,8 +206,7 @@ static NSString * const reuseIdentifier = @"Cell";
         model = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
     if(model.mediaType != MMAssetMediaTypeTransition) {
-        NSTimeInterval seconds = (NSInteger)(model.duration + 1.0f);
-        return seconds * 5.0f;
+        return model.duration * 5.0f;
     }
     
     return 30.0f;
