@@ -48,7 +48,9 @@
     MPMediaQuery *everything = [[MPMediaQuery alloc] init];
     _musicItemsArray = [everything items];
     
-    [self.tableView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
     return ;
 }
 
