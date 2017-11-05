@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="yTW-I6-U79" customClass="MMAudioMediaItemCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="m5M-bL-k9F" userLabel="SelectionImageView">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="191"/>
+                    </imageView>
+                </subviews>
+            </view>
+            <color key="backgroundColor" red="1" green="0.93725490199999995" blue="0.83921568629999999" alpha="1" colorSpace="deviceRGB"/>
+            <constraints>
+                <constraint firstItem="m5M-bL-k9F" firstAttribute="leading" secondItem="yTW-I6-U79" secondAttribute="leading" id="2Zc-2S-UwX"/>
+                <constraint firstAttribute="bottom" secondItem="m5M-bL-k9F" secondAttribute="bottom" id="Jjn-6m-faf"/>
+                <constraint firstAttribute="trailing" secondItem="m5M-bL-k9F" secondAttribute="trailing" id="Z1N-NT-XIz"/>
+                <constraint firstItem="m5M-bL-k9F" firstAttribute="top" secondItem="yTW-I6-U79" secondAttribute="top" id="ff3-SX-Q9z"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="mhK-OK-RrP"/>
+            <size key="customSize" width="481" height="424"/>
+            <connections>
+                <outlet property="selectionImageView" destination="m5M-bL-k9F" id="eEg-go-g3v"/>
+            </connections>
+            <point key="canvasLocation" x="41" y="-53.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

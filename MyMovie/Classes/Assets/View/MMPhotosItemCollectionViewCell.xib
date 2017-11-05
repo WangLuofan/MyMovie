@@ -19,55 +19,32 @@
                 <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-Ql-ouW" userLabel="SelectionView">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YaG-lI-rog">
                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
-                        <color key="backgroundColor" red="1" green="0.95666110710516272" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gk2-bm-7HG">
-                        <rect key="frame" x="5" y="5" width="70" height="70"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bK4-Wy-NB5">
-                        <rect key="frame" x="44" y="60.5" width="31" height="14.5"/>
+                        <rect key="frame" x="49" y="65.5" width="31" height="14.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Ey-ol-rCO">
-                        <rect key="frame" x="20.5" y="20.5" width="39" height="39"/>
-                        <state key="normal" image="tp_add_media_icon" backgroundImage="tp_square_button"/>
-                        <connections>
-                            <action selector="handleResAdded:" destination="gTV-IL-0wX" eventType="touchUpInside" id="dFG-F8-SCg"/>
-                        </connections>
-                    </button>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="KK3-Ql-ouW" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="top" id="0Ng-Dy-PH2"/>
-                <constraint firstItem="gk2-bm-7HG" firstAttribute="trailing" secondItem="SEy-5g-ep8" secondAttribute="trailing" constant="-5" id="2cg-q1-DXA"/>
-                <constraint firstItem="4Ey-ol-rCO" firstAttribute="centerY" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="6sx-aw-1n4"/>
-                <constraint firstItem="bK4-Wy-NB5" firstAttribute="bottom" secondItem="gk2-bm-7HG" secondAttribute="bottom" id="918-TU-9x8"/>
-                <constraint firstItem="bK4-Wy-NB5" firstAttribute="trailing" secondItem="gk2-bm-7HG" secondAttribute="trailing" id="GIW-oP-5Eq"/>
-                <constraint firstItem="gk2-bm-7HG" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="top" constant="5" id="IsU-Ip-a78"/>
-                <constraint firstItem="KK3-Ql-ouW" firstAttribute="trailing" secondItem="SEy-5g-ep8" secondAttribute="trailing" id="Mhz-s5-AI9"/>
-                <constraint firstItem="4Ey-ol-rCO" firstAttribute="centerX" secondItem="SEy-5g-ep8" secondAttribute="centerX" id="MkD-Ex-2Dq"/>
-                <constraint firstItem="gk2-bm-7HG" firstAttribute="bottom" secondItem="SEy-5g-ep8" secondAttribute="bottom" constant="-5" id="a8b-hj-eAr"/>
-                <constraint firstItem="gk2-bm-7HG" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" constant="5" id="b5c-ze-y2z"/>
-                <constraint firstItem="KK3-Ql-ouW" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" id="hnC-a7-HkH"/>
-                <constraint firstItem="KK3-Ql-ouW" firstAttribute="bottom" secondItem="SEy-5g-ep8" secondAttribute="bottom" id="vk1-B0-E3E"/>
+                <constraint firstItem="SEy-5g-ep8" firstAttribute="bottom" secondItem="bK4-Wy-NB5" secondAttribute="bottom" id="PVp-Ce-utk"/>
+                <constraint firstItem="SEy-5g-ep8" firstAttribute="trailing" secondItem="bK4-Wy-NB5" secondAttribute="trailing" id="QXc-ce-Nos"/>
+                <constraint firstItem="YaG-lI-rog" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="TwE-Bt-2uY"/>
+                <constraint firstItem="YaG-lI-rog" firstAttribute="trailing" secondItem="gTV-IL-0wX" secondAttribute="trailing" id="eqr-Yh-sgC"/>
+                <constraint firstItem="YaG-lI-rog" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="r60-aS-qzG"/>
+                <constraint firstItem="YaG-lI-rog" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" id="teS-Tl-pQa"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
             <size key="customSize" width="376" height="308"/>
             <connections>
                 <outlet property="durLabel" destination="bK4-Wy-NB5" id="cTB-e5-XPe"/>
-                <outlet property="imageView" destination="gk2-bm-7HG" id="oeV-v3-Kgt"/>
-                <outlet property="mediaAddBtn" destination="4Ey-ol-rCO" id="bxD-zh-Zyv"/>
-                <outlet property="selectionView" destination="KK3-Ql-ouW" id="eRi-5t-tOZ"/>
+                <outlet property="imageView" destination="YaG-lI-rog" id="hWo-iD-WTs"/>
             </connections>
-            <point key="canvasLocation" x="-220" y="0.0"/>
+            <point key="canvasLocation" x="-181" y="-2"/>
         </collectionViewCell>
     </objects>
-    <resources>
-        <image name="tp_add_media_icon" width="33" height="26"/>
-        <image name="tp_square_button" width="39" height="39"/>
-    </resources>
 </document>

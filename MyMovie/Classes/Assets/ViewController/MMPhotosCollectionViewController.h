@@ -12,4 +12,7 @@
 
 -(instancetype)initWithAssets:(NSArray*)assets;
 
+-(void)insertModifyItemAtIndexPath:(NSIndexPath*)indexPath;
+-(void)previewItemAtIndexPath:(NSIndexPath*)indexPath;
+
 @end

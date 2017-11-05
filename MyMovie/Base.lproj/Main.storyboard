@@ -42,7 +42,13 @@
                             <outlet property="delegate" destination="ehv-iU-fni" id="juS-bA-vff"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="所有项目" id="Ooa-vO-wNf"/>
+                    <navigationItem key="navigationItem" title="所有项目" id="Ooa-vO-wNf">
+                        <barButtonItem key="rightBarButtonItem" title="清空项目" id="EUi-5D-fk8">
+                            <connections>
+                                <action selector="removeAllProjects:" destination="ehv-iU-fni" id="icA-Lv-rfG"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cj3-AE-asu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -59,7 +65,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UiQ-v6-532">
                                 <rect key="frame" x="0.0" y="64" width="187.5" height="301.5"/>
                                 <connections>
-                                    <segue destination="9aB-SY-fIp" kind="embed" id="jpf-nQ-AEb"/>
+                                    <segue destination="CGQ-MN-8Ge" kind="embed" id="jpf-nQ-AEb"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="73c-s0-P0I">
@@ -100,7 +106,7 @@
         <!--媒体资源-->
         <scene sceneID="bqu-0K-SVB">
             <objects>
-                <tableViewController id="Z1o-fB-NRW" customClass="MMMediaAssetsTableViewController" sceneMemberID="viewController">
+                <tableViewController id="Z1o-fB-NRW" customClass="MMVideoAssetsTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Pz5-62-vMJ">
                         <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -124,7 +130,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vUT-ku-9c3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2112" y="-357"/>
+            <point key="canvasLocation" x="2442" y="-506"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dhs-Zy-H0X">
@@ -180,18 +186,42 @@
                     <view key="view" contentMode="scaleToFill" id="6ck-fL-43E">
                         <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3MD-jr-m9S">
+                                <rect key="frame" x="0.0" y="0.0" width="188" height="302"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksE-tQ-UaG">
+                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="0.76470588240000004" blue="0.18039215689999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="3MD-jr-m9S" secondAttribute="bottom" id="Ets-uN-YOd"/>
+                            <constraint firstItem="3MD-jr-m9S" firstAttribute="top" secondItem="eTq-wS-QZe" secondAttribute="top" id="GDm-De-8l4"/>
+                            <constraint firstItem="eTq-wS-QZe" firstAttribute="bottom" secondItem="ksE-tQ-UaG" secondAttribute="bottom" id="doi-mz-Q9Q"/>
+                            <constraint firstItem="3MD-jr-m9S" firstAttribute="leading" secondItem="eTq-wS-QZe" secondAttribute="leading" id="elF-FK-8FM"/>
+                            <constraint firstAttribute="trailing" secondItem="ksE-tQ-UaG" secondAttribute="trailing" id="iSo-ar-XXd"/>
+                            <constraint firstItem="ksE-tQ-UaG" firstAttribute="top" secondItem="eTq-wS-QZe" secondAttribute="top" id="kOj-ci-aKt"/>
+                            <constraint firstItem="ksE-tQ-UaG" firstAttribute="leading" secondItem="6ck-fL-43E" secondAttribute="leading" id="mWe-sZ-gGH"/>
+                            <constraint firstAttribute="trailing" secondItem="3MD-jr-m9S" secondAttribute="trailing" id="o9W-ec-LlV"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="eTq-wS-QZe"/>
                     </view>
+                    <connections>
+                        <outlet property="assetsPlayerView" destination="ksE-tQ-UaG" id="lxV-rG-qwa"/>
+                        <outlet property="previewImageView" destination="3MD-jr-m9S" id="qcm-Bj-zIV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3eT-4U-NfK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1669" y="32"/>
+            <point key="canvasLocation" x="1668.8" y="31.484257871064472"/>
         </scene>
-        <!--Basic Navigation Controller-->
+        <!--视频-->
         <scene sceneID="GtF-Py-3sS">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9aB-SY-fIp" customClass="MMBasicNavigationController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="视频" image="THTabBarVideo" selectedImage="THTabBarVideo_selected" id="PoW-9P-hxp"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KVz-06-Kqe">
                         <rect key="frame" x="0.0" y="0.0" width="187.5" height="44"/>
@@ -204,7 +234,80 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DTP-Il-I4M" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1668.8" y="-357.12143928035982"/>
+            <point key="canvasLocation" x="1998" y="-506"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="RBK-jx-43X">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="CGQ-MN-8Ge" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3Ep-a2-Fau">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="9aB-SY-fIp" kind="relationship" relationship="viewControllers" id="8vg-Tw-bcN"/>
+                        <segue destination="zZd-Fc-GGB" kind="relationship" relationship="viewControllers" id="BgC-I8-QG6"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tcs-Dd-dYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1518.4000000000001" y="-357.12143928035982"/>
+        </scene>
+        <!--音频资源-->
+        <scene sceneID="EnH-7O-XYy">
+            <objects>
+                <tableViewController id="mSu-UU-nSz" customClass="MMAudioAssetsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="gxI-ci-FhI">
+                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="301.5"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="pHg-k0-cUN">
+                                <rect key="frame" x="0.0" y="28" width="187.5" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pHg-k0-cUN" id="8PI-wp-LeV">
+                                    <rect key="frame" x="0.0" y="0.0" width="187.5" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mSu-UU-nSz" id="jqo-BT-clf"/>
+                            <outlet property="delegate" destination="mSu-UU-nSz" id="42O-ba-UFN"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="音频资源" id="JgM-xQ-eyZ"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gNi-xA-UP0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2442" y="-154"/>
+        </scene>
+        <!--音频-->
+        <scene sceneID="wyc-or-0Es">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="zZd-Fc-GGB" customClass="MMBasicNavigationController" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="音频" image="THTabBarAudio" selectedImage="THTabBarAudio_selected" id="s8q-Q5-7Lt"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LHY-F4-dW4">
+                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="mSu-UU-nSz" kind="relationship" relationship="rootViewController" id="Vh9-Qk-Iwh"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0SF-ND-bDE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1997" y="-154"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="THTabBarAudio" width="25" height="25"/>
+        <image name="THTabBarAudio_selected" width="25" height="25"/>
+        <image name="THTabBarVideo" width="21" height="25"/>
+        <image name="THTabBarVideo_selected" width="21" height="25"/>
+    </resources>
 </document>

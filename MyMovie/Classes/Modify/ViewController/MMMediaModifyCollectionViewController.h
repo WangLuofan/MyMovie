@@ -8,6 +8,22 @@
 
 #import "MMBasicCollectionViewController.h"
 
+@class MMMediaItemModel;
+@class AVPlayerItem;
+@class MMTransitionModifyView;
+@class MMMediaPreviewViewController;
+
 @interface MMMediaModifyCollectionViewController : MMBasicCollectionViewController
+
+@property(nonatomic, strong) NSMutableArray* audioDataSource;
+@property(nonatomic, strong) NSMutableArray* assetsDataSource;
+
+@property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
+@property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
+
+-(void)prepareForPlay;
+-(void)updateProgress:(NSTimeInterval)curTime;
+-(void)reloadAudioTrackAtIndex:(NSInteger)index;
+-(void)insertItemWithMediaItemModel:(MMMediaItemModel*)model;
 
 @end

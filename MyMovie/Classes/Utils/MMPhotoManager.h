@@ -21,7 +21,8 @@ typedef NS_ENUM(NSUInteger, MMAssetMediaType) {
     MMAssetMediaTypeImage = 1,
     MMAssetMediaTypeVideo = 2,
     MMAssetMediaTypeAudio = 3,
-    MMAssetMediaTypeAll = 4,
+    MMAssetMediaTypeTransition = 4,
+    MMAssetMediaTypeAll = 5,
 };
 
 @interface MMPhotoManager : NSObject

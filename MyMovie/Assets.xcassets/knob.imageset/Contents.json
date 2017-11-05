@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "th_trimmer_ui_selected.png",
+      "filename" : "knob.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "th_trimmer_ui_selected@2x.png",
+      "filename" : "knob@2x.png",
       "scale" : "2x"
     },
     {
