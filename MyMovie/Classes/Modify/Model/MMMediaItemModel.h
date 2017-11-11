@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
 };
 
 @class AVAsset;
-@interface MMMediaItemModel : NSObject
+@interface MMMediaItemModel : NSObject <NSSecureCoding>
 
 @property(nonatomic, assign) NSUInteger mediaType;
 @property(nonatomic, assign) NSTimeInterval duration;

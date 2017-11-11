@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MMProjectModel : NSObject <NSCoding>
+@interface MMProjectModel : NSObject <NSSecureCoding>
 
 @property(nonatomic, copy) NSString* projectTitle;
 @property(nonatomic, copy) NSString* projectDir;

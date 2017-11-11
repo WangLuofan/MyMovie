@@ -7,7 +7,7 @@
 //
 #import "MMMediaItemModel.h"
 #import "MMPhotoManager.h"
-#import <MediaPlayer/MediaPlayer.h>
+#import "MMMediaManager.h"
 #import "MMAudioAssetsTableViewController.h"
 #import "MMMediaPreviewViewController.h"
 #import "MMMediaModifyCollectionViewController.h"
@@ -31,26 +31,22 @@
     [menuBtn sizeToFit];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuBtn];
     
-    if([MPMediaLibrary authorizationStatus] != MPMediaLibraryAuthorizationStatusAuthorized) {
-        [MPMediaLibrary requestAuthorization:^(MPMediaLibraryAuthorizationStatus status) {
-            if(status == MPMediaLibraryAuthorizationStatusAuthorized) {
+    if([MMMediaManager sharedManager].authorizationStatus != MPMediaLibraryAuthorizationStatusAuthorized) {
+        [[MMMediaManager sharedManager] requestMediaQueryAuthorizationWhenComplete:^(MPMediaLibraryAuthorizationStatus status) {
+            if(status == MPMediaLibraryAuthorizationStatusAuthorized)
                 [self queryMusicList];
-            }
         }];
-    }else
+    }else {
         [self queryMusicList];
+    }
     
     return ;
 }
 
 -(void)queryMusicList {
+    _musicItemsArray = [[MMMediaManager sharedManager] allMedias];
+    [self.tableView reloadData];
     
-    MPMediaQuery *everything = [[MPMediaQuery alloc] init];
-    _musicItemsArray = [everything items];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadData];
-    });
     return ;
 }
 

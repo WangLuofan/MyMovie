@@ -9,6 +9,7 @@
 #import "MMProjectModel.h"
 
 @implementation MMProjectModel
+@dynamic supportsSecureCoding;
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -32,6 +33,10 @@
     [coder encodeObject:_modifyDate forKey:@"ModifyDate"];
     
     return ;
+}
+
++(BOOL)supportsSecureCoding {
+    return YES;
 }
 
 @end

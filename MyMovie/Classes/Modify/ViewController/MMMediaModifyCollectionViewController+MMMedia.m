@@ -286,6 +286,7 @@
     for (MMMediaAudioModel* audioModel in self.audioDataSource) {
         CMTime assetDuration = CMTimeMakeWithSeconds(audioModel.duration, audioModel.mediaAsset.duration.timescale);
         
+        CMTimeShow(audioModel.mediaAsset.duration);
         while(CMTIME_COMPARE_INLINE(assetDuration, >=, audioModel.mediaAsset.duration)) {
             [audioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioModel.mediaAsset.duration) ofTrack:[[audioModel.mediaAsset tracksWithMediaType:AVMediaTypeAudio] firstObject] atTime:cursorTime error:nil];
             

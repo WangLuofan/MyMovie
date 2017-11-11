@@ -9,6 +9,7 @@
 #import "MMAudioMixModel.h"
 
 @implementation MMAudioMixModel
+@dynamic supportsSecureCoding;
 
 - (instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval audio:(CGFloat)audio
 {
@@ -31,6 +32,27 @@
     tmpModel.audioLevel = self.audioLevel;
     
     return tmpModel;
+}
+
++(BOOL)supportsSecureCoding {
+    return YES;
+}
+
+-(void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeDouble:_timeInterval forKey:@"TimeInterval"];
+    [aCoder encodeFloat:_audioLevel forKey:@"AudioLevel"];
+    return ;
+}
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    
+    if(self) {
+        _timeInterval = [aDecoder decodeDoubleForKey:@"TimeInterval"];
+        _audioLevel = [aDecoder decodeFloatForKey:@"AudioLevel"];
+    }
+    
+    return self;
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MMAudioMixModel : NSObject
+@interface MMAudioMixModel : NSObject <NSSecureCoding>
 
 -(instancetype)initWithTimeInterval:(NSTimeInterval)timeInterval audio:(CGFloat)audio;
 

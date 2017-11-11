@@ -10,6 +10,7 @@
 
 @interface MMProjectEdittingViewController : MMBasicViewController
 
+-(instancetype)initNeedLoadProject;
 @property(nonatomic, copy) NSArray* allAlbums;
 
 @end

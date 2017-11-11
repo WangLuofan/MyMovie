@@ -14,6 +14,7 @@
 #import "MMAudioAssetsTableViewController.h"
 #import "MMAudioTrackMixModifyTableViewController.h"
 #import "MMPhotoManager.h"
+#import "MMTimerManager.h"
 #import "MMPopMenu.h"
 #import "UIViewController+MMRender.h"
 
@@ -38,6 +39,8 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 @property(nonatomic, strong) MMPopMenu* popMenu;
 @property(nonatomic, assign) UIInterfaceOrientation orientation;
 
+@property(nonatomic, assign) BOOL bNeedLoadProject;
+
 @end
 
 @implementation MMProjectEdittingViewController
@@ -46,7 +49,15 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 {
     self = (MMProjectEdittingViewController*)[storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
     if (self) {
-        
+        _bNeedLoadProject = NO;
+    }
+    return self;
+}
+
+-(instancetype)initNeedLoadProject {
+    self = (MMProjectEdittingViewController*)[storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
+    if (self) {
+        _bNeedLoadProject = YES;
     }
     return self;
 }
@@ -68,6 +79,8 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     panGesture.delegate = self;
     [self.view addGestureRecognizer:panGesture];
     
+    if(_bNeedLoadProject == YES)
+        [_modifyViewController load];
     return ;
 }
 
@@ -75,6 +88,15 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     if(_popMenu == nil)
         _popMenu = [[MMPopMenu alloc] initWithDelegate:self];
     [_popMenu showInView:sender orientation:_orientation];
+    return ;
+}
+
+-(void)gotoBack {
+    [[MMTimerManager sharedManager] removeAllTimers];
+    
+    [_modifyViewController save];
+    
+    [self.navigationController popViewControllerAnimated:YES];
     return ;
 }
 

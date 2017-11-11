@@ -15,6 +15,7 @@
 #import "MMMediaAssetsCollectionViewFlowLayout.h"
 #import "MMMediaModifyCollectionViewController.h"
 #import "MMMediaPreviewViewController.h"
+#import "MMProjectEdittingViewController.h"
 #import "MMMediaItemTransitionCollectionViewCell.h"
 #import "MMAudioMediaItemCollectionViewCell.h"
 #import "MMMediaModifyCollectionViewController+MMMedia.h"
@@ -55,6 +56,26 @@ static NSString * const reuseIdentifier = @"Cell";
     if(_previewViewController == nil)
         _previewViewController = (MMMediaPreviewViewController*)[self.parentViewController.childViewControllers objectAtIndex:1];
     
+    return ;
+}
+
+-(void)load {
+    MMProjectEdittingViewController* edittingController = (MMProjectEdittingViewController*)self.parentViewController;
+    NSString* projDir = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:edittingController.title];
+    
+    _assetsDataSource = [NSKeyedUnarchiver unarchiveObjectWithFile:[projDir stringByAppendingPathComponent:@"assetsDataSource.plist"]];
+    _audioDataSource = [NSKeyedUnarchiver unarchiveObjectWithFile:[projDir stringByAppendingPathComponent:@"audioDataSource.plist"]];
+    
+    [self.collectionView reloadData];
+    return ;
+}
+
+-(void)save {
+    MMProjectEdittingViewController* edittingController = (MMProjectEdittingViewController*)self.parentViewController;
+    NSString* projDir = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:edittingController.title];
+    
+    [NSKeyedArchiver archiveRootObject:_assetsDataSource toFile:[projDir stringByAppendingPathComponent:@"assetsDataSource.plist"]];
+    [NSKeyedArchiver archiveRootObject:_audioDataSource toFile:[projDir stringByAppendingPathComponent:@"audioDataSource.plist"]];
     return ;
 }
 

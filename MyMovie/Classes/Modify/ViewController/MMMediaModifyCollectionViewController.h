@@ -21,6 +21,8 @@
 @property(nonatomic, strong) MMTransitionModifyView* transitionModifyView;
 @property(nonatomic, weak) MMMediaPreviewViewController* previewViewController;
 
+-(void)load;
+-(void)save;
 -(void)prepareForPlay;
 -(void)updateProgress:(NSTimeInterval)curTime;
 -(void)reloadAudioTrackAtIndex:(NSInteger)index;

@@ -62,6 +62,7 @@
 		B3FAA9741F950A050023792C /* MMMediaModifyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FAA9731F950A050023792C /* MMMediaModifyCollectionViewController.m */; };
 		B3FAA9771F950A1C0023792C /* MMMediaAssetsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FAA9761F950A1C0023792C /* MMMediaAssetsTableViewController.m */; };
 		B3FBC26A1FB6890B00E2CC88 /* MMProjectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FBC2691FB6890B00E2CC88 /* MMProjectModel.m */; };
+		B3FBC26D1FB756DF00E2CC88 /* MMMediaManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B3FBC26C1FB756DF00E2CC88 /* MMMediaManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -164,6 +165,8 @@
 		B3FAA9761F950A1C0023792C /* MMMediaAssetsTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaAssetsTableViewController.m; sourceTree = "<group>"; };
 		B3FBC2681FB6890B00E2CC88 /* MMProjectModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMProjectModel.h; sourceTree = "<group>"; };
 		B3FBC2691FB6890B00E2CC88 /* MMProjectModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMProjectModel.m; sourceTree = "<group>"; };
+		B3FBC26B1FB756DF00E2CC88 /* MMMediaManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMMediaManager.h; sourceTree = "<group>"; };
+		B3FBC26C1FB756DF00E2CC88 /* MMMediaManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMMediaManager.m; sourceTree = "<group>"; };
 		B3FD2F561F95AB95009A0571 /* MMPhotoManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMPhotoManager.m; sourceTree = "<group>"; };
 		B3FD2F571F95AB95009A0571 /* MMPhotoManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMPhotoManager.h; sourceTree = "<group>"; };
 		E0643171031E55E820666535 /* Pods-MyMovie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMovie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyMovie/Pods-MyMovie.debug.xcconfig"; sourceTree = "<group>"; };
@@ -557,6 +560,8 @@
 				B344E37C1FA1E09C006EF1DF /* MMTimerManager.m */,
 				B3C503231FA710A6002269B7 /* MMPopMenu.h */,
 				B3C503241FA710A6002269B7 /* MMPopMenu.m */,
+				B3FBC26B1FB756DF00E2CC88 /* MMMediaManager.h */,
+				B3FBC26C1FB756DF00E2CC88 /* MMMediaManager.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -734,6 +739,7 @@
 				B344E37D1FA1E09C006EF1DF /* MMTimerManager.m in Sources */,
 				B3255A101F989CDE00DA3884 /* MMMediaItemModel.m in Sources */,
 				B344E37A1FA1CED7006EF1DF /* MMMediaTimeUtils.m in Sources */,
+				B3FBC26D1FB756DF00E2CC88 /* MMMediaManager.m in Sources */,
 				B3AE18BA1F95E8C3009554D7 /* MMPhotosItemCollectionViewCell.m in Sources */,
 				B344E36E1FA18074006EF1DF /* UIViewController+MMRender.m in Sources */,
 				B3C4AC4D1F9BA06C00A0F86C /* MMTransitionModifyView.m in Sources */,

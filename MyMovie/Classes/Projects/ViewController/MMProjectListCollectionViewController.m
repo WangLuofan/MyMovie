@@ -226,7 +226,7 @@
         [self.navigationController presentViewController:alertController animated:YES completion:nil];
     }else {
         MMProjectModel* projectModel = [_projectList objectAtIndex:indexPath.item - 1];
-        MMProjectEdittingViewController* edittingController = [[MMProjectEdittingViewController alloc] init];
+        MMProjectEdittingViewController* edittingController = [[MMProjectEdittingViewController alloc] initNeedLoadProject];
         edittingController.title = projectModel.projectTitle;
         
         [self.navigationController pushViewController:edittingController animated:YES];
@@ -234,12 +234,7 @@
     return ;
 }
 
--(void)handleLongPressGesture:(UIGestureRecognizer*)recognizer {
-    CGPoint location = [recognizer locationInView:self.collectionView];
-    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:location];
-    
-    MMProjectModel* projectModel = [_projectList objectAtIndex:indexPath.item - 1];
-    
+-(void)deleteProejct:(MMProjectModel*)projectModel indexPath:(NSIndexPath*)indexPath {
     NSError* error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:projectModel.projectDir error:&error];
     
@@ -252,6 +247,28 @@
         UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"删除项目" message:[NSString stringWithFormat:@"删除项目%@失败: %@", projectModel.projectTitle, error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
         
+        [self.navigationController presentViewController:alertController animated:YES completion:nil];
+    }
+    
+    return ;
+}
+
+-(void)handleLongPressGesture:(UIGestureRecognizer*)recognizer {
+    if(recognizer.state == UIGestureRecognizerStateBegan) {
+        CGPoint location = [recognizer locationInView:self.collectionView];
+        NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:location];
+        
+        MMProjectModel* projectModel = [_projectList objectAtIndex:indexPath.item - 1];
+        
+        UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"删除项目" message:[NSString stringWithFormat:@"确定删除项目%@?", projectModel.projectTitle] preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            [self deleteProejct:projectModel indexPath:indexPath];
+            
+            return ;
+        }]];
+
         [self.navigationController presentViewController:alertController animated:YES completion:nil];
     }
     
