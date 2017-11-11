@@ -13,6 +13,7 @@
 
 @optional
 -(void)popMenu:(MMPopMenu*)popMenu itemSelectedAtIndexPath:(NSIndexPath*)indexPath bTrack:(BOOL)bTrack;
+-(BOOL)popMenu:(MMPopMenu*)popMenu itemEnableAtIndexPath:(NSIndexPath*)indexPath bTrack:(BOOL)bTrack;
 -(NSInteger)numberOfTracks;
 -(NSArray*)itemsForMenu:(MMPopMenu*)popMenu;
 

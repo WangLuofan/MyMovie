@@ -143,7 +143,21 @@
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell* cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     
-    if(indexPath.section == 0)
+    BOOL bEnabled = YES;
+    BOOL bTrack = (_tracks != 0 && indexPath.section == 0);
+    if([self.delegate respondsToSelector:@selector(popMenu:itemEnableAtIndexPath:bTrack:)]) {
+        bEnabled = [self.delegate popMenu:self itemEnableAtIndexPath:indexPath bTrack:bTrack];
+    }
+    
+    if(bEnabled == NO) {
+        cell.textLabel.textColor = UIColorFromRGB(0x969699);
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }else {
+        cell.textLabel.textColor = [UIColor blackColor];
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+    }
+    
+    if(indexPath.section == 0 && _tracks != 0)
         cell.textLabel.text = [NSString stringWithFormat:@"Track %ld", (long)indexPath.row];
     else
         cell.textLabel.text = [_items objectAtIndex:(NSUInteger)indexPath.row];
@@ -170,10 +184,18 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     BOOL bTrack = (_tracks != 0 && indexPath.section == 0);
-    if([self.delegate respondsToSelector:@selector(popMenu:itemSelectedAtIndexPath:bTrack:)])
-        [self.delegate popMenu:self itemSelectedAtIndexPath:indexPath bTrack:bTrack];
     
-    [self hideMenu];
+    BOOL bEnabled = YES;
+    if([self.delegate respondsToSelector:@selector(popMenu:itemEnableAtIndexPath:bTrack:)])
+        bEnabled = [self.delegate popMenu:self itemEnableAtIndexPath:indexPath bTrack:bTrack];
+    
+    if(bEnabled == YES) {
+        if([self.delegate respondsToSelector:
+            @selector(popMenu:itemSelectedAtIndexPath:bTrack:)])
+            [self.delegate popMenu:self itemSelectedAtIndexPath:indexPath bTrack:bTrack];
+        [self hideMenu];
+    }
+    
     return ;
 }
 

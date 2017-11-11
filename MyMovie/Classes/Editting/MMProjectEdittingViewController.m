@@ -42,6 +42,15 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 
 @implementation MMProjectEdittingViewController
 
+- (instancetype)init
+{
+    self = (MMProjectEdittingViewController*)[storyBoardNamed(@"Main") instantiateViewControllerWithIdentifier:@"MMProjectEdittingViewController"];
+    if (self) {
+        
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -263,7 +272,7 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 }
 
 -(NSArray*)itemsForMenu:(MMPopMenu *)popMenu {
-    return nil;
+    return @[@"加载原音轨"];
 }
 
 -(void)popMenu:(MMPopMenu *)popMenu itemSelectedAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
@@ -273,9 +282,20 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
         mixController.audioModel = (MMMediaAudioModel*)itemModel;
         [self.navigationController presentViewController:[[MMBasicNavigationController alloc] initWithRootViewController:mixController] animated:YES completion:nil];
     }else {
-        
+        if(indexPath.row == 0) {
+            
+        }
     }
     return ;
+}
+
+-(BOOL)popMenu:(MMPopMenu *)popMenu itemEnableAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
+    if(bTrack == NO) {
+        if(indexPath.row == 0)
+            return _modifyViewController.assetsDataSource.count > 0;
+    }
+    
+    return YES;
 }
 
 @end

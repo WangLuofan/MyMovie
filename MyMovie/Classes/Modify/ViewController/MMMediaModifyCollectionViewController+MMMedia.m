@@ -96,7 +96,6 @@
     if(err == kCVReturnSuccess) {
         if(CVPixelBufferLockBaseAddress(pixelBuf, 0) == kCVReturnSuccess) {
             void* baseAddr = CVPixelBufferGetBaseAddress(pixelBuf);
-            
             CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
             CGContextRef context = CGBitmapContextCreate(baseAddr, k1280pSize.width, k1280pSize.height, 8, CVPixelBufferGetBytesPerRow(pixelBuf), colorSpace, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host);
             CGContextDrawImage(context, AVMakeRectWithAspectRatioInsideRect(image.size, CGRectMake(0, 0, k1280pSize.width, k1280pSize.height)), image.CGImage);

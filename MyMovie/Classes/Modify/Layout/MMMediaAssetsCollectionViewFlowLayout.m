@@ -219,7 +219,7 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
             UICollectionViewLayoutAttributes* attrs = [_calculatedLayoutAttributes objectForKey:indexPath];
             
             CGFloat xOffset = attrs.frame.origin.x + attrs.frame.size.width - 50.0f;
-            if(xOffset < 0.0f) xOffset = attrs.frame.origin.x;
+            if(xOffset < attrs.frame.origin.x) xOffset = attrs.frame.origin.x;
             
             CGFloat xWidth = attrs.frame.size.width - xOffset > 50.0f ? 50.0f : attrs.size.width;
             
