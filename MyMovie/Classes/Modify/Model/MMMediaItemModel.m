@@ -57,7 +57,7 @@
     [super encodeWithCoder:aCoder];
     
     [aCoder encodeObject:UIImageJPEGRepresentation(_thumbnail, 0.8f) forKey:@"Thumbnail"];
-    [aCoder encodeObject:((AVURLAsset*)_mediaAsset).URL.path forKey:@"MediaAsset"];
+    [aCoder encodeObject:((AVURLAsset*)_mediaAsset).URL forKey:@"MediaAsset"];
     return ;
 }
 
@@ -66,7 +66,7 @@
     
     if(self) {
         _thumbnail = [UIImage imageWithData:[aDecoder decodeObjectForKey:@"Thumbnail"]];
-        _mediaAsset = [AVAsset assetWithURL:[NSURL fileURLWithPath:[aDecoder decodeObjectForKey:@"MediaAsset"]]];
+        _mediaAsset = [AVAsset assetWithURL:[aDecoder decodeObjectForKey:@"MediaAsset"]];
         
         NSArray* keys = @[@"commonMetadata", @"duration", @"tracks"];
         [_mediaAsset loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
@@ -116,6 +116,9 @@
     
     [aCoder encodeObject:_title forKey:@"Title"];
     [aCoder encodeObject:_artist forKey:@"Artist"];
+    [aCoder encodeObject:((AVURLAsset*)_mediaAsset).URL forKey:@"MediaAsset"];
+    [aCoder encodeObject:[NSNumber numberWithUnsignedInteger:_audioSourceType] forKey:@"AudioSourceType"];
+    
     [aCoder encodeInteger:_inputParams.count forKey:@"AudioMixCount"];
     
     for(int i = 0; i != _inputParams.count; ++i) {
@@ -136,25 +139,35 @@
     if(self) {
         _title = [aDecoder decodeObjectForKey:@"Title"];
         _artist = [aDecoder decodeObjectForKey:@"Artist"];
+        _audioSourceType = (AudioSourceType)[[aDecoder decodeObjectForKey:@"AudioSourceType"] unsignedIntegerValue];
         
-        MPMediaItem* mediaItem = [[MMMediaManager sharedManager] queryMediasWithTitle:_title];
-        
-        _mediaAsset = [AVAsset assetWithURL:mediaItem.assetURL];
         NSArray* keys = @[@"commonMetadata", @"duration", @"tracks"];
-        [_mediaAsset loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
-        
-        _inputParams = [NSMutableArray array];
-        
-        NSInteger audioMixCount = [aDecoder decodeIntegerForKey:@"AudioMixCount"];
-        for(int i = 0; i != audioMixCount; ++i) {
-            NSString* timeIntervalKey = [NSString stringWithFormat:@"audio_timeInterval_%d", i];
-            NSString* audioLevelKey = [NSString stringWithFormat:@"audio_level_%d", i];
+        if(_audioSourceType == AudioMusicPodSourceType) {
+            MPMediaItem* mediaItem = [[MMMediaManager sharedManager] queryMediaItemWithTitle:_title artist:_artist];
             
-            NSTimeInterval timeInterval = [aDecoder decodeDoubleForKey:timeIntervalKey];
-            CGFloat audioLevel = [aDecoder decodeDoubleForKey:audioLevelKey];
+            _mediaAsset = [AVAsset assetWithURL:mediaItem.assetURL];
+            [_mediaAsset loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
             
-            MMAudioMixModel* audioMixModel = [[MMAudioMixModel alloc] initWithTimeInterval:timeInterval audio:audioLevel];
-            [_inputParams addObject:audioMixModel];
+            _inputParams = [NSMutableArray array];
+            
+            NSInteger audioMixCount = [aDecoder decodeIntegerForKey:@"AudioMixCount"];
+            for(int i = 0; i != audioMixCount; ++i) {
+                NSString* timeIntervalKey = [NSString stringWithFormat:@"audio_timeInterval_%d", i];
+                NSString* audioLevelKey = [NSString stringWithFormat:@"audio_level_%d", i];
+                
+                NSTimeInterval timeInterval = [aDecoder decodeDoubleForKey:timeIntervalKey];
+                CGFloat audioLevel = [aDecoder decodeDoubleForKey:audioLevelKey];
+                
+                MMAudioMixModel* audioMixModel = [[MMAudioMixModel alloc] initWithTimeInterval:timeInterval audio:audioLevel];
+                [_inputParams addObject:audioMixModel];
+            }
+        }else {
+            NSURL* assetsURL = (NSURL*)[aDecoder decodeObjectForKey:@"MediaAsset"];
+            
+            if(assetsURL != nil) {
+                _mediaAsset = [AVAsset assetWithURL:assetsURL];
+                [_mediaAsset loadValuesAsynchronouslyForKeys:keys completionHandler:nil];
+            }
         }
     }
     

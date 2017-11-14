@@ -43,6 +43,7 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
 @property(nonatomic, strong) UIImageView* draggableImageView;
 
 @property(nonatomic, strong) UIView* progressIndicatorLine;
+@property(nonatomic, assign) CGFloat progressUnit;
 
 @end
 
@@ -412,10 +413,42 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
 }
 
 #pragma mark -
--(void)setCurrentTime:(NSTimeInterval)currentTime {
-    self.progressIndicatorLine.frame = CGRectMake(5.0f + currentTime * 5.0f, 0.0f, 2.0f, self.collectionView.bounds.size.height);
+-(CGFloat)progressUnit {
+    if(_progressUnit == 0.0f) {
+        
+        CGFloat totalWidth = 0.0f;
+        
+        //section 0
+        if(_calculatedLayoutFrames.count > 0) {
+            NSArray* secFrames = [_calculatedLayoutFrames objectAtIndex:0];
+            CGFloat contentWidth = 0.0f;
+            for(int i = 0; i < secFrames.count; i += 2)
+                contentWidth += [[secFrames objectAtIndex:i] CGRectValue].size.width;
+            
+            if(totalWidth <= contentWidth)
+                totalWidth = contentWidth;
+        }
+        
+        //section 1
+        if(_calculatedLayoutFrames.count > 1) {
+            NSArray* secFrames = [_calculatedLayoutFrames objectAtIndex:1];
+            CGFloat contentWidth = 0.0f;
+            for(NSValue* frameVal in secFrames)
+                contentWidth += [frameVal CGRectValue].size.width;
+            
+            if(totalWidth <= contentWidth)
+                totalWidth = contentWidth;
+        }
+        _progressUnit = [self collectionViewContentSize].width * 5.0f / totalWidth;
+    }
     
-    [self.collectionView scrollRectToVisible:CGRectMake(self.progressIndicatorLine.frame.origin.x, self.progressIndicatorLine.frame.origin.y, 100.0f, self.progressIndicatorLine.frame.size.height) animated:YES];
+    return _progressUnit;
+}
+
+-(void)setCurrentTime:(NSTimeInterval)currentTime {
+    self.progressIndicatorLine.frame = CGRectMake(5.0f + currentTime * self.progressUnit, 0.0f, 2.0f, self.collectionView.bounds.size.height);
+    
+    [self.collectionView scrollRectToVisible:CGRectMake(self.progressIndicatorLine.frame.origin.x, self.progressIndicatorLine.frame.origin.y, self.collectionView.frame.size.width, self.progressIndicatorLine.frame.size.height) animated:YES];
     return ;
 }
 
@@ -425,6 +458,7 @@ typedef NS_OPTIONS(NSUInteger, MMDragMode) {
     switch (status) {
         case MMVideoPlayStatusStoped:
         {
+            self.progressUnit = 0.0f;
             self.progressIndicatorLine.hidden = YES;
             self.progressIndicatorLine.frame = CGRectMake(5.0f, 0.0f, 2.0f, self.collectionView.bounds.size.height);
         }

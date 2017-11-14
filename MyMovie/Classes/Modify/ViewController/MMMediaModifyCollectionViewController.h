@@ -23,6 +23,7 @@
 
 -(void)load;
 -(void)save;
+-(void)loadDefaultAudioTracks;
 -(void)prepareForPlay;
 -(void)updateProgress:(NSTimeInterval)curTime;
 -(void)reloadAudioTrackAtIndex:(NSInteger)index;

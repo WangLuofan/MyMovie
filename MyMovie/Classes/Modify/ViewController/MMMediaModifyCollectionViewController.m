@@ -79,6 +79,32 @@ static NSString * const reuseIdentifier = @"Cell";
     return ;
 }
 
+-(void)loadDefaultAudioTracks {
+    if(_assetsDataSource.count <= 0)
+        return ;
+    
+    [_audioDataSource removeAllObjects];
+    
+    for (MMMediaItemModel* itemModel in _assetsDataSource) {
+        if(itemModel.mediaType != MMAssetMediaTypeTransition) {
+            MMMediaAudioModel* audioModel = [[MMMediaAudioModel alloc] init];
+            audioModel.duration = itemModel.duration;
+            audioModel.mediaType = MMAssetMediaTypeAudio;
+            audioModel.identifer = itemModel.identifer;
+            audioModel.modified = YES;
+            
+            audioModel.audioSourceType = AudioAssetsSourceType;
+            if([itemModel isKindOfClass:[MMMediaVideoModel class]])
+                audioModel.mediaAsset = ((MMMediaVideoModel*)itemModel).mediaAsset;
+            
+            [_audioDataSource addObject:audioModel];
+        }
+    }
+    
+    [self.collectionView reloadData];
+    return ;
+}
+
 -(void)insertItemWithMediaItemModel:(MMMediaItemModel *)model {
     if(model.mediaType != MMAssetMediaTypeAudio) {
         
@@ -163,11 +189,23 @@ static NSString * const reuseIdentifier = @"Cell";
     return theImg;
 }
 
+-(NSArray*)uniqueAssetsDataSource {
+    NSMutableArray* identifiers = [NSMutableArray array];
+    NSMutableArray* assetsSource = [NSMutableArray array];
+    
+    for (MMMediaItemModel* itemModel in _assetsDataSource) {
+        if([identifiers containsObject:itemModel.identifer] == NO && itemModel.mediaType == MMAssetMediaTypeImage) {
+            [assetsSource addObject:itemModel];
+            [identifiers addObject:itemModel.identifer];
+        }
+    }
+    
+    return assetsSource;
+}
+
 -(void)prepareForPlay {
-    NSInteger itemCount = 0;
-    for (MMMediaItemModel* model in _assetsDataSource)
-        if(model.mediaType == MMAssetMediaTypeImage)
-            ++itemCount;
+    NSArray* uniqueDataSource = [self uniqueAssetsDataSource];
+    NSUInteger itemCount = uniqueDataSource.count;
     
     if(itemCount == 0) {
         [self compositionWithVideoAssetsArray:_assetsDataSource audioAssets:_audioDataSource  complete:^(AVPlayerItem * playerItem) {
@@ -184,7 +222,7 @@ static NSString * const reuseIdentifier = @"Cell";
     __block NSInteger convertedItems = 0;
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(3);
     
-    for(MMMediaItemModel* model in _assetsDataSource) {
+    for(MMMediaItemModel* model in uniqueDataSource) {
         if(model.mediaType == MMAssetMediaTypeImage && model.modified == YES) {
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             
@@ -301,7 +339,7 @@ static NSString * const reuseIdentifier = @"Cell";
                 cursorTime = CMTimeAdd(cursorTime, CMTimeMake(1, 1));
                 [timeArr addObject:[NSValue valueWithCMTime:cursorTime]];
             }
-
+            
             if(((MMMediaVideoModel*)model).thumbnail != nil)
                 ((MMMediaModifyItemCollectionViewCell*)cell).contentImageView.image = ((MMMediaVideoModel*)model).thumbnail;
             else {
@@ -498,14 +536,13 @@ static NSString * const reuseIdentifier = @"Cell";
 -(void)transitionView:(MMTransitionModifyView *)transtionView willSaveDataWithModel:(MMMediaItemModel *)model {
     NSIndexPath* indexPath = [[self.collectionView indexPathsForSelectedItems] objectAtIndex:0];
     
-    MMMediaItemModel* curModel = nil;
-    if(indexPath.section == 0)
-        curModel = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];
-    else
-        curModel = [_audioDataSource objectAtIndex:(NSUInteger)indexPath.item];
+    MMMediaItemModel* curModel = [_assetsDataSource objectAtIndex:(NSUInteger)indexPath.item];
     
-    curModel.duration = model.duration;
-    ((MMMediaTransitionModel*)curModel).transitionType = ((MMMediaTransitionModel*)model).transitionType;
+    if([curModel isKindOfClass:[MMMediaTransitionModel class]]) {
+        curModel.duration = model.duration;
+        ((MMMediaTransitionModel*)curModel).transitionType = ((MMMediaTransitionModel*)model).transitionType;
+    }
+    
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     return ;
 }

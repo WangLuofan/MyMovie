@@ -14,8 +14,9 @@
 
 +(instancetype)sharedManager;
 -(NSArray*)allMedias;
--(MPMediaItem*)queryMediasWithTitle:(NSString*)title;
+-(NSArray*)queryMediasWithTitle:(NSString*)title;
 -(NSArray*)queryMediasWithArtist:(NSString*)artist;
+-(MPMediaItem*)queryMediaItemWithTitle:(NSString*)title artist:(NSString*)artist;
 -(void)requestMediaQueryAuthorizationWhenComplete:(void(^)(MPMediaLibraryAuthorizationStatus))completeHandler;
 
 @end

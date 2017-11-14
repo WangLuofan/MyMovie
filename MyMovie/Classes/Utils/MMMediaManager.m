@@ -43,16 +43,12 @@ static MMMediaManager* _obj = nil;
     return [query items];
 }
 
--(MPMediaItem*)queryMediasWithTitle:(NSString *)title {
+-(NSArray*)queryMediasWithTitle:(NSString *)title {
     MPMediaQuery* query = [[MPMediaQuery alloc] init];
     [query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:title forProperty:MPMediaItemPropertyTitle]];
     query.groupingType = MPMediaGroupingTitle;
     
-    NSArray* items = [query items];
-    
-    if(items.count <= 0)
-        return nil;
-    return [items firstObject];
+    return [query items];
 }
 
 -(NSArray*)queryMediasWithArtist:(NSString *)artist {
@@ -61,6 +57,18 @@ static MMMediaManager* _obj = nil;
     query.groupingType = MPMediaGroupingArtist;
     
     return [query items];
+}
+
+-(MPMediaItem *)queryMediaItemWithTitle:(NSString *)title artist:(NSString *)artist {
+    MPMediaQuery* query = [[MPMediaQuery alloc] init];
+    [query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:title forProperty:MPMediaItemPropertyTitle]];
+    [query addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:artist forProperty:MPMediaItemPropertyArtist]];
+    query.groupingType = MPMediaGroupingTitle;
+    
+    NSArray* items = [query items];
+    if(items.count <= 0)
+        return nil;
+    return [items firstObject];
 }
 
 -(void)requestMediaQueryAuthorizationWhenComplete:(void (^)(MPMediaLibraryAuthorizationStatus))completeHandler {

@@ -15,6 +15,11 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
     TransitionTypeCrop,
 };
 
+typedef NS_ENUM(NSUInteger, AudioSourceType) {
+    AudioMusicPodSourceType,
+    AudioAssetsSourceType,
+};
+
 @class AVAsset;
 @interface MMMediaItemModel : NSObject <NSSecureCoding>
 
@@ -43,6 +48,7 @@ typedef NS_ENUM(NSUInteger, TransitionType) {
 
 @property(nonatomic, copy) NSString* title;
 @property(nonatomic, copy) NSString* artist;
+@property(nonatomic, assign) AudioSourceType audioSourceType;
 @property(nonatomic, copy) AVAsset* mediaAsset;
 @property(nonatomic, strong) NSMutableArray* inputParams;
 

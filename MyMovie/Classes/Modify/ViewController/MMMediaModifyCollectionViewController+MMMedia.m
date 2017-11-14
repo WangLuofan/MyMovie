@@ -139,7 +139,6 @@
         
         if(complete) {
             self.previewViewController.progressView.progress = 1.0f;
-            CMTimeShow(playerItem.duration);
             complete(playerItem);
         }
         
@@ -251,7 +250,6 @@
             AVMutableCompositionTrack* track = [videoTracks objectAtIndex:(trackIndex++ % 2)];
             AVAsset* videoAsset = ((MMMediaVideoModel*)itemModel).mediaAsset;
             
-            CMTimeShow(videoAsset.duration);
             CMTime assetDuration = CMTimeMakeWithSeconds(((MMMediaVideoModel*)itemModel).duration, ((MMMediaVideoModel*)itemModel).mediaAsset.duration.timescale);
             if(i != 0) {
                 MMMediaTransitionModel* transitionModel = (MMMediaTransitionModel*)[self.assetsDataSource objectAtIndex:i - 1];
@@ -283,7 +281,16 @@
     
     AVMutableAudioMix* audioMix = [AVMutableAudioMix audioMix];
     AVMutableAudioMixInputParameters* inputParams = [AVMutableAudioMixInputParameters audioMixInputParametersWithTrack:audioTrack];
+    
     for (MMMediaAudioModel* audioModel in self.audioDataSource) {
+        
+        NSUInteger audioTrackCount = [audioModel.mediaAsset tracksWithMediaType:AVMediaTypeAudio].count;
+        
+        if(audioTrackCount == 0) {
+            cursorTime = CMTimeAdd(cursorTime, CMTimeMakeWithSeconds(audioModel.duration, 1));
+            continue;
+        }
+        
         CMTime assetDuration = CMTimeMakeWithSeconds(audioModel.duration, audioModel.mediaAsset.duration.timescale);
         
         CMTimeShow(audioModel.mediaAsset.duration);

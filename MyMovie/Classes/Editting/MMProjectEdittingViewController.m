@@ -16,6 +16,7 @@
 #import "MMPhotoManager.h"
 #import "MMTimerManager.h"
 #import "MMPopMenu.h"
+#import "MMMediaItemModel.h"
 #import "UIViewController+MMRender.h"
 
 typedef NS_ENUM(NSUInteger, ItemDragStatus) {
@@ -300,12 +301,15 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 -(void)popMenu:(MMPopMenu *)popMenu itemSelectedAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
     if(bTrack == YES) {
         MMMediaItemModel* itemModel = [_modifyViewController.audioDataSource objectAtIndex:(NSUInteger)indexPath.row];
-        MMAudioTrackMixModifyTableViewController* mixController = [[MMAudioTrackMixModifyTableViewController alloc] initWithModifyViewController:_modifyViewController];
-        mixController.audioModel = (MMMediaAudioModel*)itemModel;
-        [self.navigationController presentViewController:[[MMBasicNavigationController alloc] initWithRootViewController:mixController] animated:YES completion:nil];
+        
+        if([itemModel isKindOfClass:[MMMediaAudioModel class]]) {
+            MMAudioTrackMixModifyTableViewController* mixController = [[MMAudioTrackMixModifyTableViewController alloc] initWithModifyViewController:_modifyViewController];
+            mixController.audioModel = (MMMediaAudioModel*)itemModel;
+            [self.navigationController presentViewController:[[MMBasicNavigationController alloc] initWithRootViewController:mixController] animated:YES completion:nil];
+        }
     }else {
         if(indexPath.row == 0) {
-            
+            [_modifyViewController loadDefaultAudioTracks];
         }
     }
     return ;
@@ -315,6 +319,12 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
     if(bTrack == NO) {
         if(indexPath.row == 0)
             return _modifyViewController.assetsDataSource.count > 0;
+    }else {
+        MMMediaAudioModel* itemModel = [_modifyViewController.audioDataSource objectAtIndex:(NSUInteger)indexPath.row];
+        NSUInteger audioTracksCount = [itemModel.mediaAsset tracksWithMediaType:AVMediaTypeAudio].count;
+        
+        if(audioTracksCount <= 0)
+            return NO;
     }
     
     return YES;

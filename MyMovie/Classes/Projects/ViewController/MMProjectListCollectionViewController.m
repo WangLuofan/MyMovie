@@ -238,17 +238,17 @@
     NSError* error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:projectModel.projectDir error:&error];
     
-    if(error == nil) {
-        [_projectList removeObject:projectModel];
-        [self.collectionView performBatchUpdates:^{
-            [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        } completion:nil];
-    }else {
-        UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"删除项目" message:[NSString stringWithFormat:@"删除项目%@失败: %@", projectModel.projectTitle, error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
-        
-        [self.navigationController presentViewController:alertController animated:YES completion:nil];
-    }
+    //    if(error == nil) {
+    [_projectList removeObject:projectModel];
+    [self.collectionView performBatchUpdates:^{
+        [self.collectionView deleteItemsAtIndexPaths:@[indexPath]];
+    } completion:nil];
+    //    }else {
+    //        UIAlertController* alertController = [UIAlertController alertControllerWithTitle:@"删除项目" message:[NSString stringWithFormat:@"删除项目%@失败: %@", projectModel.projectTitle, error.localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
+    //        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
+    //
+    //        [self.navigationController presentViewController:alertController animated:YES completion:nil];
+    //    }
     
     return ;
 }
@@ -268,7 +268,7 @@
             
             return ;
         }]];
-
+        
         [self.navigationController presentViewController:alertController animated:YES completion:nil];
     }
     
