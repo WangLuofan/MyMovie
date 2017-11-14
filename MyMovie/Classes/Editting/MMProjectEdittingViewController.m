@@ -295,7 +295,7 @@ typedef NS_ENUM(NSUInteger, ItemDragStatus) {
 }
 
 -(NSArray*)itemsForMenu:(MMPopMenu *)popMenu {
-    return @[@"加载原音轨"];
+    return @[@"加载默认音轨"];
 }
 
 -(void)popMenu:(MMPopMenu *)popMenu itemSelectedAtIndexPath:(NSIndexPath *)indexPath bTrack:(BOOL)bTrack {
